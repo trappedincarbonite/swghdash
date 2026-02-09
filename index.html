@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWGOH Player Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .card { @apply bg-gray-800 rounded-lg p-4 shadow-lg border border-gray-700; }
+        .stat-label { @apply text-gray-400 text-xs uppercase font-bold; }
+        .stat-value { @apply text-white text-lg; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen font-sans">
+
+    <nav class="bg-gray-800 border-b border-gray-700 p-4 sticky top-0 z-10">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold text-yellow-500">SWGOH Data Viewer</h1>
+            <div class="space-x-4">
+                <button onclick="showSection('units')" class="hover:text-yellow-500">Units</button>
+                <button onclick="showSection('ships')" class="hover:text-yellow-500">Ships</button>
+                <button onclick="showSection('mods')" class="hover:text-yellow-500">Mods</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-6">
+        <!-- Status Indicator -->
+        <div id="status-bar" class="mb-6 p-2 rounded text-center text-sm hidden"></div>
+
+        <!-- Section: Units -->
+        <section id="section-units" class="content-section">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-semibold text-white">Mina Units</h2>
+                <input type="text" id="unit-search" placeholder="Sök karaktär..." 
+                       class="bg-gray-700 text-white px-4 py-2 rounded-lg border border-gray-600 focus:outline-none focus:border-yellow-500">
+            </div>
+            <div id="units-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Laddas dynamiskt via JS -->
+                <p class="text-gray-500">Laddar enheter...</p>
+            </div>
+        </section>
+
+        <!-- Section: Ships (Dold som standard) -->
+        <section id="section-ships" class="content-section hidden text-center py-20">
+            <h2 class="text-2xl font-semibold mb-4">Skeppsvy</h2>
+            <p class="text-gray-400">Här kommer skeppsdata att visas.</p>
+        </section>
+    </main>
+
+    <script>
+        // Konfiguration - Justera sökvägar till dina JSON-filer
+        const DATA_SOURCES = {
+            gameData: 'db_game_data.json',
+            translation: 'unit_translation.json'
+        };
+
+        let gameState = {
+            units: [],
+            translation: {}
+        };
+
+        // Initiering
+        async function init() {
+            try {
+                const statusBar = document.getElementById('status-bar');
+                
+                // Ladda JSON-filer parallellt
+                const [gameRes, transRes] = await Promise.all([
+                    fetch(DATA_SOURCES.gameData).catch(e => null),
+                    fetch(DATA_SOURCES.translation).catch(e => null)
+                ]);
+
+                if (!gameRes) {
+                    showStatus('Kunde inte hitta db_game_data.json. Se till att filen ligger i samma mapp.', 'bg-red-900');
+                    return;
+                }
+
+                const rawData = await gameRes.json();
+                gameState.translation = transRes ? await transRes.json() : {};
+                
+                // Extrahera units från din specifika JSON-struktur
+                // Här anpassar du efter hur swgoh.gg-exporten ser ut
+                gameState.units = rawData.units || [];
+
+                renderUnits();
+                showStatus('Data laddad korrekt', 'bg-green-900');
+            } catch (err) {
+                console.error(err);
+                showStatus('Ett fel uppstod vid inläsning av data: ' + err.message, 'bg-red-900');
+            }
+        }
+
+        function renderUnits(filter = '') {
+            const grid = document.getElementById('units-grid');
+            grid.innerHTML = '';
+
+            const filtered = gameState.units.filter(u => {
+                const name = u.data.name.toLowerCase();
+                return name.includes(filter.toLowerCase());
+            });
+
+            filtered.forEach(unit => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                
+                // Matcha mot översättningstabell om den finns
+                const localizedName = gameState.translation[unit.data.base_id] || unit.data.name;
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="font-bold text-white leading-tight">${localizedName}</h3>
+                            <span class="text-xs text-gray-400">${unit.data.rarity}* | Gear ${unit.data.gear_level}</span>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-yellow-500 font-bold">${unit.data.power.toLocaleString()}</div>
+                            <div class="text-[10px] text-gray-500 uppercase">Power</div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-2 border-t border-gray-700 pt-2">
+                        <div>
+                            <p class="stat-label">Relic</p>
+                            <p class="stat-value text-blue-400">${unit.data.relic_tier > 2 ? unit.data.relic_tier - 2 : '-'}</p>
+                        </div>
+                        <div>
+                            <p class="stat-label">Zetas</p>
+                            <p class="stat-value text-purple-400">${unit.data.zeta_abilities ? unit.data.zeta_abilities.length : 0}</p>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Enkel navigering
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
+            document.getElementById('section-' + sectionId).classList.remove('hidden');
+        }
+
+        function showStatus(msg, colorClass) {
+            const bar = document.getElementById('status-bar');
+            bar.innerText = msg;
+            bar.className = `mb-6 p-2 rounded text-center text-sm ${colorClass}`;
+            bar.classList.remove('hidden');
+            setTimeout(() => bar.classList.add('hidden'), 5000);
+        }
+
+        // Sök-event
+        document.getElementById('unit-search').addEventListener('input', (e) => {
+            renderUnits(e.target.value);
+        });
+
+        // Kör vid start
+        window.onload = init;
+    </script>
+</body>
+</html>
