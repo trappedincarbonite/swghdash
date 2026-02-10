@@ -1,1 +1,13 @@
+#Color codes used in dashboard to create a muted, dark aesthetic and clear mod status.
 
+Base Colors (Background & Panels) These colors create the dark foundation that is easy on the eyes during evening use:
+Background (Page): #0f172a (A very dark navy/black shade).
+Panels/Table: #1e293b (A slightly lighter navy to create depth).
+Borders & Lines: #334155 (A muted grey-blue to separate cells without being too sharp).
+Text (Main): #cbd5e1 (A soft light grey, not pure white).
+
+Status Colors (Mod Cells) These colors are used to indicate status within the table:
+OK / Good: #166534 (A muted forest green).
+Perfect: #15803d (A slightly brighter green with a light green border #4ade80).
+Needs Fix: #991b1b (A muted dark red).
+Empty / No Mod: #334155 (Matches the border color to blend in).
