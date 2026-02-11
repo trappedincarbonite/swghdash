@@ -56,6 +56,7 @@
         .match-fail { color: #ef4444; }
         .rec-hint { display: block; font-size: 0.55rem; opacity: 0.7; font-weight: normal; }
 
+        /* Färgmappning för stats */
         .stat-Health { background-color: #064e3b; color: #34d399; }
         .stat-Speed { background-color: #7f1d1d; color: #f87171; }
         .stat-Protection { background-color: #164e63; color: #22d3ee; }
@@ -63,8 +64,8 @@
         .stat-Defense { background-color: #450a0a; color: #fca5a5; }
         .stat-Potency { background-color: #4c1d95; color: #a78bfa; }
         .stat-Tenacity { background-color: #713f12; color: #fbbf24; }
-        .stat-Crit-Damage { background-color: #1e3a8a; color: #60a5fa; }
-        .stat-Crit-Chance { background-color: #831843; color: #f472b6; }
+        .stat-Crit-Damage, .stat-Critical-Damage { background-color: #1e3a8a; color: #60a5fa; }
+        .stat-Crit-Chance, .stat-Critical-Chance { background-color: #831843; color: #f472b6; }
         .stat-none { background-color: #1f2937; color: #4b5563; }
 
         .search-input { 
@@ -160,29 +161,25 @@
         const BUILD_ID = "build_260211_093235";
         let fullData = { game: null, kyro: null, mods: null };
 
-        // Rensar osynliga tecken (BOM/Zero-width) och trimmar
+        // Rensar data och hanterar eventuella specialtecken
         function cleanName(name) {
             if (!name) return "";
-            return name.replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
+            return String(name).replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
         }
 
         async function initDashboard() {
             try {
+                // Försök hämta de nya filnamnen direkt från rotmappen
                 const tryFetch = async (fileName) => {
-                    const paths = [`data/${fileName}`, `./data/${fileName}`, `${window.location.pathname.replace('index.html', '')}data/${fileName}`];
-                    for (const path of paths) {
-                        try {
-                            const res = await fetch(path);
-                            if (res.ok) return await res.json();
-                        } catch (e) { continue; }
-                    }
-                    throw new Error(`Kunde inte hitta ${fileName}`);
+                    const response = await fetch(fileName);
+                    if (!response.ok) throw new Error(`Status: ${response.status}`);
+                    return await response.json();
                 };
 
                 const [gameRes, kyroRes, modsRes] = await Promise.all([
-                    tryFetch('game_data.json'),
-                    tryFetch('kyro_data.json'),
-                    tryFetch('mods_data.json')
+                    tryFetch('game_data_r.json'),
+                    tryFetch('kyro_data_r.json'),
+                    tryFetch('mods_data_r.json')
                 ]);
 
                 fullData.game = gameRes;
@@ -195,7 +192,7 @@
                 console.error("Fetch error:", err);
                 document.getElementById('stats-grid').innerHTML = 
                     `<div class="text-rose-500 text-xs font-bold px-3 py-2 bg-rose-500/10 border border-rose-500/20 rounded">
-                        FEL: Kunde inte läsa JSON-filer. Kontrollera sökvägen.<br>
+                        FEL: Kunde inte läsa JSON-filer (_r.json). Kontrollera sökvägen.<br>
                         <span class="opacity-70 text-[10px]">${err.message}</span>
                     </div>`;
             }
@@ -219,36 +216,42 @@
 
         function getStatClass(statName) {
             if (!statName || statName === '-') return 'stat-none';
-            const clean = statName.replace(/\s+/g, '-');
+            // Hanterar "Critical Damage" -> "Critical-Damage"
+            const clean = String(statName).replace(/\s+/g, '-');
             return `stat-${clean}`;
         }
 
         function renderTables(units, kyros, recMods, filter = '') {
             const unitsBody = document.getElementById('units-body');
             const compBody = document.getElementById('comparison-body');
-            if (!unitsBody || !compBody || !units || !kyros || !recMods) return;
+            if (!unitsBody || !compBody || !units) return;
 
             unitsBody.innerHTML = '';
             compBody.innerHTML = '';
 
             units.forEach(unit => {
+                if (!unit || !unit.name) return;
+                
                 const uName = cleanName(unit.name);
-                if (filter && !uName.toLowerCase().includes(filter.toLowerCase())) return;
+                if (filter && !uName.toLowerCase().includes(String(filter).toLowerCase())) return;
 
-                const kyroInfo = kyros.find(k => cleanName(k.name) === uName);
+                // Kyrotech matching
+                const kyroInfo = kyros ? kyros.find(k => cleanName(k.name) === uName) : null;
                 const kyroValue = kyroInfo ? kyroInfo.total_kyros : '-';
                 
                 unitsBody.insertAdjacentHTML('beforeend', `
                     <tr>
                         <td class="font-semibold text-slate-200">${uName}</td>
-                        <td class="text-center">${unit.level}</td>
-                        <td class="text-center">${unit.rarity}</td>
-                        <td class="text-center">G${unit.gear_level}${unit.relic_tier > 2 ? ' R' + (unit.relic_tier - 2) : ''}</td>
+                        <td class="text-center">${unit.level || '?'}</td>
+                        <td class="text-center">${unit.rarity || '?'}</td>
+                        <td class="text-center">G${unit.gear_level || '?'}${unit.relic_tier > 2 ? ' R' + (unit.relic_tier - 2) : ''}</td>
                         <td class="text-center text-yellow-600 font-bold">${kyroValue}</td>
                     </tr>
                 `);
 
-                const rec = recMods.find(r => r.slug === unit.base_id.toLowerCase().replace(/_/g, '-'));
+                // Mod matching
+                const slug = unit.base_id ? unit.base_id.toLowerCase().replace(/_/g, '-') : '';
+                const rec = recMods ? recMods.find(r => r.slug === slug) : null;
                 const equipped = unit.mods || [];
                 const slots = [
                     { id: 2, key: 'arrow' }, { id: 4, key: 'triangle' }, { id: 6, key: 'circle' },
@@ -256,7 +259,7 @@
                 ];
 
                 const eqSets = {};
-                equipped.forEach(m => eqSets[m.set] = (eqSets[m.set] || 0) + 1);
+                equipped.forEach(m => { if(m.set) eqSets[m.set] = (eqSets[m.set] || 0) + 1; });
                 
                 let setHtml = '<td class="min-w-[120px]">';
                 if (rec && rec.mod_sets) {
@@ -268,7 +271,7 @@
                         </div>`;
                     });
                 } else {
-                    setHtml += '<span class="text-slate-600 text-[9px]">Ingen rekommendation</span>';
+                    setHtml += '<span class="text-slate-600 text-[9px]">Ingen data</span>';
                 }
                 setHtml += '</td>';
 
@@ -277,12 +280,15 @@
                     const m = equipped.find(mod => mod.slot === slot.id);
                     const currentStat = m ? m.primary_stat : '-';
                     const targetStat = (rec && rec.primaries && rec.primaries[slot.key]) ? rec.primaries[slot.key] : null;
-                    const isMatch = targetStat ? (currentStat.toLowerCase() === targetStat.toLowerCase()) : true;
+                    
+                    const isMatch = (targetStat && currentStat !== '-') 
+                        ? (currentStat.toLowerCase() === targetStat.toLowerCase()) 
+                        : true;
 
                     slotsHtml += `
                         <td class="p-1">
                             <div class="mod-tag ${getStatClass(currentStat)} ${isMatch && currentStat !== '-' ? 'match-ok' : ''}">
-                                <span class="${!isMatch ? 'match-fail' : ''}">${currentStat}</span>
+                                <span class="${(!isMatch && currentStat !== '-') ? 'match-fail' : ''}">${currentStat}</span>
                                 ${(!isMatch && targetStat) ? `<span class="rec-hint">(${targetStat})</span>` : ''}
                             </div>
                         </td>
@@ -294,7 +300,9 @@
 
         function filterCharacters() {
             const val = document.getElementById('charSearch').value;
-            renderTables(fullData.game.units, fullData.kyro.characters, fullData.mods, val);
+            if (fullData.game) {
+                renderTables(fullData.game.units, fullData.kyro ? fullData.kyro.characters : [], fullData.mods, val);
+            }
         }
     </script>
 </body>
