@@ -201,7 +201,7 @@
             const grid = document.getElementById('stats-grid');
             if (!data) return;
             const stats = [
-                { label: 'GP', value: (data.galactic_power || 0).toLocaleString() },
+                { label: 'Galactic Power', value: (data.galactic_power || 0).toLocaleString() },
                 { label: 'Char GP', value: (data.character_galactic_power || 0).toLocaleString() },
                 { label: 'Arena', value: `#${data.arena_rank || '?'}` }
             ];
