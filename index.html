@@ -56,6 +56,7 @@
         .match-fail { color: #ef4444; }
         .rec-hint { display: block; font-size: 0.55rem; opacity: 0.7; font-weight: normal; }
 
+        /* Stat Colors */
         .stat-Health { background-color: #064e3b; color: #34d399; }
         .stat-Speed { background-color: #7f1d1d; color: #f87171; }
         .stat-Protection { background-color: #164e63; color: #22d3ee; }
@@ -95,6 +96,7 @@
             color: #475569;
             margin-top: auto;
             padding: 1rem 0;
+            text-align: center;
         }
     </style>
 </head>
@@ -115,7 +117,7 @@
 
     <main class="grid grid-cols-1 xl:grid-cols-12 gap-4 flex-grow">
         <section class="xl:col-span-3">
-            <h2 class="text-[10px] font-bold mb-1 uppercase tracking-widest text-slate-400 px-1">Unlocked Units</h2>
+            <h2 class="text-[10px] font-bold mb-1 uppercase tracking-widest text-slate-400 px-1 text-center sm:text-left">Unlocked Units</h2>
             <div class="table-container max-h-[70vh] overflow-y-auto shadow-2xl">
                 <table id="units-table">
                     <thead>
@@ -133,7 +135,7 @@
         </section>
 
         <section class="xl:col-span-9">
-            <h2 class="text-[10px] font-bold mb-1 uppercase tracking-widest text-slate-400 px-1">Mod Comparison</h2>
+            <h2 class="text-[10px] font-bold mb-1 uppercase tracking-widest text-slate-400 px-1 text-center sm:text-left">Mod Comparison</h2>
             <div class="table-container max-h-[70vh] overflow-y-auto shadow-2xl">
                 <table id="comparison-table">
                     <thead>
@@ -153,26 +155,30 @@
         </section>
     </main>
 
-    <footer id="build-tag">build_260211085912</footer>
+    <footer id="build-tag">build_260211093122</footer>
 
     <script>
-        const BUILD_ID = "build_260211085912";
+        const BUILD_ID = "build_260211093122";
         let fullData = { game: null, kyro: null, mods: null };
 
         async function initDashboard() {
             try {
-                // Försöker hämta data med absoluta och relativa fallbacks
-                const fetchData = async (path) => {
-                    const response = await fetch(path);
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                    return response.json();
+                // Försöker hämta data med flera sökvägsvarianter för att hantera olika servermiljöer
+                const tryFetch = async (fileName) => {
+                    const paths = [`data/${fileName}`, `./data/${fileName}`, `/${fileName}`];
+                    for (const path of paths) {
+                        try {
+                            const res = await fetch(path);
+                            if (res.ok) return await res.json();
+                        } catch (e) { continue; }
+                    }
+                    throw new Error(`Kunde inte ladda ${fileName}`);
                 };
 
-                // Vi provar med raka namn först (fungerar bäst i de flesta servermiljöer)
                 const [gameRes, kyroRes, modsRes] = await Promise.all([
-                    fetchData('data/game_data.json'),
-                    fetchData('data/kyro_data.json'),
-                    fetchData('data/mods_data.json')
+                    tryFetch('game_data.json'),
+                    tryFetch('kyro_data.json'),
+                    tryFetch('mods_data.json')
                 ]);
 
                 fullData.game = gameRes;
@@ -185,7 +191,7 @@
                 console.error("Fetch error:", err);
                 document.getElementById('stats-grid').innerHTML = 
                     `<div class="text-rose-500 text-xs font-bold px-3 py-2 bg-rose-500/10 border border-rose-500/20 rounded">
-                        FEL: Kunde inte läsa JSON-filer. Kontrollera sökvägen.<br>
+                        FEL: Kunde inte läsa JSON-filer. Kontrollera mappen 'data'.<br>
                         <span class="opacity-70 text-[10px]">${err.message} | ${BUILD_ID}</span>
                     </div>`;
             }
@@ -193,10 +199,11 @@
 
         function renderHeader(data) {
             const grid = document.getElementById('stats-grid');
+            if (!data) return;
             const stats = [
-                { label: 'GP', value: data.galactic_power.toLocaleString() },
-                { label: 'Char GP', value: data.character_galactic_power.toLocaleString() },
-                { label: 'Arena', value: `#${data.arena_rank}` }
+                { label: 'GP', value: (data.galactic_power || 0).toLocaleString() },
+                { label: 'Char GP', value: (data.character_galactic_power || 0).toLocaleString() },
+                { label: 'Arena', value: `#${data.arena_rank || '?'}` }
             ];
             grid.innerHTML = stats.map(s => `
                 <div class="flex items-baseline space-x-2">
@@ -215,6 +222,8 @@
         function renderTables(units, kyros, recMods, filter = '') {
             const unitsBody = document.getElementById('units-body');
             const compBody = document.getElementById('comparison-body');
+            if (!units || !kyros || !recMods) return;
+
             unitsBody.innerHTML = '';
             compBody.innerHTML = '';
 
@@ -254,7 +263,7 @@
                         </div>`;
                     });
                 } else {
-                    setHtml += '<span class="text-slate-600">No Rec</span>';
+                    setHtml += '<span class="text-slate-600">Ingen rekommendation</span>';
                 }
                 setHtml += '</td>';
 
