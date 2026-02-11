@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SWGHDash</title>
+    <title>SWGoH Statistik</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -100,16 +100,25 @@
 </div>
 
 <script>
-    const fmt = (n) => new Intl.NumberFormat('sv-SE').format(n);
+    // Formaterar siffror med tusentalsavgränsare (t.ex. 1 234 567)
+    const fmt = (n) => {
+        if (n === undefined || n === null) return "N/A";
+        return new Intl.NumberFormat('sv-SE').format(n);
+    };
 
     async function fetchData() {
         const app = document.getElementById('app');
+        // Ändrat till ditt specifika filnamn: game_data_r.json
+        const fileName = 'game_data_r.json';
+
         try {
-            const response = await fetch('game_data.json');
-            if (!response.ok) throw new Error('Kunde inte läsa game_data.json');
+            const response = await fetch(fileName);
+            if (!response.ok) throw new Error(`Kunde inte hitta ${fileName}`);
             
             const json = await response.json();
-            const d = json.data;
+            
+            // Hanterar både om datan ligger direkt i root eller i ett .data objekt
+            const d = json.data || json;
 
             app.innerHTML = `
                 <header>
@@ -118,42 +127,46 @@
                 <div class="stats-grid">
                     <div class="stat-item">
                         <span class="label">Total GP</span>
-                        <span class="value">${fmt(d.galactic_power)}</span>
+                        <span class="value">${fmt(d.galactic_power || d.gp)}</span>
                     </div>
                     <div class="stat-item">
                         <span class="label">Character GP</span>
-                        <span class="value">${fmt(d.character_galactic_power)}</span>
+                        <span class="value">${fmt(d.character_galactic_power || d.char_gp)}</span>
                     </div>
                     <div class="stat-item">
                         <span class="label">Ship GP</span>
-                        <span class="value">${fmt(d.ship_galactic_power)}</span>
+                        <span class="value">${fmt(d.ship_galactic_power || d.ship_gp)}</span>
                     </div>
                     <div class="stat-item" style="border-left-color: #ffcc00;">
                         <span class="label">Arena Rank</span>
-                        <span class="value">#${d.arena_rank}</span>
+                        <span class="value">#${d.arena_rank || d.rank || 'N/A'}</span>
                     </div>
                     <div class="stat-item">
                         <span class="label">Level</span>
-                        <span class="value">${d.level}</span>
+                        <span class="value">${d.level || 'N/A'}</span>
                     </div>
                     <div class="stat-item">
-                        <span class="label">Guld Bidrag</span>
-                        <span class="value">${fmt(d.guild_contribution)}</span>
+                        <span class="label">Guild Contribution</span>
+                        <span class="value">${fmt(d.guild_contribution || 0)}</span>
                     </div>
                 </div>
                 <div class="status-footer">
-                    Senast uppdaterad: ${new Date(d.last_updated).toLocaleString('sv-SE')}
+                    Senast uppdaterad: ${d.last_updated ? new Date(d.last_updated).toLocaleString('sv-SE') : 'Okänt datum'}
                 </div>
             `;
         } catch (err) {
-            app.innerHTML = `<div class="error-msg">
-                <h3>Ett fel uppstod</h3>
-                <p>${err.message}</p>
-                <p>Kontrollera att game_data.json ligger i samma mapp på GitHub.</p>
-            </div>`;
+            app.innerHTML = `
+                <header><h1>Fel</h1></header>
+                <div class="error-msg">
+                    <p><strong>Status:</strong> ${err.message}</p>
+                    <p style="font-size: 0.8rem; margin-top: 10px; color: var(--text-dim);">
+                        Säkerställ att filen <b>${fileName}</b> finns på servern/GitHub.
+                    </p>
+                </div>`;
         }
     }
 
+    // Starta hämtning när sidan laddats
     window.onload = fetchData;
 </script>
 
