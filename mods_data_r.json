@@ -1,0 +1,66 @@
+[
+    {
+        "slug": "admiral-ackbar",
+        "mod_sets": [
+            {
+                "set": "Health",
+                "count": 2
+            },
+            {
+                "set": "Speed",
+                "count": 4
+            }
+        ],
+        "primaries": {
+            "arrow": "Speed",
+            "triangle": "Protection",
+            "circle": "Protection",
+            "cross": "Tenacity"
+        },
+        "updated_at": "2026-02-07 22:47:54"
+    },
+    {
+        "slug": "admiral-piett",
+        "mod_sets": [
+            {
+                "set": "Health",
+                "count": 2
+            },
+            {
+                "set": "Speed",
+                "count": 4
+            }
+        ],
+        "primaries": {
+            "arrow": "Speed",
+            "triangle": "Critical Damage",
+            "circle": "Protection",
+            "cross": "Potency"
+        },
+        "updated_at": "2026-02-07 22:48:00"
+    },
+    {
+        "slug": "aayla-secura",
+        "mod_sets": [
+            {
+                "set": "Crit Chance",
+                "count": 2
+            },
+            {
+                "set": "Crit Chance",
+                "count": 2
+            },
+            {
+                "set": "Potency",
+                "count": 2
+            }
+        ],
+        "primaries": {
+            "arrow": "Speed",
+            "triangle": "Critical Damage",
+            "circle": "Health",
+            "cross": "Potency"
+        },
+        "updated_at": "2026-02-07 22:48:07"
+    }
+]

@@ -1,0 +1,3720 @@
+{
+    "characters": [
+        {
+            "name": "﻿0-0-0",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "4-LOM",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "50R-T",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "ARC Trooper",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Aayla Secura",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Admiral Ackbar",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Admiral Piett",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Admiral Raddus",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "Admiral Trench",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "Ahsoka Tano",
+            "requirements": [
+                {
+                    "amount": 400,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 300,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 700
+        },
+        {
+            "name": "Ahsoka Tano (Fulcrum)",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Ahsoka Tano (Snips)",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Amilyn Holdo",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Asajj Ventress",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Asajj Ventress (Dark Disciple)",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Aurra Sing",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "B1 Battle Droid",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "B2 Super Battle Droid",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "BB-8",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "BT-1",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Barriss Offee",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Bastila Shan",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Bastila Shan (Fallen)",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Batcher",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Baylan Skoll",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "Baze Malbus",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Ben Solo",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Biggs Darklighter",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Bistan",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Bo-Katan (Mand'alor)",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "Bo-Katan Kryze",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Boba Fett",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Boba Fett, Scion of Jango",
+            "requirements": [
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 50,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 200
+        },
+        {
+            "name": "Bodhi Rook",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Boss Nass",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Bossk",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Boushh (Leia Organa)",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Brutus",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "C-3PO",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "CC-1119 \"Appo\"",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "CC-2224 \"Cody\"",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "CT-21-0408 \"Echo\"",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "CT-5555 \"Fives\"",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "CT-7567 \"Rex\"",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "CX-2",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Cad Bane",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Cal Kestis",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Canderous Ordo",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Captain Drogan",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Captain Enoch",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Captain Han Solo",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Captain Ithano",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Captain Phasma",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Captain Rex",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Captain Silvo",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Captain Tarpals",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Cara Dune",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Carth Onasi",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Cassian Andor",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Cere Junda",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Chewbacca",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Chief Chirpa",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Chief Nebit",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Chirrut ÃŽmwe",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Chopper",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Clone Sergeant - Phase I",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Clone Wars Chewbacca",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Colonel Starck",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Commander Ahsoka Tano",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Commander Luke Skywalker",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Coruscant Underworld Police",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Count Dooku",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Crosshair (Scarred)",
+            "requirements": [
+                {
+                    "amount": 200,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 300
+        },
+        {
+            "name": "Dark Trooper",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Dark Trooper Moff Gideon",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Darth Bane",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "Darth Malak",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "Darth Malgus",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Darth Maul",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Darth Nihilus",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Darth Revan",
+            "requirements": [
+                {
+                    "amount": 200,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 300
+        },
+        {
+            "name": "Darth Sidious",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Darth Sion",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Darth Talon",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Darth Traya",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Darth Vader",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Darth Vader (Duel's End)",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Dash Rendar",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Dathcha",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Death Trooper",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Death Trooper (Peridea)",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Dengar",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Depa Billaba",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Director Krennic",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Disguised Clone Trooper",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Doctor Aphra",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "Droideka",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Echo",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Eeth Koth",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Eighth Brother",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Embo",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Emperor Palpatine",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Enfys Nest",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Ewok Elder",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Ewok Scout",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Ezra Bridger",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Ezra Bridger (Exile)",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Fennec Shand",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Fifth Brother",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Finn",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "First Order Executioner",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "First Order Officer",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "First Order SF TIE Pilot",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "First Order Stormtrooper",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "First Order TIE Pilot",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Gamorrean Guard",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Gar Saxon",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Garazeb \"Zeb\" Orrelios",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "General Grievous",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "General Hux",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "General Kenobi",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "General Skywalker",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "General Syndulla",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "General Veers",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Geonosian Brood Alpha",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Geonosian Soldier",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Geonosian Spy",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Grand Admiral Thrawn",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Grand Inquisitor",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "Grand Master Yoda",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Grand Moff Tarkin",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Great Mothers",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Greedo",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Greef Karga",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Gungan Boomadier",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Gungan Phalanx",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "HK-47",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Han Solo",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Hera Syndulla",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Hermit Yoda",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Hondo Ohnaka",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Hoth Rebel Scout",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Hoth Rebel Soldier",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Hunter",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Hunter (Mercenary)",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Huyang",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "IG-100 MagnaGuard",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "IG-11",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "IG-12 & Grogu",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "IG-86 Sentinel Droid",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "IG-88",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "IG-90",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Iden Versio",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Ima-Gun Di",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Imperial Probe Droid",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Imperial Super Commando",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Inquisitor Barriss",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Jabba the Hutt",
+            "requirements": [
+                {
+                    "amount": 400,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 300,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 700
+        },
+        {
+            "name": "Jango Fett",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Jar Jar Binks",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "Jawa",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Jawa Engineer",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Jawa Scavenger",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Jedi Consular",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Jedi Knight Anakin",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Jedi Knight Cal Kestis",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "Jedi Knight Guardian",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Jedi Knight Luke Skywalker",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Jedi Knight Revan",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Jedi Master Kenobi",
+            "requirements": [
+                {
+                    "amount": 400,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 300,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 700
+        },
+        {
+            "name": "Jedi Master Luke Skywalker",
+            "requirements": [
+                {
+                    "amount": 350,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 600
+        },
+        {
+            "name": "Jedi Master Mace Windu",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "Jocasta Nu",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Jolee Bindo",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Juhani",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Jyn Erso",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "K-2SO",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Kanan Jarrus",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Kelleran Beq",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Ki-Adi-Mundi",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Kit Fisto",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Kix",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Krrsantan",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Kuiil",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Kyle Katarn",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Kylo Ren",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Kylo Ren (Unmasked)",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "L3-37",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Lando Calrissian",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Leia Organa",
+            "requirements": [
+                {
+                    "amount": 400,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 300,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 700
+        },
+        {
+            "name": "Lobot",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Logray",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Lord Vader",
+            "requirements": [
+                {
+                    "amount": 400,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 300,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 700
+        },
+        {
+            "name": "Luke Skywalker (Farmboy)",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Luminara Unduli",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Luthen Rael",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Mace Windu",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Magmatrooper",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Mara Jade, The Emperor's Hand",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Marrok",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Master Qui-Gon",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Maul",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Maul (Hate-Fueled)",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "Maz Kanata",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Merrin",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Mission Vao",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Mob Enforcer",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Moff Gideon",
+            "requirements": [
+                {
+                    "amount": 200,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 300
+        },
+        {
+            "name": "Mon Mothma",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "Morgan Elsbeth",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Mother Talzin",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Night Trooper",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Nightsister Acolyte",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Nightsister Initiate",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Nightsister Spirit",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Nightsister Zombie",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Ninth Sister",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Nute Gunray",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Obi-Wan Kenobi (Old Ben)",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Old Daka",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Omega",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Omega (Fugitive)",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Padawan Obi-Wan",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Padawan Sabine Wren",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "PadmÃ© Amidala",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Pao",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Paploo",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Paz Vizsla",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Pirate King Hondo Ohnaka",
+            "requirements": [
+                {
+                    "amount": 400,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 300,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 700
+        },
+        {
+            "name": "Plo Koon",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Poe Dameron",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Poggle the Lesser",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Princess Kneesaa",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Princess Leia",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Qi'ra",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Queen Amidala",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Qui-Gon Jinn",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Quiggold",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "R2-D2",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "RC-1262 \"Scorch\"",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Range Trooper",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Rebel Officer Leia Organa",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Resistance Hero Finn",
+            "requirements": [
+                {
+                    "amount": 200,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 300
+        },
+        {
+            "name": "Resistance Hero Poe",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Resistance Pilot",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Resistance Trooper",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Rey",
+            "requirements": [
+                {
+                    "amount": 400,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 300,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 700
+        },
+        {
+            "name": "Rey (Dark Side Vision)",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Rey (Jedi Training)",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Rey (Scavenger)",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Rose Tico",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Royal Guard",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "SM-33",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "STAP",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Sabine Wren",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Sana Starros",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Savage Opress",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Saw Gerrera",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "Scarif Rebel Pathfinder",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Scout Trooper",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Second Sister",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Seventh Sister",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Shaak Ti",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "Shin Hati",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Shoretrooper",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Sith Assassin",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Sith Empire Trooper",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Sith Eternal Emperor",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Sith Marauder",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Sith Trooper",
+            "requirements": [
+                {
+                    "amount": 200,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 300
+        },
+        {
+            "name": "Skiff Guard (Lando Calrissian)",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Snowtrooper",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Starkiller",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "Stormtrooper",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Stormtrooper Han",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Stormtrooper Luke",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Sun Fac",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Supreme Leader Kylo Ren",
+            "requirements": [
+                {
+                    "amount": 400,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 300,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 700
+        },
+        {
+            "name": "T3-M4",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "TIE Fighter Pilot",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Talia",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Tarfful",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Taron Malicos",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "Tech",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Teebo",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Temple Guard",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "The Armorer",
+            "requirements": [
+                {
+                    "amount": 300,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 200,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 500
+        },
+        {
+            "name": "The Mandalorian",
+            "requirements": [
+                {
+                    "amount": 200,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 300
+        },
+        {
+            "name": "The Mandalorian (Beskar Armor)",
+            "requirements": [
+                {
+                    "amount": 350,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 600
+        },
+        {
+            "name": "The Stranger",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Third Sister",
+            "requirements": [
+                {
+                    "amount": 400,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 300,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 700
+        },
+        {
+            "name": "Threepio & Chewie",
+            "requirements": [
+                {
+                    "amount": 200,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 300
+        },
+        {
+            "name": "Tusken Chieftain",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Tusken Raider",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Tusken Shaman",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Tusken Warrior",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "URoRRuR'R'R",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Ugnaught",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Vandor Chewbacca",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Vane",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Veteran Smuggler Chewbacca",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Veteran Smuggler Han Solo",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Visas Marr",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Wampa",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Wat Tambor",
+            "requirements": [
+                {
+                    "amount": 200,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 300
+        },
+        {
+            "name": "Wedge Antilles",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Wicket",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Wrecker",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Wrecker (Mercenary)",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Yoda & Chewie",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Young Han Solo",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Young Lando Calrissian",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Zaalbar",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Zam Wesell",
+            "requirements": [
+                {
+                    "amount": 100,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                }
+            ],
+            "total_kyros": 100
+        },
+        {
+            "name": "Zorii Bliss",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        },
+        {
+            "name": "Zuckuss",
+            "requirements": [
+                {
+                    "amount": 250,
+                    "item": "Mk 7 Kyrotech Shock Prod Prototype Salvage"
+                },
+                {
+                    "amount": 150,
+                    "item": "Mk 9 Kyrotech Battle Computer Prototype Salvage"
+                }
+            ],
+            "total_kyros": 400
+        }
+    ]
+}
