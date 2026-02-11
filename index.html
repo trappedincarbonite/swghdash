@@ -49,12 +49,10 @@
             border: 1px solid transparent;
         }
 
-        /* Match States */
         .match-ok { border-color: #10b981 !important; color: #10b981; }
         .match-fail { color: #ef4444; }
         .rec-hint { display: block; font-size: 0.55rem; opacity: 0.7; font-weight: normal; }
 
-        /* SWGOH Stat Colors */
         .stat-Health { background-color: #064e3b; color: #34d399; }
         .stat-Speed { background-color: #7f1d1d; color: #f87171; }
         .stat-Protection { background-color: #164e63; color: #22d3ee; }
@@ -85,7 +83,7 @@
         <div class="flex items-center space-x-10">
             <h1 class="text-2xl font-bold text-yellow-500 tracking-tighter">SWGHDash</h1>
             <div id="stats-grid" class="grid grid-cols-3 gap-x-8 gap-y-1">
-                <div class="flex space-x-2"><span class="stat-label">Laddar data...</span></div>
+                <div class="flex space-x-2"><span class="stat-label">Laddar data från mappen /data...</span></div>
             </div>
         </div>
         <div>
@@ -94,8 +92,6 @@
     </header>
 
     <main class="grid grid-cols-1 xl:grid-cols-12 gap-4">
-        
-        <!-- Tabell 1: Unit Info -->
         <section class="xl:col-span-3">
             <h2 class="text-[10px] font-bold mb-1 uppercase tracking-widest text-slate-400 px-1">Unlocked Units</h2>
             <div class="table-container max-h-[75vh] overflow-y-auto shadow-2xl">
@@ -114,7 +110,6 @@
             </div>
         </section>
 
-        <!-- Tabell 2: Equipped vs Recommended -->
         <section class="xl:col-span-9">
             <h2 class="text-[10px] font-bold mb-1 uppercase tracking-widest text-slate-400 px-1">Mod Comparison (Equipped vs GT100 Rec)</h2>
             <div class="table-container max-h-[75vh] overflow-y-auto shadow-2xl">
@@ -134,7 +129,6 @@
                 </table>
             </div>
         </section>
-
     </main>
 
     <script>
@@ -142,10 +136,11 @@
 
         async function initDashboard() {
             try {
+                // Uppdaterade sökvägar för att hämta från undermappen /data
                 const [gameRes, kyroRes, modsRes] = await Promise.all([
-                    fetch('game_data.json').then(r => r.json()),
-                    fetch('kyro_data.json').then(r => r.json()),
-                    fetch('mods_data.json').then(r => r.json())
+                    fetch('data/game_data.json').then(r => r.json()),
+                    fetch('data/kyro_data.json').then(r => r.json()),
+                    fetch('data/mods_data.json').then(r => r.json())
                 ]);
 
                 fullData.game = gameRes;
@@ -155,7 +150,8 @@
                 renderHeader(gameRes.data);
                 renderTables(gameRes.units, kyroRes.characters, modsRes);
             } catch (err) {
-                console.error("Fel vid laddning:", err);
+                console.error("Kunde inte hitta filer i /data-mappen:", err);
+                document.getElementById('stats-grid').innerHTML = '<div class="text-rose-500 text-xs">Fel: Kontrollera att filerna ligger i mappen "data/"</div>';
             }
         }
 
@@ -193,7 +189,6 @@
             units.forEach(unit => {
                 if (filter && !unit.name.toLowerCase().includes(filter.toLowerCase())) return;
 
-                // 1. UNIT INFO
                 const kyroInfo = kyros.find(k => k.name.trim() === unit.name.trim());
                 const kyroValue = kyroInfo ? kyroInfo.total_kyros : '-';
                 
@@ -208,11 +203,9 @@
                 `;
                 unitsBody.insertAdjacentHTML('beforeend', unitRow);
 
-                // 2. COMPARISON LOGIC
                 const rec = recMods.find(r => r.slug === unit.base_id.toLowerCase().replace(/_/g, '-'));
                 const equipped = unit.mods || [];
                 
-                // Slots Mapping
                 const slots = [
                     { id: 2, key: 'arrow' },
                     { id: 4, key: 'triangle' },
@@ -222,7 +215,6 @@
                     { id: 3, key: 'diamond' }
                 ];
 
-                // Mod Sets Comparison
                 const eqSets = {};
                 equipped.forEach(m => eqSets[m.set] = (eqSets[m.set] || 0) + 1);
                 
@@ -240,7 +232,6 @@
                 }
                 setHtml += '</td>';
 
-                // Slot Comparison
                 let slotsHtml = '';
                 slots.forEach(slot => {
                     const m = equipped.find(mod => mod.slot === slot.id);
@@ -248,7 +239,6 @@
                     const targetStat = (rec && rec.primaries && rec.primaries[slot.key]) ? rec.primaries[slot.key] : null;
                     
                     const isMatch = targetStat ? (currentStat.toLowerCase() === targetStat.toLowerCase()) : true;
-                    const statusClass = isMatch ? 'match-ok' : 'match-fail';
 
                     slotsHtml += `
                         <td class="p-1">
