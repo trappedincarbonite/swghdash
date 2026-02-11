@@ -5,110 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SWGoH Statistik</title>
     <style>
-        :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-main: #ffffff;
-            --text-dim: #b0b0b0;
-            --accent: #37bcf9;
-            --border: #333;
-        }
-
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            min-height: 100vh;
+            padding: 20px;
         }
-
-        .dashboard {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
+        .container {
+            background-color: #2d2d2d;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             width: 100%;
-            max-width: 450px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 600px;
         }
-
-        header {
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            text-align: center;
-        }
-
         h1 {
-            margin: 0;
-            font-size: 1.4rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 25px;
         }
-
-        .stats-grid {
-            display: grid;
-            gap: 12px;
-        }
-
-        .stat-item {
+        .stat-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background-color: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            border-left: 3px solid var(--accent);
+            padding: 12px 0;
+            border-bottom: 1px solid #444;
         }
-
+        .stat-row:last-child {
+            border-bottom: none;
+        }
         .label {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .value {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 1.1rem;
             font-weight: bold;
+            color: #aaa;
         }
-
-        .status-footer {
-            margin-top: 20px;
-            font-size: 0.75rem;
-            color: var(--text-dim);
+        .value {
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .error {
+            color: #ff5555;
+            background: #3d1a1a;
+            padding: 15px;
+            border-radius: 8px;
             text-align: center;
         }
-
-        .error-msg {
-            color: #ff5252;
+        .loading {
             text-align: center;
-            padding: 20px;
+            font-style: italic;
+            color: #888;
         }
     </style>
 </head>
 <body>
 
-<div class="dashboard" id="app">
-    <header>
-        <h1>Laddar Data...</h1>
-    </header>
+<div class="container" id="content">
+    <div class="loading">Laddar spelardata...</div>
 </div>
 
 <script>
-    // Formaterar siffror med tusentalsavgränsare (t.ex. 1 234 567)
-    const fmt = (n) => {
-        if (n === undefined || n === null) return "N/A";
-        return new Intl.NumberFormat('sv-SE').format(n);
-    };
+    const fmt = (n) => n ? new Intl.NumberFormat('sv-SE').format(n) : '0';
 
-    async function fetchData() {
-        const app = document.getElementById('app');
-        // Ändrat till ditt specifika filnamn: game_data_r.json
+    async function loadStats() {
+        const container = document.getElementById('content');
         const fileName = 'game_data_r.json';
 
         try {
@@ -116,58 +76,46 @@
             if (!response.ok) throw new Error(`Kunde inte hitta ${fileName}`);
             
             const json = await response.json();
-            
-            // Hanterar både om datan ligger direkt i root eller i ett .data objekt
             const d = json.data || json;
 
-            app.innerHTML = `
-                <header>
-                    <h1>SWGoH Statistik</h1>
-                </header>
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <span class="label">Total GP</span>
-                        <span class="value">${fmt(d.galactic_power || d.gp)}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="label">Character GP</span>
-                        <span class="value">${fmt(d.character_galactic_power || d.char_gp)}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="label">Ship GP</span>
-                        <span class="value">${fmt(d.ship_galactic_power || d.ship_gp)}</span>
-                    </div>
-                    <div class="stat-item" style="border-left-color: #ffcc00;">
-                        <span class="label">Arena Rank</span>
-                        <span class="value">#${d.arena_rank || d.rank || 'N/A'}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="label">Level</span>
-                        <span class="value">${d.level || 'N/A'}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="label">Guild Contribution</span>
-                        <span class="value">${fmt(d.guild_contribution || 0)}</span>
-                    </div>
+            container.innerHTML = `
+                <h1>SWGoH Statistik</h1>
+                <div class="stat-row">
+                    <span class="label">Total GP:</span>
+                    <span class="value">${fmt(d.galactic_power || d.gp)}</span>
                 </div>
-                <div class="status-footer">
-                    Senast uppdaterad: ${d.last_updated ? new Date(d.last_updated).toLocaleString('sv-SE') : 'Okänt datum'}
+                <div class="stat-row">
+                    <span class="label">Character GP:</span>
+                    <span class="value">${fmt(d.character_galactic_power || d.char_gp)}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="label">Ship GP:</span>
+                    <span class="value">${fmt(d.ship_galactic_power || d.ship_gp)}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="label">Arena Rank:</span>
+                    <span class="value">#${d.arena_rank || d.rank || 'N/A'}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="label">Nivå:</span>
+                    <span class="value">${d.level || 'N/A'}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="label">Senast uppdaterad:</span>
+                    <span class="value">${d.last_updated ? d.last_updated.split('T')[0] : 'Okänt'}</span>
                 </div>
             `;
         } catch (err) {
-            app.innerHTML = `
-                <header><h1>Fel</h1></header>
-                <div class="error-msg">
-                    <p><strong>Status:</strong> ${err.message}</p>
-                    <p style="font-size: 0.8rem; margin-top: 10px; color: var(--text-dim);">
-                        Säkerställ att filen <b>${fileName}</b> finns på servern/GitHub.
-                    </p>
-                </div>`;
+            container.innerHTML = `
+                <div class="error">
+                    <h3>Ett fel uppstod</h3>
+                    <p>${err.message}</p>
+                </div>
+            `;
         }
     }
 
-    // Starta hämtning när sidan laddats
-    window.onload = fetchData;
+    window.onload = loadStats;
 </script>
 
 </body>
