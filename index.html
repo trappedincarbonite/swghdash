@@ -3,307 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SWGHDash - Mod Comparison</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>SWGoH Statistik</title>
     <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-color: #e0e0e0;
+            --accent-color: #4a90e2;
+        }
         body {
-            background-color: #0a0e1a;
-            color: #e2e8f0;
-            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            padding: 20px;
         }
-        .header-bg { background-color: #0f172a; border-bottom: 1px solid #1e293b; }
-        .stat-label { color: #94a3b8; font-size: 0.7rem; text-transform: uppercase; }
-        .stat-value { color: #f1f5f9; font-size: 0.85rem; font-weight: 600; }
-        
-        .table-container { 
-            background-color: #111827; 
-            border: 1px solid #1f2937; 
-            border-radius: 0.25rem; 
-        }
-        table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
-        th { 
-            background-color: #1f2937; 
-            color: #94a3b8; 
-            text-align: left; 
-            padding: 0.5rem 0.6rem; 
-            border-bottom: 1px solid #374151;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.6rem;
-        }
-        td { 
-            padding: 0.5rem 0.6rem; 
-            border-bottom: 1px solid #1f2937; 
-            border-right: 1px solid #1f2937; 
-            white-space: nowrap;
-        }
-        
-        .mod-tag {
-            display: inline-block;
-            padding: 2px 4px;
-            border-radius: 2px;
-            font-weight: bold;
-            font-size: 0.65rem;
+        .container {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            max-width: 400px;
             width: 100%;
-            text-align: center;
-            border: 1px solid transparent;
         }
-
-        .match-ok { border-color: #10b981 !important; color: #10b981; }
-        .match-fail { color: #ef4444; }
-        .rec-hint { display: block; font-size: 0.55rem; opacity: 0.7; font-weight: normal; }
-
-        /* Färgmappning för stats */
-        .stat-Health { background-color: #064e3b; color: #34d399; }
-        .stat-Speed { background-color: #7f1d1d; color: #f87171; }
-        .stat-Protection { background-color: #164e63; color: #22d3ee; }
-        .stat-Offense { background-color: #14532d; color: #4ade80; }
-        .stat-Defense { background-color: #450a0a; color: #fca5a5; }
-        .stat-Potency { background-color: #4c1d95; color: #a78bfa; }
-        .stat-Tenacity { background-color: #713f12; color: #fbbf24; }
-        .stat-Crit-Damage, .stat-Critical-Damage { background-color: #1e3a8a; color: #60a5fa; }
-        .stat-Crit-Chance, .stat-Critical-Chance { background-color: #831843; color: #f472b6; }
-        .stat-none { background-color: #1f2937; color: #4b5563; }
-
-        .search-input { 
-            background-color: #1e293b; 
-            border: 1px solid #334155; 
-            color: white; 
-            border-radius: 0.25rem; 
-            padding: 0.3rem 0.8rem; 
+        h1 {
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
         }
-        
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-
-        .loading-spinner {
-            border: 3px solid rgba(255,255,255,.1);
-            border-radius: 50%;
-            border-top: 3px solid #eab308;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            padding: 0.5rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        #build-tag {
-            font-family: monospace;
-            font-size: 0.65rem;
-            color: #475569;
-            margin-top: auto;
-            padding: 1rem 0;
-            text-align: center;
+        .label {
+            font-weight: bold;
+            color: #aaa;
+        }
+        .value {
+            font-family: 'Courier New', Courier, monospace;
+            color: #fff;
         }
     </style>
 </head>
-<body class="p-4" onload="initDashboard()">
+<body>
 
-    <header id="player-header" class="header-bg p-4 mb-6 flex flex-wrap items-center justify-between rounded-md">
-        <div class="flex items-center space-x-10">
-            <h1 class="text-2xl font-bold text-yellow-500 tracking-tighter">SWGHDash</h1>
-            <div id="stats-grid" class="flex space-x-6 items-center">
-                <div class="loading-spinner"></div>
-                <span class="text-xs text-slate-400">Hämtar data...</span>
-            </div>
-        </div>
-        <div>
-            <input type="text" id="charSearch" oninput="filterCharacters()" placeholder="Sök karaktär..." class="search-input text-sm w-64 focus:outline-none focus:ring-1 focus:ring-yellow-500">
-        </div>
-    </header>
+<div class="container" id="stats-container">
+    <h1>Laddar statistik...</h1>
+</div>
 
-    <main class="grid grid-cols-1 xl:grid-cols-12 gap-4 flex-grow">
-        <section class="xl:col-span-3">
-            <h2 class="text-[10px] font-bold mb-1 uppercase tracking-widest text-slate-400 px-1">Upplåsta Karaktärer</h2>
-            <div class="table-container max-h-[70vh] overflow-y-auto shadow-2xl">
-                <table id="units-table">
-                    <thead>
-                        <tr>
-                            <th>Namn</th>
-                            <th class="text-center">Lvl</th>
-                            <th class="text-center">Stars</th>
-                            <th class="text-center">Gear</th>
-                            <th class="text-center">Kyros</th>
-                        </tr>
-                    </thead>
-                    <tbody id="units-body"></tbody>
-                </table>
-            </div>
-        </section>
+<script>
+    async function loadStats() {
+        const container = document.getElementById('stats-container');
+        try {
+            const response = await fetch('game_data.json');
+            if (!response.ok) throw new Error('Kunde inte ladda filen');
+            
+            const result = await response.json();
+            const d = result.data;
 
-        <section class="xl:col-span-9">
-            <h2 class="text-[10px] font-bold mb-1 uppercase tracking-widest text-slate-400 px-1">Mod Jämförelse</h2>
-            <div class="table-container max-h-[70vh] overflow-y-auto shadow-2xl">
-                <table id="comparison-table">
-                    <thead>
-                        <tr>
-                            <th>Mod Sets</th>
-                            <th class="text-center">Arrow</th>
-                            <th class="text-center">Triangle</th>
-                            <th class="text-center">Circle</th>
-                            <th class="text-center">Cross</th>
-                            <th class="text-center">Square</th>
-                            <th class="text-center">Diamond</th>
-                        </tr>
-                    </thead>
-                    <tbody id="comparison-body"></tbody>
-                </table>
-            </div>
-        </section>
-    </main>
+            // Formatera siffror med tusentalsavgränsare
+            const fmt = (num) => new Intl.NumberFormat('sv-SE').format(num);
 
-    <footer id="build-tag">build_260211_093235</footer>
-
-    <script>
-        const BUILD_ID = "build_260211_093235";
-        let fullData = { game: null, kyro: null, mods: null };
-
-        // Rensar data och hanterar eventuella specialtecken
-        function cleanName(name) {
-            if (!name) return "";
-            return String(name).replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
-        }
-
-        async function initDashboard() {
-            try {
-                // Försök hämta de nya filnamnen direkt från rotmappen
-                const tryFetch = async (fileName) => {
-                    const response = await fetch(fileName);
-                    if (!response.ok) throw new Error(`Status: ${response.status}`);
-                    return await response.json();
-                };
-
-                const [gameRes, kyroRes, modsRes] = await Promise.all([
-                    tryFetch('game_data_r.json'),
-                    tryFetch('kyro_data_r.json'),
-                    tryFetch('mods_data_r.json')
-                ]);
-
-                fullData.game = gameRes;
-                fullData.kyro = kyroRes;
-                fullData.mods = modsRes;
-
-                renderHeader(gameRes.data);
-                renderTables(gameRes.units, kyroRes.characters, modsRes);
-            } catch (err) {
-                console.error("Fetch error:", err);
-                document.getElementById('stats-grid').innerHTML = 
-                    `<div class="text-rose-500 text-xs font-bold px-3 py-2 bg-rose-500/10 border border-rose-500/20 rounded">
-                        FEL: Kunde inte läsa JSON-filer (_r.json). Kontrollera sökvägen.<br>
-                        <span class="opacity-70 text-[10px]">${err.message}</span>
-                    </div>`;
-            }
-        }
-
-        function renderHeader(data) {
-            const grid = document.getElementById('stats-grid');
-            if (!data) return;
-            const stats = [
-                { label: 'GP', value: (data.galactic_power || 0).toLocaleString() },
-                { label: 'Char GP', value: (data.character_galactic_power || 0).toLocaleString() },
-                { label: 'Arena', value: `#${data.arena_rank || '?'}` }
-            ];
-            grid.innerHTML = stats.map(s => `
-                <div class="flex items-baseline space-x-2">
-                    <span class="stat-label">${s.label}</span>
-                    <span class="stat-value text-yellow-500">${s.value}</span>
+            container.innerHTML = `
+                <h1>SWGoH Statistik</h1>
+                <div class="stat-row">
+                    <span class="label">Total GP:</span>
+                    <span class="value">${fmt(d.galactic_power)}</span>
                 </div>
-            `).join('');
+                <div class="stat-row">
+                    <span class="label">Character GP:</span>
+                    <span class="value">${fmt(d.character_galactic_power)}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="label">Ship GP:</span>
+                    <span class="value">${fmt(d.ship_galactic_power)}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="label">Arena Rank:</span>
+                    <span class="value">#${d.arena_rank}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="label">Level:</span>
+                    <span class="value">${d.level}</span>
+                </div>
+            `;
+        } catch (error) {
+            container.innerHTML = `<h1>Fel</h1><p>${error.message}</p>`;
         }
+    }
 
-        function getStatClass(statName) {
-            if (!statName || statName === '-') return 'stat-none';
-            // Hanterar "Critical Damage" -> "Critical-Damage"
-            const clean = String(statName).replace(/\s+/g, '-');
-            return `stat-${clean}`;
-        }
+    window.onload = loadStats;
+</script>
 
-        function renderTables(units, kyros, recMods, filter = '') {
-            const unitsBody = document.getElementById('units-body');
-            const compBody = document.getElementById('comparison-body');
-            if (!unitsBody || !compBody || !units) return;
-
-            unitsBody.innerHTML = '';
-            compBody.innerHTML = '';
-
-            units.forEach(unit => {
-                if (!unit || !unit.name) return;
-                
-                const uName = cleanName(unit.name);
-                if (filter && !uName.toLowerCase().includes(String(filter).toLowerCase())) return;
-
-                // Kyrotech matching
-                const kyroInfo = kyros ? kyros.find(k => cleanName(k.name) === uName) : null;
-                const kyroValue = kyroInfo ? kyroInfo.total_kyros : '-';
-                
-                unitsBody.insertAdjacentHTML('beforeend', `
-                    <tr>
-                        <td class="font-semibold text-slate-200">${uName}</td>
-                        <td class="text-center">${unit.level || '?'}</td>
-                        <td class="text-center">${unit.rarity || '?'}</td>
-                        <td class="text-center">G${unit.gear_level || '?'}${unit.relic_tier > 2 ? ' R' + (unit.relic_tier - 2) : ''}</td>
-                        <td class="text-center text-yellow-600 font-bold">${kyroValue}</td>
-                    </tr>
-                `);
-
-                // Mod matching
-                const slug = unit.base_id ? unit.base_id.toLowerCase().replace(/_/g, '-') : '';
-                const rec = recMods ? recMods.find(r => r.slug === slug) : null;
-                const equipped = unit.mods || [];
-                const slots = [
-                    { id: 2, key: 'arrow' }, { id: 4, key: 'triangle' }, { id: 6, key: 'circle' },
-                    { id: 5, key: 'cross' }, { id: 1, key: 'square' }, { id: 3, key: 'diamond' }
-                ];
-
-                const eqSets = {};
-                equipped.forEach(m => { if(m.set) eqSets[m.set] = (eqSets[m.set] || 0) + 1; });
-                
-                let setHtml = '<td class="min-w-[120px]">';
-                if (rec && rec.mod_sets) {
-                    rec.mod_sets.forEach(rs => {
-                        const count = eqSets[rs.set] || 0;
-                        const isMatch = count >= rs.count;
-                        setHtml += `<div class="text-[9px] ${isMatch ? 'text-emerald-400' : 'text-rose-400'}">
-                            ${rs.set} ${count}/${rs.count}
-                        </div>`;
-                    });
-                } else {
-                    setHtml += '<span class="text-slate-600 text-[9px]">Ingen data</span>';
-                }
-                setHtml += '</td>';
-
-                let slotsHtml = '';
-                slots.forEach(slot => {
-                    const m = equipped.find(mod => mod.slot === slot.id);
-                    const currentStat = m ? m.primary_stat : '-';
-                    const targetStat = (rec && rec.primaries && rec.primaries[slot.key]) ? rec.primaries[slot.key] : null;
-                    
-                    const isMatch = (targetStat && currentStat !== '-') 
-                        ? (currentStat.toLowerCase() === targetStat.toLowerCase()) 
-                        : true;
-
-                    slotsHtml += `
-                        <td class="p-1">
-                            <div class="mod-tag ${getStatClass(currentStat)} ${isMatch && currentStat !== '-' ? 'match-ok' : ''}">
-                                <span class="${(!isMatch && currentStat !== '-') ? 'match-fail' : ''}">${currentStat}</span>
-                                ${(!isMatch && targetStat) ? `<span class="rec-hint">(${targetStat})</span>` : ''}
-                            </div>
-                        </td>
-                    `;
-                });
-                compBody.insertAdjacentHTML('beforeend', `<tr>${setHtml}${slotsHtml}</tr>`);
-            });
-        }
-
-        function filterCharacters() {
-            const val = document.getElementById('charSearch').value;
-            if (fullData.game) {
-                renderTables(fullData.game.units, fullData.kyro ? fullData.kyro.characters : [], fullData.mods, val);
-            }
-        }
-    </script>
 </body>
 </html>
