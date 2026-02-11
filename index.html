@@ -56,7 +56,6 @@
         .match-fail { color: #ef4444; }
         .rec-hint { display: block; font-size: 0.55rem; opacity: 0.7; font-weight: normal; }
 
-        /* Stat Colors */
         .stat-Health { background-color: #064e3b; color: #34d399; }
         .stat-Speed { background-color: #7f1d1d; color: #f87171; }
         .stat-Protection { background-color: #164e63; color: #22d3ee; }
@@ -155,13 +154,13 @@
         </section>
     </main>
 
-    <footer id="build-tag">build_260211093100</footer>
+    <footer id="build-tag">build_260211_093235</footer>
 
     <script>
-        const BUILD_ID = "build_260211093100";
+        const BUILD_ID = "build_260211_093235";
         let fullData = { game: null, kyro: null, mods: null };
 
-        // Rensar osynliga tecken som kan finnas i JSON-data
+        // Rensar osynliga tecken (BOM/Zero-width) och trimmar
         function cleanName(name) {
             if (!name) return "";
             return name.replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
@@ -227,7 +226,7 @@
         function renderTables(units, kyros, recMods, filter = '') {
             const unitsBody = document.getElementById('units-body');
             const compBody = document.getElementById('comparison-body');
-            if (!units || !kyros || !recMods) return;
+            if (!unitsBody || !compBody || !units || !kyros || !recMods) return;
 
             unitsBody.innerHTML = '';
             compBody.innerHTML = '';
@@ -269,7 +268,7 @@
                         </div>`;
                     });
                 } else {
-                    setHtml += '<span class="text-slate-600">Ingen rekommendation</span>';
+                    setHtml += '<span class="text-slate-600 text-[9px]">Ingen rekommendation</span>';
                 }
                 setHtml += '</td>';
 
