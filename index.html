@@ -56,7 +56,6 @@
         .match-fail { color: #ef4444; }
         .rec-hint { display: block; font-size: 0.55rem; opacity: 0.7; font-weight: normal; }
 
-        /* Mod Stat Färgkodning */
         .stat-Health { background-color: #064e3b; color: #34d399; }
         .stat-Speed { background-color: #7f1d1d; color: #f87171; }
         .stat-Protection { background-color: #164e63; color: #22d3ee; }
@@ -157,15 +156,23 @@
     <footer id="build-tag">build_260211085912</footer>
 
     <script>
+        const BUILD_ID = "build_260211085912";
         let fullData = { game: null, kyro: null, mods: null };
 
         async function initDashboard() {
             try {
-                // Fix: Använder explicita relativa sökvägar för att undvika parse-fel i vissa miljöer
+                // Försöker hämta data med absoluta och relativa fallbacks
+                const fetchData = async (path) => {
+                    const response = await fetch(path);
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    return response.json();
+                };
+
+                // Vi provar med raka namn först (fungerar bäst i de flesta servermiljöer)
                 const [gameRes, kyroRes, modsRes] = await Promise.all([
-                    fetch('./data/game_data.json').then(r => r.json()),
-                    fetch('./data/kyro_data.json').then(r => r.json()),
-                    fetch('./data/mods_data.json').then(r => r.json())
+                    fetchData('data/game_data.json'),
+                    fetchData('data/kyro_data.json'),
+                    fetchData('data/mods_data.json')
                 ]);
 
                 fullData.game = gameRes;
@@ -177,7 +184,10 @@
             } catch (err) {
                 console.error("Fetch error:", err);
                 document.getElementById('stats-grid').innerHTML = 
-                    '<div class="text-rose-500 text-xs font-bold px-2 py-1 bg-rose-500/10 rounded">FEL: Kunde inte läsa JSON-filer. Kontrollera sökvägen.</div>';
+                    `<div class="text-rose-500 text-xs font-bold px-3 py-2 bg-rose-500/10 border border-rose-500/20 rounded">
+                        FEL: Kunde inte läsa JSON-filer. Kontrollera sökvägen.<br>
+                        <span class="opacity-70 text-[10px]">${err.message} | ${BUILD_ID}</span>
+                    </div>`;
             }
         }
 
@@ -198,7 +208,6 @@
 
         function getStatClass(statName) {
             if (!statName || statName === '-') return 'stat-none';
-            // Tar bort mellanslag för att matcha CSS-klasser (t.ex. Crit Damage -> Crit-Damage)
             const clean = statName.replace(/\s+/g, '-');
             return `stat-${clean}`;
         }
@@ -206,7 +215,6 @@
         function renderTables(units, kyros, recMods, filter = '') {
             const unitsBody = document.getElementById('units-body');
             const compBody = document.getElementById('comparison-body');
-
             unitsBody.innerHTML = '';
             compBody.innerHTML = '';
 
@@ -216,7 +224,7 @@
                 const kyroInfo = kyros.find(k => k.name.trim() === unit.name.trim());
                 const kyroValue = kyroInfo ? kyroInfo.total_kyros : '-';
                 
-                const unitRow = `
+                unitsBody.insertAdjacentHTML('beforeend', `
                     <tr>
                         <td class="font-semibold text-slate-200">${unit.name}</td>
                         <td class="text-center">${unit.level}</td>
@@ -224,19 +232,13 @@
                         <td class="text-center">G${unit.gear_level}${unit.relic_tier > 2 ? ' R' + (unit.relic_tier - 2) : ''}</td>
                         <td class="text-center text-yellow-600 font-bold">${kyroValue}</td>
                     </tr>
-                `;
-                unitsBody.insertAdjacentHTML('beforeend', unitRow);
+                `);
 
                 const rec = recMods.find(r => r.slug === unit.base_id.toLowerCase().replace(/_/g, '-'));
                 const equipped = unit.mods || [];
-                
                 const slots = [
-                    { id: 2, key: 'arrow' },
-                    { id: 4, key: 'triangle' },
-                    { id: 6, key: 'circle' },
-                    { id: 5, key: 'cross' },
-                    { id: 1, key: 'square' },
-                    { id: 3, key: 'diamond' }
+                    { id: 2, key: 'arrow' }, { id: 4, key: 'triangle' }, { id: 6, key: 'circle' },
+                    { id: 5, key: 'cross' }, { id: 1, key: 'square' }, { id: 3, key: 'diamond' }
                 ];
 
                 const eqSets = {};
@@ -272,7 +274,6 @@
                         </td>
                     `;
                 });
-
                 compBody.insertAdjacentHTML('beforeend', `<tr>${setHtml}${slotsHtml}</tr>`);
             });
         }
