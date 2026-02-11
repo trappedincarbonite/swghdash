@@ -10,6 +10,9 @@
             background-color: #0a0e1a;
             color: #e2e8f0;
             font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         .header-bg { background-color: #0f172a; border-bottom: 1px solid #1e293b; }
         .stat-label { color: #94a3b8; font-size: 0.7rem; text-transform: uppercase; }
@@ -75,6 +78,24 @@
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
+        .loading-spinner {
+            border: 3px solid rgba(255,255,255,.1);
+            border-radius: 50%;
+            border-top: 3px solid #eab308;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        #build-tag {
+            font-family: monospace;
+            font-size: 0.65rem;
+            color: #475569;
+            margin-top: auto;
+            padding: 1rem 0;
+        }
     </style>
 </head>
 <body class="p-4" onload="initDashboard()">
@@ -82,8 +103,9 @@
     <header id="player-header" class="header-bg p-4 mb-6 flex flex-wrap items-center justify-between rounded-md">
         <div class="flex items-center space-x-10">
             <h1 class="text-2xl font-bold text-yellow-500 tracking-tighter">SWGHDash</h1>
-            <div id="stats-grid" class="grid grid-cols-3 gap-x-8 gap-y-1">
-                <div class="flex space-x-2"><span class="stat-label">Laddar data från mappen /data...</span></div>
+            <div id="stats-grid" class="flex space-x-6 items-center">
+                <div class="loading-spinner"></div>
+                <span class="text-xs text-slate-400">Hämtar data...</span>
             </div>
         </div>
         <div>
@@ -91,10 +113,10 @@
         </div>
     </header>
 
-    <main class="grid grid-cols-1 xl:grid-cols-12 gap-4">
+    <main class="grid grid-cols-1 xl:grid-cols-12 gap-4 flex-grow">
         <section class="xl:col-span-3">
             <h2 class="text-[10px] font-bold mb-1 uppercase tracking-widest text-slate-400 px-1">Unlocked Units</h2>
-            <div class="table-container max-h-[75vh] overflow-y-auto shadow-2xl">
+            <div class="table-container max-h-[70vh] overflow-y-auto shadow-2xl">
                 <table id="units-table">
                     <thead>
                         <tr>
@@ -111,8 +133,8 @@
         </section>
 
         <section class="xl:col-span-9">
-            <h2 class="text-[10px] font-bold mb-1 uppercase tracking-widest text-slate-400 px-1">Mod Comparison (Equipped vs GT100 Rec)</h2>
-            <div class="table-container max-h-[75vh] overflow-y-auto shadow-2xl">
+            <h2 class="text-[10px] font-bold mb-1 uppercase tracking-widest text-slate-400 px-1">Mod Comparison</h2>
+            <div class="table-container max-h-[70vh] overflow-y-auto shadow-2xl">
                 <table id="comparison-table">
                     <thead>
                         <tr>
@@ -131,12 +153,13 @@
         </section>
     </main>
 
+    <footer id="build-tag">build_260211085420</footer>
+
     <script>
         let fullData = { game: null, kyro: null, mods: null };
 
         async function initDashboard() {
             try {
-                // Uppdaterade sökvägar för att hämta från undermappen /data
                 const [gameRes, kyroRes, modsRes] = await Promise.all([
                     fetch('data/game_data.json').then(r => r.json()),
                     fetch('data/kyro_data.json').then(r => r.json()),
@@ -150,25 +173,23 @@
                 renderHeader(gameRes.data);
                 renderTables(gameRes.units, kyroRes.characters, modsRes);
             } catch (err) {
-                console.error("Kunde inte hitta filer i /data-mappen:", err);
-                document.getElementById('stats-grid').innerHTML = '<div class="text-rose-500 text-xs">Fel: Kontrollera att filerna ligger i mappen "data/"</div>';
+                console.error("Fetch error:", err);
+                document.getElementById('stats-grid').innerHTML = 
+                    '<div class="text-rose-500 text-xs font-bold px-2 py-1 bg-rose-500/10 rounded">FEL: Kunde inte läsa JSON.</div>';
             }
         }
 
         function renderHeader(data) {
             const grid = document.getElementById('stats-grid');
             const stats = [
-                { label: 'Galactic Power', value: data.galactic_power.toLocaleString() },
-                { label: 'Characters Power', value: data.character_galactic_power.toLocaleString() },
-                { label: 'Squad Arena', value: `#${data.arena_rank}` },
-                { label: 'Ships Power', value: data.ship_galactic_power.toLocaleString() },
-                { label: 'Fleet Arena', value: `#${data.fleet_arena_rank || 'N/A'}` },
-                { label: 'PVP Wins', value: data.pvp_battles_won }
+                { label: 'GP', value: data.galactic_power.toLocaleString() },
+                { label: 'Char GP', value: data.character_galactic_power.toLocaleString() },
+                { label: 'Arena', value: `#${data.arena_rank}` }
             ];
             grid.innerHTML = stats.map(s => `
-                <div class="flex space-x-2">
+                <div class="flex items-baseline space-x-2">
                     <span class="stat-label">${s.label}</span>
-                    <span class="stat-value">${s.value}</span>
+                    <span class="stat-value text-yellow-500">${s.value}</span>
                 </div>
             `).join('');
         }
@@ -237,7 +258,6 @@
                     const m = equipped.find(mod => mod.slot === slot.id);
                     const currentStat = m ? m.primary_stat : '-';
                     const targetStat = (rec && rec.primaries && rec.primaries[slot.key]) ? rec.primaries[slot.key] : null;
-                    
                     const isMatch = targetStat ? (currentStat.toLowerCase() === targetStat.toLowerCase()) : true;
 
                     slotsHtml += `
