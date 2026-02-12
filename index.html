@@ -155,57 +155,73 @@
         </section>
     </main>
 
-    <footer id="build-tag">build_260211_093235</footer>
+    <footer id="build-tag">build_260212_221000</footer>
 
     <script>
-        const BUILD_ID = "build_260211_093235";
-        let fullData = { game: null, kyro: null, mods: null };
+        const BUILD_ID = "build_260212_221000";
+        let fullData = { game: null, kyro: null, mods: null, playerMd: null };
 
         function cleanName(name) {
             if (!name) return "";
             return String(name).replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
         }
 
+        /**
+         * Parsar player_data.md (Markdown-tabell) till ett läsbart format.
+         */
+        function parsePlayerMarkdown(mdText) {
+            const lines = mdText.trim().split('\n');
+            if (lines.length < 3) return [];
+
+            // Extrahera rubriker från rad 0
+            const headers = lines[0].split('|').map(s => s.trim()).filter(s => s !== '');
+            // Extrahera värden från rad 2 (efter separator-raden)
+            const values = lines[2].split('|').map(s => s.trim()).filter(s => s !== '');
+
+            return headers.map((h, i) => ({
+                label: h,
+                value: values[i] || '-'
+            }));
+        }
+
         async function initDashboard() {
             try {
-                const tryFetch = async (fileName) => {
+                const tryFetch = async (fileName, isText = false) => {
                     const response = await fetch(fileName);
-                    if (!response.ok) throw new Error(`Status: ${response.status}`);
-                    return await response.json();
+                    if (!response.ok) throw new Error(`Status: ${response.status} på ${fileName}`);
+                    return isText ? await response.text() : await response.json();
                 };
 
-                // Använder _r.json-filerna som du bekräftat finns i samma mapp
-                const [gameRes, kyroRes, modsRes] = await Promise.all([
+                // Ladda alla filer, inklusive den nya Markdown-filen
+                const [gameRes, kyroRes, modsRes, playerMdRes] = await Promise.all([
                     tryFetch('game_data_r.json'),
                     tryFetch('kyro_data_r.json'),
-                    tryFetch('mods_data_r.json')
+                    tryFetch('mods_data_r.json'),
+                    tryFetch('player_data.md', true) // Hämta som text
                 ]);
 
                 fullData.game = gameRes;
                 fullData.kyro = kyroRes;
                 fullData.mods = modsRes;
+                fullData.playerMd = parsePlayerMarkdown(playerMdRes);
 
-                renderHeader(gameRes.data);
+                renderHeader(fullData.playerMd);
                 renderTables(gameRes.units, kyroRes.characters, modsRes);
             } catch (err) {
                 console.error("Fetch error:", err);
                 document.getElementById('stats-grid').innerHTML = 
                     `<div class="text-rose-500 text-xs font-bold px-3 py-2 bg-rose-500/10 border border-rose-500/20 rounded">
-                        FEL: Kunde inte läsa JSON-filer (_r.json). Kontrollera sökvägen.<br>
+                        FEL: Kunde inte läsa filer. Kontrollera player_data.md och JSON-filer.<br>
                         <span class="opacity-70 text-[10px]">${err.message}</span>
                     </div>`;
             }
         }
 
-        function renderHeader(data) {
+        function renderHeader(statsArray) {
             const grid = document.getElementById('stats-grid');
-            if (!data) return;
-            const stats = [
-                { label: 'Galactic Power', value: (data.galactic_power || 0).toLocaleString() },
-                { label: 'Arena Rank', value: `#${data.arena_rank || '?'}` },
-                { label: 'Character Galactic Power', value: (data.character_galactic_power || 0).toLocaleString() }
-            ];
-            grid.innerHTML = stats.map(s => `
+            if (!statsArray || statsArray.length === 0) return;
+            
+            grid.innerHTML = statsArray.map(s => `
                 <div class="flex items-baseline space-x-2">
                     <span class="stat-label">${s.label}</span>
                     <span class="stat-value text-yellow-500">${s.value}</span>
