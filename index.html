@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SWGHDash - Mod Comparison</title>
+    <title>SWGHDash Mod Comparator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -16,7 +16,6 @@
         }
         .header-bg { background-color: #0f172a; border-bottom: 1px solid #1e293b; }
         
-        /* Uppdaterade stat-klasser för att matcha Galactic Power storlek */
         .stat-label { color: #94a3b8; font-size: 1.25rem; font-weight: 700; text-transform: uppercase; letter-spacing: -0.025em; }
         .stat-value { color: #eab308; font-size: 1.25rem; font-weight: 700; }
         
@@ -43,33 +42,6 @@
             white-space: nowrap;
         }
         
-        .mod-tag {
-            display: inline-block;
-            padding: 2px 4px;
-            border-radius: 2px;
-            font-weight: bold;
-            font-size: 0.65rem;
-            width: 100%;
-            text-align: center;
-            border: 1px solid transparent;
-        }
-
-        .match-ok { border-color: #10b981 !important; color: #10b981; }
-        .match-fail { color: #ef4444; }
-        .rec-hint { display: block; font-size: 0.55rem; opacity: 0.7; font-weight: normal; }
-
-        /* Färgmappning för stats */
-        .stat-Health { background-color: #064e3b; color: #34d399; }
-        .stat-Speed { background-color: #7f1d1d; color: #f87171; }
-        .stat-Protection { background-color: #164e63; color: #22d3ee; }
-        .stat-Offense { background-color: #14532d; color: #4ade80; }
-        .stat-Defense { background-color: #450a0a; color: #fca5a5; }
-        .stat-Potency { background-color: #4c1d95; color: #a78bfa; }
-        .stat-Tenacity { background-color: #713f12; color: #fbbf24; }
-        .stat-Crit-Damage, .stat-Critical-Damage { background-color: #1e3a8a; color: #60a5fa; }
-        .stat-Crit-Chance, .stat-Critical-Chance { background-color: #831843; color: #f472b6; }
-        .stat-none { background-color: #1f2937; color: #4b5563; }
-
         .search-input { 
             background-color: #1e293b; 
             border: 1px solid #334155; 
@@ -110,27 +82,26 @@
             <div id="stats-grid" class="flex items-center space-x-12">
                 <div class="flex items-center space-x-3">
                     <div class="loading-spinner"></div>
-                    <span class="text-xs text-slate-400">Hämtar data...</span>
+                    <span class="text-xs text-slate-400">Hämtar data från Markdown...</span>
                 </div>
             </div>
         </div>
         <div>
-            <input type="text" id="charSearch" oninput="filterCharacters()" placeholder="Sök karaktär..." class="search-input text-sm w-64 focus:outline-none focus:ring-1 focus:ring-yellow-500">
+            <input type="text" id="charSearch" oninput="filterCharacters()" placeholder="Search Characters..." class="search-input text-sm w-64 focus:outline-none focus:ring-1 focus:ring-yellow-500">
         </div>
     </header>
 
     <main class="grid grid-cols-1 xl:grid-cols-12 gap-4 flex-grow">
-        <section class="xl:col-span-3">
-            <h2 class="text-[10px] font-bold mb-1 uppercase tracking-widest text-slate-400 px-1">Upplåsta Karaktärer</h2>
-            <div class="table-container max-h-[70vh] overflow-y-auto shadow-2xl">
+        <section class="xl:col-span-5">
+            <h2 class="text-[10px] font-bold mb-1 uppercase tracking-widest text-slate-400 px-1">Karaktärer</h2>
+            <div class="table-container max-h-[75vh] overflow-y-auto shadow-2xl">
                 <table id="units-table">
                     <thead>
                         <tr>
                             <th>Namn</th>
                             <th class="text-center">Lvl</th>
                             <th class="text-center">Stars</th>
-                            <th class="text-center">Gear</th>
-                            <th class="text-center">Kyros</th>
+                            <th class="text-center">Gear / Relic</th>
                         </tr>
                     </thead>
                     <tbody id="units-body"></tbody>
@@ -138,38 +109,50 @@
             </div>
         </section>
 
-        <section class="xl:col-span-9">
-            <h2 class="text-[10px] font-bold mb-1 uppercase tracking-widest text-slate-400 px-1">Mod Jämförelse</h2>
-            <div class="table-container max-h-[70vh] overflow-y-auto shadow-2xl">
-                <table id="comparison-table">
-                    <thead>
-                        <tr>
-                            <th>Mod Sets</th>
-                            <th class="text-center">Arrow</th>
-                            <th class="text-center">Triangle</th>
-                            <th class="text-center">Circle</th>
-                            <th class="text-center">Cross</th>
-                            <th class="text-center">Square</th>
-                            <th class="text-center">Diamond</th>
-                        </tr>
-                    </thead>
-                    <tbody id="comparison-body"></tbody>
-                </table>
+        <section class="xl:col-span-7">
+            <div class="table-container p-8 text-center text-slate-500 italic h-full flex items-center justify-center">
+                Välj en enhet för att se mer information.
             </div>
         </section>
     </main>
 
-    <footer id="build-tag">build_260212_224500</footer>
+    <footer id="build-tag">build_260212_234800</footer>
 
     <script>
-        const BUILD_ID = "build_260212_224500";
-        let fullData = { game: null, kyro: null, mods: null, playerMd: null };
+        let fullData = { units: [], playerMd: null };
 
-        function cleanName(name) {
-            if (!name) return "";
-            return String(name).replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
+        // Formaterar siffror med tusentalsavgränsare (t.ex. 1 234 567)
+        function formatNum(num) {
+            if (!num || isNaN(num.toString().replace(/\s/g, ''))) return num;
+            const cleanNum = Number(num.toString().replace(/\s/g, ''));
+            return cleanNum.toLocaleString('sv-SE');
         }
 
+        // Parsar unit_data.md
+        function parseUnitMarkdown(mdText) {
+            const lines = mdText.trim().split('\n');
+            const tableStartIndex = lines.findIndex(l => l.includes('| name |'));
+            if (tableStartIndex === -1) return [];
+
+            const dataLines = lines.slice(tableStartIndex + 2); // Skippa header och separator
+            
+            return dataLines.map(line => {
+                const cols = line.split('|').map(s => s.trim()).filter(s => s !== '');
+                if (cols.length < 8) return null;
+                return {
+                    name: cols[0],
+                    base_id: cols[1],
+                    level: cols[2],
+                    rarity: cols[3],
+                    gear_level: cols[4],
+                    relic_tier: cols[5],
+                    power: cols[6],
+                    combat_type: cols[7]
+                };
+            }).filter(u => u !== null);
+        }
+
+        // Parsar player_data.md
         function parsePlayerMarkdown(mdText) {
             const lines = mdText.trim().split('\n');
             if (lines.length < 3) return [];
@@ -180,149 +163,84 @@
 
         async function initDashboard() {
             try {
-                const tryFetch = async (fileName, isText = false) => {
-                    const response = await fetch(fileName);
-                    if (!response.ok) throw new Error(`Status: ${response.status}`);
-                    return isText ? await response.text() : await response.json();
-                };
-
-                const [gameRes, kyroRes, modsRes, playerMdRes] = await Promise.all([
-                    tryFetch('game_data_r.json'),
-                    tryFetch('kyro_data_r.json'),
-                    tryFetch('mods_data_r.json'),
-                    tryFetch('player_data.md', true)
+                const [unitMdRes, playerMdRes] = await Promise.all([
+                    fetch('unit_data.md').then(r => r.text()),
+                    fetch('player_data.md').then(r => r.text())
                 ]);
 
-                fullData.game = gameRes;
-                fullData.kyro = kyroRes;
-                fullData.mods = modsRes;
+                const allUnits = parseUnitMarkdown(unitMdRes);
+                
+                // Filtrera på combat_type 1 (Karaktärer) och sortera (siffror först, sen bokstavsordning)
+                fullData.units = allUnits
+                    .filter(u => u.combat_type === "1")
+                    .sort((a, b) => a.name.localeCompare(b.name, 'sv', { numeric: true, sensitivity: 'base' }));
+                
                 fullData.playerMd = parsePlayerMarkdown(playerMdRes);
 
                 renderHeader(fullData.playerMd);
-                renderTables(gameRes.units, kyroRes.characters, modsRes);
+                renderTables(fullData.units);
             } catch (err) {
                 console.error("Fetch error:", err);
+                document.getElementById('stats-grid').innerHTML = `<span class="text-rose-500 text-xs">Error loading Markdown files.</span>`;
             }
         }
 
         function renderHeader(stats) {
             const grid = document.getElementById('stats-grid');
-            if (!stats || stats.length < 7) return;
+            if (!stats || stats.length < 1) return;
 
-            // Hjälpfunktion för stat-rader med fet stil och enhetlig storlek
             const row = (s) => `
                 <div class="flex items-center space-x-3">
                     <span class="stat-label whitespace-nowrap">${s.label}</span>
-                    <span class="stat-value">${s.value}</span>
+                    <span class="stat-value">${formatNum(s.value)}</span>
                 </div>
             `;
 
             grid.innerHTML = `
-                <!-- Grupp 1: Galactic Power -->
                 <div class="flex items-center space-x-4 pr-6 border-r border-slate-800">
-                    <span class="stat-label">Galactic Power</span>
-                    <span class="text-3xl font-black text-yellow-500">${stats[0].value}</span>
+                    <span class="stat-label">${stats[0].label}</span>
+                    <span class="text-3xl font-black text-yellow-500">${formatNum(stats[0].value)}</span>
                 </div>
-
-                <!-- Grupp 2: Power-detaljer -->
                 <div class="flex flex-col justify-center space-y-1">
-                    ${row(stats[1])}
-                    ${row(stats[2])}
+                    ${stats.slice(1, 3).map(s => row(s)).join('')}
                 </div>
-
-                <!-- Grupp 3: Vinster -->
                 <div class="flex flex-col justify-center space-y-1">
-                    ${row(stats[3])}
-                    ${row(stats[4])}
+                    ${stats.slice(3, 5).map(s => row(s)).join('')}
                 </div>
-
-                <!-- Grupp 4: Ranks -->
                 <div class="flex flex-col justify-center space-y-1">
-                    ${row(stats[5])}
-                    ${row(stats[6])}
+                    ${stats.slice(5, 7).map(s => row(s)).join('')}
                 </div>
             `;
         }
 
-        function getStatClass(statName) {
-            if (!statName || statName === '-') return 'stat-none';
-            const clean = String(statName).replace(/\s+/g, '-');
-            return `stat-${clean}`;
-        }
-
-        function renderTables(units, kyros, recMods, filter = '') {
+        function renderTables(units, filter = '') {
             const unitsBody = document.getElementById('units-body');
-            const compBody = document.getElementById('comparison-body');
-            if (!unitsBody || !compBody || !units) return;
+            if (!unitsBody) return;
             unitsBody.innerHTML = '';
-            compBody.innerHTML = '';
 
             units.forEach(unit => {
-                if (!unit || !unit.name) return;
-                const uName = cleanName(unit.name);
-                if (filter && !uName.toLowerCase().includes(String(filter).toLowerCase())) return;
+                if (filter && !unit.name.toLowerCase().includes(filter.toLowerCase())) return;
 
-                const kyroInfo = kyros ? kyros.find(k => cleanName(k.name) === uName) : null;
-                const kyroValue = kyroInfo ? kyroInfo.total_kyros : '-';
-                
+                const relicVal = parseInt(unit.relic_tier);
+                // Relic tier 1 & 2 är tekniskt sett gear 13, R1 börjar vid 3
+                const relicDisplay = (relicVal > 2) 
+                    ? ` <span class="text-blue-400 font-bold">R${relicVal - 2}</span>` 
+                    : '';
+
                 unitsBody.insertAdjacentHTML('beforeend', `
-                    <tr>
-                        <td class="font-semibold text-slate-200">${uName}</td>
-                        <td class="text-center">${unit.level || '?'}</td>
-                        <td class="text-center">${unit.rarity || '?'}</td>
-                        <td class="text-center">G${unit.gear_level || '?'}${unit.relic_tier > 2 ? ' R' + (unit.relic_tier - 2) : ''}</td>
-                        <td class="text-center text-yellow-600 font-bold">${kyroValue}</td>
+                    <tr class="hover:bg-slate-800/50 transition-colors">
+                        <td class="font-semibold text-slate-200">${unit.name}</td>
+                        <td class="text-center">${formatNum(unit.level)}</td>
+                        <td class="text-center text-yellow-500 font-bold">${unit.rarity}*</td>
+                        <td class="text-center">G${unit.gear_level}${relicDisplay}</td>
                     </tr>
                 `);
-
-                const slug = unit.base_id ? unit.base_id.toLowerCase().replace(/_/g, '-') : '';
-                const rec = recMods ? recMods.find(r => r.slug === slug) : null;
-                const equipped = unit.mods || [];
-                const slots = [
-                    { id: 2, key: 'arrow' }, { id: 4, key: 'triangle' }, { id: 6, key: 'circle' },
-                    { id: 5, key: 'cross' }, { id: 1, key: 'square' }, { id: 3, key: 'diamond' }
-                ];
-
-                const eqSets = {};
-                equipped.forEach(m => { if(m.set) eqSets[m.set] = (eqSets[m.set] || 0) + 1; });
-                
-                let setHtml = '<td>';
-                if (rec && rec.mod_sets) {
-                    rec.mod_sets.forEach(rs => {
-                        const count = eqSets[rs.set] || 0;
-                        const isMatch = count >= rs.count;
-                        setHtml += `<div class="text-[9px] ${isMatch ? 'text-emerald-400' : 'text-rose-400'}">${rs.set} ${count}/${rs.count}</div>`;
-                    });
-                } else {
-                    setHtml += '<span class="text-slate-600 text-[9px]">Ingen data</span>';
-                }
-                setHtml += '</td>';
-
-                let slotsHtml = '';
-                slots.forEach(slot => {
-                    const m = equipped.find(mod => mod.slot === slot.id);
-                    const currentStat = m ? m.primary_stat : '-';
-                    const targetStat = (rec && rec.primaries && rec.primaries[slot.key]) ? rec.primaries[slot.key] : null;
-                    const isMatch = (targetStat && currentStat !== '-') ? (currentStat.toLowerCase() === targetStat.toLowerCase()) : true;
-
-                    slotsHtml += `
-                        <td class="p-1">
-                            <div class="mod-tag ${getStatClass(currentStat)} ${isMatch && currentStat !== '-' ? 'match-ok' : ''}">
-                                <span class="${(!isMatch && currentStat !== '-') ? 'match-fail' : ''}">${currentStat}</span>
-                                ${(!isMatch && targetStat) ? `<span class="rec-hint">(${targetStat})</span>` : ''}
-                            </div>
-                        </td>
-                    `;
-                });
-                compBody.insertAdjacentHTML('beforeend', `<tr>${setHtml}${slotsHtml}</tr>`);
             });
         }
 
         function filterCharacters() {
             const val = document.getElementById('charSearch').value;
-            if (fullData.game) {
-                renderTables(fullData.game.units, fullData.kyro ? fullData.kyro.characters : [], fullData.mods, val);
-            }
+            renderTables(fullData.units, val);
         }
     </script>
 </body>
