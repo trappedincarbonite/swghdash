@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWGoH Master Table</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #0a0e1a;
+            color: #e2e8f0;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header-bg { background-color: #0f172a; border-bottom: 1px solid #1e293b; width: 100%; }
+        
+        table { width: 100%; border-collapse: collapse; table-layout: auto; }
+        th { 
+            background-color: #1f2937; 
+            color: #94a3b8; 
+            text-align: left; 
+            padding: 10px; 
+            border: 1px solid #374151;
+            font-size: 0.75rem;
+            cursor: pointer;
+            white-space: nowrap;
+            text-transform: uppercase;
+        }
+        th:hover { background-color: #374151; color: white; }
+        td { 
+            padding: 8px 10px; 
+            border: 1px solid #1f2937; 
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+        
+        .match-green { background-color: #065f46 !important; color: #34d399; }
+        .mismatch-red { background-color: #7f1d1d !important; color: #f87171; }
+        .neutral-cell { background-color: #111827; }
+        
+        tr:hover td { filter: brightness(1.2); }
+        
+        .player-stat { border-right: 1px solid #1e293b; padding: 0 2rem; }
+        .player-stat:last-child { border-right: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Top Player Bar -->
+    <div class="header-bg p-4 flex items-center shadow-lg mb-4">
+        <div class="player-stat">
+            <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Spelare</div>
+            <div id="player-name" class="text-xl font-black text-yellow-500">-</div>
+        </div>
+        <div class="player-stat">
+            <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Galactic Power</div>
+            <div id="player-gp" class="text-xl font-black text-slate-200">-</div>
+        </div>
+    </div>
+
+    <!-- Main Table Container -->
+    <div class="w-full overflow-x-auto">
+        <table id="master-table">
+            <thead>
+                <tr id="table-headers">
+                    <th onclick="sortTable(0)">Name</th>
+                    <th onclick="sortTable(1)">Level</th>
+                    <th onclick="sortTable(2)">Stars</th>
+                    <th onclick="sortTable(3)">Gear</th>
+                    <th onclick="sortTable(4)">Set Bonus (E)</th>
+                    <th onclick="sortTable(5)">Arrow</th>
+                    <th onclick="sortTable(6)">Triangle</th>
+                    <th onclick="sortTable(7)">Circle</th>
+                    <th onclick="sortTable(8)">Cross</th>
+                    <th onclick="sortTable(9)">Square</th>
+                    <th onclick="sortTable(10)">Diamond</th>
+                    <th onclick="sortTable(11)">Set Bonus (R)</th>
+                    <th onclick="sortTable(12)">Arrow (R)</th>
+                    <th onclick="sortTable(13)">Triangle (R)</th>
+                    <th onclick="sortTable(14)">Circle (R)</th>
+                    <th onclick="sortTable(15)">Cross (R)</th>
+                    <th onclick="sortTable(16)">Kyro</th>
+                    <th onclick="sortTable(17)">URL</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- Data rows will be injected here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let fullData = null;
+        let sortDirections = {};
+
+        // Mapping for Mod Set IDs to Names
+        const setMap = {
+            "1": "Health", "2": "Offense", "3": "Defense", "4": "Speed", 
+            "5": "Crit Chance", "6": "Crit DMG", "7": "Potency", "8": "Tenacity"
+        };
+
+        /**
+         * Clean character names: Replace \ with "
+         */
+        function cleanCharName(name) {
+            if (!name) return "";
+            return name.replace(/\\/g, '"');
+        }
+
+        /**
+         * Calculate Equipped Set Bonus string
+         */
+        function getEquippedSetBonus(characterId, mods) {
+            const charMods = mods.filter(m => m.character === characterId);
+            const counts = {};
+            charMods.forEach(m => {
+                const setName = setMap[m.set] || "Unknown";
+                counts[setName] = (counts[setName] || 0) + 1;
+            });
+            return Object.entries(counts)
+                .map(([name, count]) => `${name} (${count})`)
+                .join(" ");
+        }
+
+        /**
+         * Calculate Recommended Set Bonus string
+         */
+        function getRecommendedSetBonus(rec) {
+            if (!rec || !rec.mod_sets) return "-";
+            return rec.mod_sets.map(s => `${s.set} (${s.count})`).join(" ");
+        }
+
+        /**
+         * Fetch and initialize data
+         */
+        async function loadData() {
+            try {
+                // CHANGED: Removed 'db/' prefix because files are in the same folder
+                const dataUrl = 'db_master_data.json';
+                const response = await fetch(dataUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`Kunde inte hitta ${dataUrl} (Status: ${response.status})`);
+                }
+                
+                fullData = await response.json();
+                
+                renderPlayerHeader();
+                renderTable();
+            } catch (err) {
+                console.error("Load Error:", err);
+                document.getElementById('table-body').innerHTML = `
+                    <tr>
+                        <td colspan="18" class="text-center p-10 text-rose-500 font-bold">
+                            FEL: ${err.message}<br>
+                            <span class="text-slate-500 font-normal text-xs">Kontrollera att filnamnet är exakt db_master_data.json och ligger i samma mapp som index.html</span>
+                        </td>
+                    </tr>`;
+            }
+        }
+
+        function renderPlayerHeader() {
+            const p = fullData.player?.data || {};
+            document.getElementById('player-name').textContent = p.name || "N/A";
+            document.getElementById('player-gp').textContent = Number(p.galactic_power || 0).toLocaleString('sv-SE');
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            // Filter for combat_type 1 (characters)
+            const characters = fullData.units.filter(u => String(u.data.combat_type) === "1");
+            
+            // Map Kyro for easy lookup
+            const kyroMap = {};
+            if (fullData.kyro?.characters) {
+                fullData.kyro.characters.forEach(c => kyroMap[c.name] = c.total_kyros);
+            }
+
+            characters.forEach(unit => {
+                const u = unit.data;
+                const charId = u.base_id;
+                const charName = cleanCharName(u.name);
+                
+                // Get Mods and Recommendations
+                const charMods = fullData.mods_equipped.filter(m => m.character === charId);
+                const rec = fullData.mods_recommended.find(r => r.base_id === charId);
+
+                // Extract Specific Stats for Coloring Logic
+                const getStat = (slotId) => charMods.find(m => m.slot == slotId)?.pri_stat || "-";
+                
+                const eq = {
+                    arrow: getStat(2),
+                    triangle: getStat(4),
+                    circle: getStat(5),
+                    cross: getStat(6),
+                    square: getStat(1),
+                    diamond: getStat(3)
+                };
+
+                const rs = rec?.primaries || {};
+
+                // Helper to determine cell class
+                const getCellClass = (slot, eqVal, recVal) => {
+                    if (eqVal === "-" || !recVal) return "neutral-cell";
+                    // Normalize names for comparison
+                    const norm = (s) => s.toLowerCase().replace(/critical/g, 'crit').trim();
+                    return norm(eqVal) === norm(recVal) ? "match-green" : "mismatch-red";
+                };
+
+                const row = document.createElement('tr');
+                row.className = "hover:bg-slate-800/40";
+                
+                const relicText = u.relic_tier > 2 ? ` / R${u.relic_tier - 2}` : '';
+                const kyroVal = kyroMap[u.name] || 0;
+
+                row.innerHTML = `
+                    <td class="font-bold">${charName}</td>
+                    <td class="text-center">${u.level}</td>
+                    <td class="text-center text-yellow-500 font-bold">${u.rarity}★</td>
+                    <td class="text-center">${u.gear_level}${relicText}</td>
+                    <td class="text-xs">${getEquippedSetBonus(charId, fullData.mods_equipped)}</td>
+                    <td class="${getCellClass('arrow', eq.arrow, rs.arrow)}">${eq.arrow}</td>
+                    <td class="${getCellClass('triangle', eq.triangle, rs.triangle)}">${eq.triangle}</td>
+                    <td class="${getCellClass('circle', eq.circle, rs.circle)}">${eq.circle}</td>
+                    <td class="${getCellClass('cross', eq.cross, rs.cross)}">${eq.cross}</td>
+                    <td class="neutral-cell">${eq.square}</td>
+                    <td class="neutral-cell">${eq.diamond}</td>
+                    <td class="text-xs text-slate-400">${getRecommendedSetBonus(rec)}</td>
+                    <td class="text-slate-400">${rs.arrow || "-"}</td>
+                    <td class="text-slate-400">${rs.triangle || "-"}</td>
+                    <td class="text-slate-400">${rs.circle || "-"}</td>
+                    <td class="text-slate-400">${rs.cross || "-"}</td>
+                    <td class="text-right text-sky-400 font-mono">${kyroVal}</td>
+                    <td><a href="${rec?.url || '#'}" target="_blank" class="text-yellow-500 underline hover:text-yellow-400">url</a></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        /**
+         * Table sorting logic
+         */
+        function sortTable(columnIndex) {
+            const table = document.getElementById("master-table");
+            const tbody = document.getElementById("table-body");
+            const rows = Array.from(tbody.rows);
+            
+            // Toggle direction
+            sortDirections[columnIndex] = !sortDirections[columnIndex];
+            const isAsc = sortDirections[columnIndex];
+
+            rows.sort((a, b) => {
+                let cellA = a.cells[columnIndex].innerText.trim();
+                let cellB = b.cells[columnIndex].innerText.trim();
+
+                // Handle numbers
+                const valA = parseFloat(cellA.replace(/[^0-9.]/g, ''));
+                const valB = parseFloat(cellB.replace(/[^0-9.]/g, ''));
+                
+                if (!isNaN(valA) && !isNaN(valB)) {
+                    return isAsc ? valA - valB : valB - valA;
+                }
+
+                // Handle strings
+                return isAsc ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+            });
+
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        window.onload = loadData;
+    </script>
+</body>
+</html>
