@@ -3,270 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SWGOH Dashboard</title>
+    <title>SWGHDash Mod Comparator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0f172a; color: #f1f5f9; }
-        .card { background-color: #1e293b; border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        body {
+            background-color: #0a0e1a;
+            color: #e2e8f0;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header-bg { background-color: #0f172a; border-bottom: 1px solid #1e293b; }
         
-        /* Table formatting */
-        table { width: 100%; border-collapse: collapse; }
+        .stat-label { color: #94a3b8; font-size: 1.25rem; font-weight: 700; text-transform: uppercase; letter-spacing: -0.025em; }
+        .stat-value { color: #eab308; font-size: 1.25rem; font-weight: 700; }
+        
+        .table-container { 
+            background-color: #111827; 
+            border: 1px solid #1f2937; 
+            border-radius: 0.25rem; 
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
         th { 
-            background-color: #1e293b; 
-            color: #60a5fa; 
+            background-color: #1f2937; 
+            color: #94a3b8; 
             text-align: left; 
-            padding: 12px 8px; 
-            border: 1px solid #334155;
-            font-size: 0.65rem;
-            cursor: pointer;
+            padding: 0.5rem 0.6rem; 
+            border-bottom: 1px solid #374151;
+            font-weight: 600;
             text-transform: uppercase;
-            white-space: nowrap;
+            font-size: 0.6rem;
         }
-        th:hover { background-color: #334155; }
         td { 
-            padding: 6px 8px; 
-            border: 1px solid #1e293b; 
-            font-size: 0.75rem;
+            padding: 0.5rem 0.6rem; 
+            border-bottom: 1px solid #1f2937; 
+            border-right: 1px solid #1f2937; 
             white-space: nowrap;
         }
         
-        /* Mod match coloring */
-        .match-green { background-color: #166534 !important; color: #bbf7d0; }
-        .mismatch-red { background-color: #991b1b !important; color: #fecaca; }
-        .neutral-cell { background-color: #1e293b; }
+        .search-input { 
+            background-color: #1e293b; 
+            border: 1px solid #334155; 
+            color: white; 
+            border-radius: 0.25rem; 
+            padding: 0.3rem 0.8rem; 
+        }
         
-        tr:hover td { background-color: #334155; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
+        .loading-spinner {
+            border: 3px solid rgba(255,255,255,.1);
+            border-radius: 50%;
+            border-top: 3px solid #eab308;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        #build-tag {
+            font-family: monospace;
+            font-size: 0.65rem;
+            color: #475569;
+            margin-top: auto;
+            padding: 1rem 0;
+            text-align: center;
+        }
     </style>
 </head>
-<body class="p-4">
-    <div class="w-full mx-auto">
-        <header class="mb-8 border-b border-slate-700 pb-4 flex justify-between items-end">
-            <div>
-                <h1 class="text-3xl font-bold text-blue-400">SWGOH Dashboard</h1>
-                <p id="player-summary" class="text-slate-400 mt-2 text-sm uppercase tracking-widest">Laddar spelardata...</p>
-            </div>
-            <div id="data-status" class="text-xs text-slate-500"></div>
-        </header>
+<body class="p-4" onload="initDashboard()">
 
-        <main id="app">
-            <div id="status" class="card mb-6">
-                <p class="text-yellow-400">Laddar data från db_master_data.json...</p>
-            </div>
-
-            <div id="content" class="hidden">
-                <div class="overflow-x-auto rounded-lg border border-slate-700">
-                    <table id="master-table">
-                        <thead>
-                            <tr>
-                                <th onclick="sortTable(0)">Name</th>
-                                <th onclick="sortTable(1)">Level</th>
-                                <th onclick="sortTable(2)">Stars</th>
-                                <th onclick="sortTable(3)">Gear</th>
-                                <th onclick="sortTable(4)">Set Bonus (E)</th>
-                                <th onclick="sortTable(5)">Arrow</th>
-                                <th onclick="sortTable(6)">Triangle</th>
-                                <th onclick="sortTable(7)">Circle</th>
-                                <th onclick="sortTable(8)">Cross</th>
-                                <th onclick="sortTable(9)">Square</th>
-                                <th onclick="sortTable(10)">Diamond</th>
-                                <th onclick="sortTable(11)">Set Bonus (R)</th>
-                                <th onclick="sortTable(12)">Arrow (R)</th>
-                                <th onclick="sortTable(13)">Triangle (R)</th>
-                                <th onclick="sortTable(14)">Circle (R)</th>
-                                <th onclick="sortTable(15)">Cross (R)</th>
-                                <th onclick="sortTable(16)">Kyro</th>
-                                <th onclick="sortTable(17)">URL</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-body">
-                            <!-- Populated via JS -->
-                        </tbody>
-                    </table>
+    <header id="player-header" class="header-bg p-4 mb-6 flex flex-wrap items-center justify-between rounded-md">
+        <div class="flex items-center space-x-12">
+            <h1 class="text-3xl font-black text-yellow-500 tracking-tighter mr-4">SWGHDash</h1>
+            <div id="stats-grid" class="flex items-center space-x-12">
+                <div class="flex items-center space-x-3">
+                    <div class="loading-spinner"></div>
+                    <span class="text-xs text-slate-400">Hämtar data från Markdown...</span>
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
+        <div>
+            <input type="text" id="charSearch" oninput="filterCharacters()" placeholder="Search Characters..." class="search-input text-sm w-64 focus:outline-none focus:ring-1 focus:ring-yellow-500">
+        </div>
+    </header>
+
+    <main class="grid grid-cols-1 xl:grid-cols-12 gap-4 flex-grow">
+        <section class="xl:col-span-5">
+            <h2 class="text-[10px] font-bold mb-1 uppercase tracking-widest text-slate-400 px-1">Karaktärer</h2>
+            <div class="table-container max-h-[75vh] overflow-y-auto shadow-2xl">
+                <table id="units-table">
+                    <thead>
+                        <tr>
+                            <th>Namn</th>
+                            <th class="text-center">Lvl</th>
+                            <th class="text-center">Stars</th>
+                            <th class="text-center">Gear / Relic</th>
+                        </tr>
+                    </thead>
+                    <tbody id="units-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="xl:col-span-7">
+            <div class="table-container p-8 text-center text-slate-500 italic h-full flex items-center justify-center">
+                Välj en enhet för att se mer information.
+            </div>
+        </section>
+    </main>
+
+    <footer id="build-tag">build_260212_234800</footer>
 
     <script>
-        // Filename for the merged data
-        const DATA_URL = 'db_master_data.json';
-        let masterData = null;
-        let sortOrder = { index: 0, asc: true };
+        let fullData = { units: [], playerMd: null };
 
-        // Mod Set ID Mapping
-        const setMap = {
-            "1": "Health", "2": "Offense", "3": "Defense", "4": "Speed", 
-            "5": "Crit Chance", "6": "Potency", "7": "Tenacity", "8": "Crit Damage"
-        };
-
-        /**
-         * Cleans character names: replaces \ with "
-         */
-        function cleanName(name) {
-            if (!name) return "";
-            return name.replace(/\\/g, '"');
+        // Formaterar siffror med tusentalsavgränsare (t.ex. 1 234 567)
+        function formatNum(num) {
+            if (!num || isNaN(num.toString().replace(/\s/g, ''))) return num;
+            const cleanNum = Number(num.toString().replace(/\s/g, ''));
+            return cleanNum.toLocaleString('sv-SE');
         }
 
-        /**
-         * Logic for Gear/Relic display
-         * Shows G1-G13 or R1-R9 (relic_tier - 2)
-         */
-        function formatGear(gear, relic) {
-            const g = parseInt(gear);
-            const r = parseInt(relic);
-            if (g === 13 && r >= 3) return `R${r - 2}`;
-            return `G${g}`;
+        // Parsar unit_data.md
+        function parseUnitMarkdown(mdText) {
+            const lines = mdText.trim().split('\n');
+            const tableStartIndex = lines.findIndex(l => l.includes('| name |'));
+            if (tableStartIndex === -1) return [];
+
+            const dataLines = lines.slice(tableStartIndex + 2); // Skippa header och separator
+            
+            return dataLines.map(line => {
+                const cols = line.split('|').map(s => s.trim()).filter(s => s !== '');
+                if (cols.length < 8) return null;
+                return {
+                    name: cols[0],
+                    base_id: cols[1],
+                    level: cols[2],
+                    rarity: cols[3],
+                    gear_level: cols[4],
+                    relic_tier: cols[5],
+                    power: cols[6],
+                    combat_type: cols[7]
+                };
+            }).filter(u => u !== null);
         }
 
-        /**
-         * Groups equipped sets: "Speed (4) Potency (2)"
-         */
-        function getSetBonus1(charId, mods) {
-            const charMods = mods.filter(m => m.character === charId);
-            const counts = {};
-            charMods.forEach(m => {
-                const name = setMap[m.set] || "Unknown";
-                counts[name] = (counts[name] || 0) + 1;
-            });
-            return Object.entries(counts)
-                .map(([name, count]) => `${name} (${count})`)
-                .join(" ");
+        // Parsar player_data.md
+        function parsePlayerMarkdown(mdText) {
+            const lines = mdText.trim().split('\n');
+            if (lines.length < 3) return [];
+            const headers = lines[0].split('|').map(s => s.trim()).filter(s => s !== '');
+            const values = lines[2].split('|').map(s => s.trim()).filter(s => s !== '');
+            return headers.map((h, i) => ({ label: h, value: values[i] || '-' }));
         }
 
-        /**
-         * Normalizes stat names for comparison (e.g. "Critical Damage" -> "Crit DMG")
-         */
-        function normalizeStat(stat) {
-            if (!stat) return "";
-            return stat.toLowerCase().replace(/critical/g, 'crit').replace(/damage/g, 'dmg').trim();
-        }
-
-        /**
-         * Determines cell background class based on recommendation match
-         */
-        function getModClass(equipped, recommended) {
-            if (equipped === "-" || !recommended) return "neutral-cell";
-            return normalizeStat(equipped) === normalizeStat(recommended) ? "match-green" : "mismatch-red";
-        }
-
-        async function loadData() {
-            const statusEl = document.getElementById('status');
-            const contentEl = document.getElementById('content');
-            const playerSummary = document.getElementById('player-summary');
-
+        async function initDashboard() {
             try {
-                const response = await fetch(DATA_URL);
-                if (!response.ok) throw new Error('Could not find db_master_data.json');
-                
-                masterData = await response.json();
-                
-                // Set Player Header
-                const p = masterData.player?.data || {};
-                playerSummary.innerHTML = `${p.name || 'Unknown'} | GP: ${Number(p.galactic_power).toLocaleString('sv-SE')} | Units: ${masterData.units.length}`;
-                
-                document.getElementById('data-status').textContent = `Generated: ${masterData.metadata.generated_at}`;
+                const [unitMdRes, playerMdRes] = await Promise.all([
+                    fetch('unit_data.md').then(r => r.text()),
+                    fetch('player_data.md').then(r => r.text())
+                ]);
 
-                statusEl.classList.add('hidden');
-                contentEl.classList.remove('hidden');
+                const allUnits = parseUnitMarkdown(unitMdRes);
                 
-                renderTable();
+                // Filtrera på combat_type 1 (Karaktärer) och sortera (siffror först, sen bokstavsordning)
+                fullData.units = allUnits
+                    .filter(u => u.combat_type === "1")
+                    .sort((a, b) => a.name.localeCompare(b.name, 'sv', { numeric: true, sensitivity: 'base' }));
+                
+                fullData.playerMd = parsePlayerMarkdown(playerMdRes);
 
-            } catch (error) {
-                statusEl.innerHTML = `<p class="text-red-400">Fel: ${error.message}. Check if db_master_data.json is in the root.</p>`;
+                renderHeader(fullData.playerMd);
+                renderTables(fullData.units);
+            } catch (err) {
+                console.error("Fetch error:", err);
+                document.getElementById('stats-grid').innerHTML = `<span class="text-rose-500 text-xs">Error loading Markdown files.</span>`;
             }
         }
 
-        /**
-         * Builds the main table rows
-         */
-        function renderTable() {
-            const tbody = document.getElementById('table-body');
-            tbody.innerHTML = '';
+        function renderHeader(stats) {
+            const grid = document.getElementById('stats-grid');
+            if (!stats || stats.length < 1) return;
 
-            // Filter for characters only
-            let characters = masterData.units.filter(u => String(u.data.combat_type) === "1");
+            const row = (s) => `
+                <div class="flex items-center space-x-3">
+                    <span class="stat-label whitespace-nowrap">${s.label}</span>
+                    <span class="stat-value">${formatNum(s.value)}</span>
+                </div>
+            `;
 
-            // Sort data based on sortOrder state
-            characters.sort((a, b) => {
-                let valA, valB;
-                const idx = sortOrder.index;
+            grid.innerHTML = `
+                <div class="flex items-center space-x-4 pr-6 border-r border-slate-800">
+                    <span class="stat-label">${stats[0].label}</span>
+                    <span class="text-3xl font-black text-yellow-500">${formatNum(stats[0].value)}</span>
+                </div>
+                <div class="flex flex-col justify-center space-y-1">
+                    ${stats.slice(1, 3).map(s => row(s)).join('')}
+                </div>
+                <div class="flex flex-col justify-center space-y-1">
+                    ${stats.slice(3, 5).map(s => row(s)).join('')}
+                </div>
+                <div class="flex flex-col justify-center space-y-1">
+                    ${stats.slice(5, 7).map(s => row(s)).join('')}
+                </div>
+            `;
+        }
 
-                if (idx === 0) { // Name
-                    valA = cleanName(a.data.name);
-                    valB = cleanName(b.data.name);
-                } else if (idx === 1) { // Level
-                    valA = parseInt(a.data.level);
-                    valB = parseInt(b.data.level);
-                } else if (idx === 16) { // Kyro
-                    valA = masterData.kyro.characters.find(c => c.name === a.data.name)?.total_kyros || 0;
-                    valB = masterData.kyro.characters.find(c => c.name === b.data.name)?.total_kyros || 0;
-                } else {
-                    valA = a.data.name;
-                    valB = b.data.name;
-                }
+        function renderTables(units, filter = '') {
+            const unitsBody = document.getElementById('units-body');
+            if (!unitsBody) return;
+            unitsBody.innerHTML = '';
 
-                if (typeof valA === 'string') {
-                    return sortOrder.asc ? valA.localeCompare(valB) : valB.localeCompare(valA);
-                }
-                return sortOrder.asc ? valA - valB : valB - valA;
-            });
+            units.forEach(unit => {
+                if (filter && !unit.name.toLowerCase().includes(filter.toLowerCase())) return;
 
-            characters.forEach(unit => {
-                const u = unit.data;
-                const charId = u.base_id;
-                const charName = cleanName(u.name);
-                
-                // Cross-reference data
-                const charMods = masterData.mods_equipped.filter(m => m.character === charId);
-                const rec = masterData.mods_recommended.find(r => r.base_id === charId);
-                const kyro = masterData.kyro.characters.find(c => c.name === u.name)?.total_kyros || 0;
+                const relicVal = parseInt(unit.relic_tier);
+                // Relic tier 1 & 2 är tekniskt sett gear 13, R1 börjar vid 3
+                const relicDisplay = (relicVal > 2) 
+                    ? ` <span class="text-blue-400 font-bold">R${relicVal - 2}</span>` 
+                    : '';
 
-                // Slot mapping: 2=Arrow, 4=Triangle, 5=Circle, 6=Cross, 1=Square, 3=Diamond
-                const getEq = (slot) => charMods.find(m => m.slot == slot)?.pri_stat || "-";
-                const rs = rec?.primaries || {};
-
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="font-bold text-blue-300">${charName}</td>
-                    <td class="text-center">${u.level}</td>
-                    <td class="text-center text-yellow-500">${u.rarity}★</td>
-                    <td class="text-center font-bold text-slate-200">${formatGear(u.gear_level, u.relic_tier)}</td>
-                    <td class="text-[10px] text-slate-400">${getSetBonus1(charId, masterData.mods_equipped)}</td>
-                    
-                    <td class="${getModClass(getEq(2), rs.arrow)}">${getEq(2)}</td>
-                    <td class="${getModClass(getEq(4), rs.triangle)}">${getEq(4)}</td>
-                    <td class="${getModClass(getEq(5), rs.circle)}">${getEq(5)}</td>
-                    <td class="${getModClass(getEq(6), rs.cross)}">${getEq(6)}</td>
-                    <td class="neutral-cell">${getEq(1)}</td>
-                    <td class="neutral-cell">${getEq(3)}</td>
-                    
-                    <td class="text-[10px] text-blue-400/60">${rec ? rec.mod_sets.map(s => `${s.set} (${s.count})`).join(" ") : "-"}</td>
-                    <td class="text-slate-500">${rs.arrow || "-"}</td>
-                    <td class="text-slate-500">${rs.triangle || "-"}</td>
-                    <td class="text-slate-500">${rs.circle || "-"}</td>
-                    <td class="text-slate-500">${rs.cross || "-"}</td>
-                    
-                    <td class="text-center text-orange-400 font-mono font-bold">${kyro}</td>
-                    <td><a href="${rec?.url || '#'}" target="_blank" class="text-blue-400 underline hover:text-blue-200">url</a></td>
-                `;
-                tbody.appendChild(row);
+                unitsBody.insertAdjacentHTML('beforeend', `
+                    <tr class="hover:bg-slate-800/50 transition-colors">
+                        <td class="font-semibold text-slate-200">${unit.name}</td>
+                        <td class="text-center">${formatNum(unit.level)}</td>
+                        <td class="text-center text-yellow-500 font-bold">${unit.rarity}*</td>
+                        <td class="text-center">G${unit.gear_level}${relicDisplay}</td>
+                    </tr>
+                `);
             });
         }
 
-        /**
-         * Sort handler triggered by header click
-         */
-        function sortTable(index) {
-            if (sortOrder.index === index) {
-                sortOrder.asc = !sortOrder.asc;
-            } else {
-                sortOrder.index = index;
-                sortOrder.asc = true;
-            }
-            renderTable();
+        function filterCharacters() {
+            const val = document.getElementById('charSearch').value;
+            renderTables(fullData.units, val);
         }
-
-        window.onload = loadData;
     </script>
 </body>
 </html>
