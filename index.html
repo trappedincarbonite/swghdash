@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWGHDash</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link id="favicon" rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        /* Custom scrollbar and theme colors */
+        body { background-color: #0b1120; color: #f1f5f9; }
+        .bg-dark-header { background-color: #111827; }
+        .bg-dark-menu { background-color: #1e293b; }
+        .text-swgoh-orange { color: #facc15; }
+        .border-slate-custom { border-color: #334155; }
+        
+        /* Table Cell Logic Colors */
+        .match-green { background-color: #14532d !important; color: #bbf7d0; }
+        .mismatch-red { background-color: #7f1d1d !important; color: #fecaca; }
+        
+        /* Table widths and padding */
+        .master-container { max-width: 1350px; margin: 0 auto; padding: 0 2rem; }
+        table { border-collapse: separate; border-spacing: 0; }
+        th { 
+            background-color: #1e293b; 
+            color: #94a3b8; 
+            font-size: 0.65rem; 
+            text-transform: uppercase; 
+            letter-spacing: 0.05em;
+            padding: 12px;
+            border-bottom: 2px solid #0f172a;
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+        th:hover { background-color: #334155; color: #facc15; }
+        td { 
+            padding: 8px 12px; 
+            border-bottom: 1px solid #1e293b; 
+            font-size: 0.85rem; 
+            white-space: nowrap; 
+        }
+        tr:hover td { background-color: rgba(51, 65, 85, 0.3); }
+    </style>
+</head>
+<body class="antialiased font-sans">
+
+    <!-- Header Section -->
+    <div class="bg-dark-header border-b border-slate-custom">
+        <div class="master-container py-4 flex flex-wrap items-center justify-between gap-6">
+            <div class="flex items-center gap-8">
+                <h1 class="text-3xl font-black text-swgoh-orange tracking-tighter">SWGHDash</h1>
+                <div id="header-stats" class="flex gap-6 text-[11px] uppercase tracking-wider font-bold">
+                    <!-- Dynamic Header Stats go here -->
+                </div>
+            </div>
+            
+            <!-- Search Bar -->
+            <div class="relative">
+                <input type="text" id="char-search" placeholder="Search Characters..." 
+                       class="bg-slate-800 border border-slate-700 rounded-md px-4 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500/50 w-64 placeholder-slate-500">
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <div class="bg-dark-menu shadow-md">
+        <div class="master-container">
+            <nav id="top-menu" class="flex items-center gap-1 text-sm font-medium py-2">
+                <!-- Dynamic Menu Links go here -->
+            </nav>
+        </div>
+    </div>
+
+    <!-- Table Section -->
+    <main class="master-container mt-8">
+        <div class="bg-dark-header rounded-t-lg border border-slate-custom overflow-hidden shadow-2xl">
+            <div class="overflow-x-auto no-scrollbar">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr id="table-headers">
+                            <!-- Headers generated from JSON units -->
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <!-- Unit rows generated from JSON -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Footer Info -->
+        <footer class="mt-8 mb-12 text-center">
+            <div id="build-info" class="text-[10px] font-mono text-slate-600 uppercase tracking-[0.2em]"></div>
+        </footer>
+    </main>
+
+    <script>
+        const DATA_PATH = 'db/db_master_data.json';
+        let fullUnitsData = [];
+        let sortState = { key: 'name', desc: false };
+
+        /**
+         * Cleans values for comparison (handles case insensitivity)
+         */
+        function normalize(val) {
+            if (!val || val === "-") return "";
+            return val.toString().toLowerCase()
+                      .replace(/critical/g, 'crit')
+                      .replace(/damage/g, 'dmg')
+                      .trim();
+        }
+
+        /**
+         * Comparison logic for coloring mod cells
+         */
+        function getCellClass(value, key, unit) {
+            const modMap = {
+                "Arrow": "Arrow(r)",
+                "Triangle": "Triangle(r)",
+                "Circle": "Circle(r)",
+                "Cross": "Cross(r)"
+            };
+
+            const recKey = modMap[key];
+            if (!recKey || !unit[recKey] || unit[recKey] === "-") return "";
+            
+            return normalize(value) === normalize(unit[recKey]) ? "match-green" : "mismatch-red";
+        }
+
+        /**
+         * Fetches data and initializes UI
+         */
+        async function init() {
+            try {
+                const response = await fetch(DATA_PATH);
+                const data = await response.json();
+                const meta = data.metadata;
+
+                // Set Favicon from metadata
+                if (meta.favicon) document.getElementById('favicon').href = meta.favicon;
+
+                // Render Header Stats
+                const statsDiv = document.getElementById('header-stats');
+                statsDiv.innerHTML = meta.header.map(s => `
+                    <div class="flex gap-2">
+                        <span class="text-slate-500">${s.label}</span>
+                        <span class="text-swgoh-orange">${isNaN(s.value) ? s.value : Number(s.value).toLocaleString()}</span>
+                    </div>
+                `).join('');
+
+                // Render Menu
+                const menuNav = document.getElementById('top-menu');
+                menuNav.innerHTML = meta.menu.map((m, idx) => `
+                    ${idx > 0 ? '<span class="text-slate-600 px-1">|</span>' : ''}
+                    <a href="${m.url}" target="_blank" class="px-2 py-1 hover:text-swgoh-orange transition-colors">${m.label}</a>
+                `).join('');
+
+                document.getElementById('build-info').textContent = `build_${meta.generated_at.replace(/[: -]/g, '').slice(2)}`;
+
+                fullUnitsData = data.units;
+
+                // Initial Sort: Name A-Z (0 before A)
+                fullUnitsData.sort((a, b) => String(a.name).localeCompare(String(b.name), undefined, { numeric: true }));
+
+                if (fullUnitsData.length > 0) {
+                    createHeaders(fullUnitsData[0]);
+                    renderTable(fullUnitsData);
+                }
+
+                // Search Event
+                document.getElementById('char-search').addEventListener('input', (e) => {
+                    const term = e.target.value.toLowerCase();
+                    const filtered = fullUnitsData.filter(u => u.name.toLowerCase().includes(term));
+                    renderTable(filtered);
+                });
+
+            } catch (err) {
+                console.error("Initialization failed:", err);
+                document.getElementById('table-body').innerHTML = `<tr><td colspan="20" class="text-center py-20 text-red-500">Could not find db_master_data.json</td></tr>`;
+            }
+        }
+
+        function createHeaders(exampleUnit) {
+            const row = document.getElementById('table-headers');
+            row.innerHTML = '';
+            Object.keys(exampleUnit).forEach(key => {
+                const th = document.createElement('th');
+                th.textContent = key;
+                th.onclick = () => handleSort(key);
+                row.appendChild(th);
+            });
+        }
+
+        function renderTable(units) {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            units.forEach(u => {
+                const tr = document.createElement('tr');
+                Object.entries(u).forEach(([key, val]) => {
+                    const td = document.createElement('td');
+                    const colorClass = getCellClass(val, key, u);
+                    if (colorClass) td.className = colorClass;
+
+                    // Specific column styling
+                    if (key === "name") td.classList.add("text-blue-400", "font-medium");
+                    if (["level", "stars", "gear"].includes(key.toLowerCase())) td.classList.add("text-center");
+                    if (key === "kyro") td.classList.add("text-center", "text-orange-400", "font-mono");
+
+                    // Render content
+                    if (key.toLowerCase() === "url") {
+                        td.innerHTML = `<a href="${val}" target="_blank" class="text-slate-500 hover:text-swgoh-orange transition-colors">🔗</a>`;
+                    } else {
+                        td.textContent = val === undefined || val === null ? "-" : val;
+                    }
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+        }
+
+        function handleSort(key) {
+            sortState.desc = (sortState.key === key) ? !sortState.desc : false;
+            sortState.key = key;
+
+            fullUnitsData.sort((a, b) => {
+                const v1 = a[key];
+                const v2 = b[key];
+                const res = isNaN(v1) || isNaN(v2) 
+                    ? String(v1).localeCompare(String(v2), undefined, { numeric: true })
+                    : parseFloat(v1) - parseFloat(v2);
+                return sortState.desc ? res * -1 : res;
+            });
+            renderTable(fullUnitsData);
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
