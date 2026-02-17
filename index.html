@@ -6,11 +6,12 @@
     <title>SWGOH Master Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0f172a; color: #f1f5f9; margin: 0; padding: 0; }
+        body { background-color: #0f172a; color: #f1f5f9; margin: 0; padding: 0; font-family: sans-serif; }
         .header-bg { background-color: #1e293b; border-bottom: 1px solid #334155; }
         
         /* Table Styles */
-        table { width: 100%; border-collapse: collapse; table-layout: auto; }
+        .table-container { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 1200px; }
         th { 
             background-color: #1e293b; 
             color: #60a5fa; 
@@ -27,189 +28,190 @@
         }
         th:hover { background-color: #334155; }
         td { 
-            padding: 8px 10px; 
+            padding: 6px 10px; 
             border: 1px solid #1e293b; 
             font-size: 0.75rem;
             white-space: nowrap;
         }
         
-        /* Coloring Logic */
+        /* Matching Logic Colors */
         .match-green { background-color: #166534 !important; color: #bbf7d0; }
         .mismatch-red { background-color: #991b1b !important; color: #fecaca; }
         .neutral-cell { background-color: #1e293b; }
         
-        tr:hover td { filter: brightness(1.2); }
+        tr:nth-child(even) { background-color: #111827; }
+        tr:hover td { filter: brightness(1.3); }
+
+        /* Hide horizontal scrollbar but allow scrolling */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="p-0">
+<body>
 
-    <!-- Top Bar with Player Metadata -->
-    <header class="header-bg p-4 shadow-lg mb-4 flex justify-between items-center">
+    <!-- Header Section -->
+    <header class="header-bg p-4 shadow-xl flex justify-between items-center">
         <div>
-            <h1 class="text-2xl font-black text-blue-400 tracking-tight">SWGOH MASTER</h1>
-            <div id="player-summary" class="text-slate-400 text-xs uppercase tracking-widest mt-1">
-                Laddar spelardata...
+            <h1 class="text-xl font-black text-blue-400 tracking-tighter">SWGOH MASTER DATA</h1>
+            <div id="player-summary" class="text-slate-400 text-[10px] uppercase tracking-widest mt-1">
+                Laddar spelarinformation...
             </div>
         </div>
-        <div id="build-info" class="text-[10px] text-slate-500 font-mono"></div>
+        <div id="build-info" class="text-[9px] text-slate-500 font-mono text-right"></div>
     </header>
 
-    <!-- Main Table Container -->
-    <div class="w-full overflow-x-auto">
+    <!-- Dashboard Table -->
+    <div class="table-container no-scrollbar">
         <table id="master-table">
             <thead>
-                <tr id="table-headers">
-                    <!-- Headers are hardcoded to match the [Table] section in merge.ini -->
-                    <th onclick="sortTable(0)">Name</th>
-                    <th onclick="sortTable(1)">Level</th>
-                    <th onclick="sortTable(2)">Stars</th>
-                    <th onclick="sortTable(3)">Gear</th>
-                    <th onclick="sortTable(4)">Set Bonus</th>
-                    <th onclick="sortTable(5)">Square</th>
-                    <th onclick="sortTable(6)">Arrow</th>
-                    <th onclick="sortTable(7)">Diamond</th>
-                    <th onclick="sortTable(8)">Triangle</th>
-                    <th onclick="sortTable(9)">Circle</th>
-                    <th onclick="sortTable(10)">Cross</th>
-                    <th onclick="sortTable(11)">Rec Bonus</th>
-                    <th onclick="sortTable(12)">Arrow(r)</th>
-                    <th onclick="sortTable(13)">Triangle(r)</th>
-                    <th onclick="sortTable(14)">Circle(r)</th>
-                    <th onclick="sortTable(15)">Cross(r)</th>
-                    <th onclick="sortTable(16)">Kyro</th>
-                    <th onclick="sortTable(17)">URL</th>
+                <tr id="header-row">
+                    <!-- Table headers are generated from JSON keys to avoid "undefined" errors -->
                 </tr>
             </thead>
             <tbody id="table-body">
-                <tr><td colspan="18" class="text-center p-20 text-yellow-500">Väntar på db_master_data.json...</td></tr>
+                <tr><td colspan="20" class="text-center py-20 text-slate-500 italic">Väntar på data från db_master_data.json...</td></tr>
             </tbody>
         </table>
     </div>
 
     <script>
-        const DATA_URL = 'db_master_data.json';
-        let masterData = null;
-        let sortDirections = {};
+        const DATA_PATH = 'db_master_data.json';
+        let masterData = [];
+        let sortState = { col: null, desc: false };
 
         /**
-         * Normalizes stat names for comparison (e.g., "Critical Damage" vs "Crit Damage")
+         * Cleans and normalizes strings for comparison
          */
-        function normalize(val) {
-            if (!val || val === "-") return "";
-            return val.toLowerCase()
+        function normalize(str) {
+            if (!str || str === "-") return "";
+            return str.toString().toLowerCase()
                       .replace(/critical/g, 'crit')
                       .replace(/damage/g, 'dmg')
                       .trim();
         }
 
         /**
-         * Returns the CSS class by comparing equipped vs recommended values
+         * Logic to determine if equipped mod matches recommendation
          */
-        function getCompareClass(eq, rec) {
-            if (eq === "-" || !rec || rec === "-") return "neutral-cell";
-            return normalize(eq) === normalize(rec) ? "match-green" : "mismatch-red";
+        function getCellColorClass(val, key, unit) {
+            const compareMap = {
+                "Arrow": "Arrow(r)",
+                "Triangle": "Triangle(r)",
+                "Circle": "Circle(r)",
+                "Cross": "Cross(r)"
+            };
+
+            const recKey = compareMap[key];
+            if (!recKey || !unit[recKey] || unit[recKey] === "-") return "neutral-cell";
+            
+            return normalize(val) === normalize(unit[recKey]) ? "match-green" : "mismatch-red";
         }
 
         /**
-         * Loads the master JSON and populates the UI
+         * Main load function
          */
-        async function loadData() {
+        async function init() {
             try {
-                const response = await fetch(DATA_URL);
-                if (!response.ok) throw new Error("Could not load master data.");
-                
-                masterData = await response.json();
+                const response = await fetch(DATA_PATH);
+                const data = await response.json();
                 
                 // Update Metadata
-                const meta = masterData.metadata;
+                const meta = data.metadata;
                 document.getElementById('player-summary').innerHTML = 
-                    `Spelare: <b class="text-white">${meta.player_name}</b> | GP: <b class="text-white">${Number(meta.galactic_power).toLocaleString('sv-SE')}</b>`;
-                document.getElementById('build-info').textContent = `Build: ${meta.generated_at}`;
+                    `Spelare: <span class="text-white">${meta.player_name}</span> | GP: <span class="text-white">${Number(meta.galactic_power).toLocaleString()}</span>`;
+                document.getElementById('build-info').textContent = `Senast uppdaterad: ${meta.generated_at}`;
 
-                renderTable();
+                masterData = data.units;
+                if (masterData.length > 0) {
+                    createHeaders(masterData[0]);
+                    renderTable(masterData);
+                }
             } catch (err) {
-                console.error(err);
                 document.getElementById('table-body').innerHTML = 
-                    `<tr><td colspan="18" class="text-center p-20 text-rose-500 font-bold">FEIL: ${err.message}</td></tr>`;
+                    `<tr><td colspan="20" class="text-center py-20 text-red-500">Kunde inte läsa JSON-filen. Kontrollera att den finns på GitHub.</td></tr>`;
+                console.error("Fetch error:", err);
             }
         }
 
         /**
-         * Renders the table rows based on the 'units' array
+         * Creates headers dynamically based on the keys in the first JSON unit object
          */
-        function renderTable() {
+        function createHeaders(firstUnit) {
+            const headerRow = document.getElementById('header-row');
+            headerRow.innerHTML = '';
+            
+            Object.keys(firstUnit).forEach((key, index) => {
+                const th = document.createElement('th');
+                th.textContent = key;
+                th.onclick = () => sortTable(key);
+                headerRow.appendChild(th);
+            });
+        }
+
+        /**
+         * Renders the rows into the table body
+         */
+        function renderTable(units) {
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
 
-            if (!masterData.units || masterData.units.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="18" class="text-center p-20">Inga karaktärer hittades.</td></tr>';
-                return;
-            }
-
-            masterData.units.forEach(u => {
-                const row = document.createElement('tr');
+            units.forEach(unit => {
+                const tr = document.createElement('tr');
                 
-                // We access the keys exactly as defined in the [Table] section of merge.ini
-                // Comparison Logic for columns (Arrow, Triangle, Circle, Cross)
-                const arrowClass = getCompareClass(u["Arrow"], u["Arrow(r)"]);
-                const triangleClass = getCompareClass(u["Triangle"], u["Triangle(r)"]);
-                const circleClass = getCompareClass(u["Circle"], u["Circle(r)"]);
-                const crossClass = getCompareClass(u["Cross"], u["Cross(r)"]);
+                Object.entries(unit).forEach(([key, value]) => {
+                    const td = document.createElement('td');
+                    const displayValue = (value === undefined || value === null) ? "-" : value;
+                    
+                    // Specific styling for certain columns
+                    if (key === "Name") td.classList.add("font-bold", "text-blue-300");
+                    if (key === "Gear") td.classList.add("font-bold", "text-slate-100", "text-center");
+                    if (key === "Kyro") td.classList.add("text-orange-400", "font-mono", "text-center");
+                    if (key === "Stars" || key === "Level") td.classList.add("text-center");
+                    
+                    // Mod comparison coloring
+                    const colorClass = getCellColorClass(displayValue, key, unit);
+                    if (colorClass !== "neutral-cell") td.classList.add(colorClass);
 
-                row.innerHTML = `
-                    <td class="font-bold text-blue-300">${u["Name"]}</td>
-                    <td class="text-center">${u["Level"]}</td>
-                    <td class="text-center text-yellow-500 font-bold">${u["Stars"]}★</td>
-                    <td class="text-center font-bold text-slate-200">${u["Gear"]}</td>
-                    <td class="text-[10px] text-slate-400">${u["Set Bonus"]}</td>
-                    <td class="neutral-cell">${u["Square"]}</td>
-                    <td class="${arrowClass}">${u["Arrow"]}</td>
-                    <td class="neutral-cell">${u["Diamond"]}</td>
-                    <td class="${triangleClass}">${u["Triangle"]}</td>
-                    <td class="${circleClass}">${u["Circle"]}</td>
-                    <td class="${crossClass}">${u["Cross"]}</td>
-                    <td class="text-[10px] text-blue-400/60">${u["Rec Bonus"]}</td>
-                    <td class="text-slate-500">${u["Arrow(r)"]}</td>
-                    <td class="text-slate-500">${u["Triangle(r)"]}</td>
-                    <td class="text-slate-500">${u["Circle(r)"]}</td>
-                    <td class="text-slate-500">${u["Cross(r)"]}</td>
-                    <td class="text-center text-orange-400 font-mono font-bold">${u["Kyro"]}</td>
-                    <td><a href="${u["url"]}" target="_blank" class="text-blue-400 underline hover:text-blue-200">url</a></td>
-                `;
-                tbody.appendChild(row);
+                    // Handle URL as link
+                    if (key.toLowerCase() === "url") {
+                        td.innerHTML = `<a href="${displayValue}" target="_blank" class="text-blue-500 hover:underline italic">Link</a>`;
+                    } else {
+                        td.textContent = displayValue;
+                    }
+
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
             });
         }
 
         /**
-         * Standard sorting function for the table columns
+         * Sorts the table by key
          */
-        function sortTable(n) {
-            const tbody = document.getElementById("table-body");
-            const rows = Array.from(tbody.rows);
-            
-            // Toggle direction
-            sortDirections[n] = !sortDirections[n];
-            const dir = sortDirections[n];
+        function sortTable(key) {
+            sortState.desc = (sortState.col === key) ? !sortState.desc : false;
+            sortState.col = key;
 
-            rows.sort((a, b) => {
-                let x = a.cells[n].innerText.toLowerCase();
-                let y = b.cells[n].innerText.toLowerCase();
-                
-                // Numeric sort if applicable
-                const nx = parseFloat(x.replace(/[^0-9.]/g, ''));
-                const ny = parseFloat(y.replace(/[^0-9.]/g, ''));
-                
-                if (!isNaN(nx) && !isNaN(ny)) {
-                    return dir ? nx - ny : ny - nx;
+            const sorted = [...masterData].sort((a, b) => {
+                let v1 = a[key];
+                let v2 = b[key];
+
+                // Numeric sort
+                const n1 = parseFloat(v1);
+                const n2 = parseFloat(v2);
+                if (!isNaN(n1) && !isNaN(n2)) {
+                    return sortState.desc ? n2 - n1 : n1 - n2;
                 }
-                
-                return dir ? x.localeCompare(y) : y.localeCompare(x);
+
+                // String sort
+                return sortState.desc 
+                    ? String(v2).localeCompare(String(v1)) 
+                    : String(v1).localeCompare(String(v2));
             });
 
-            rows.forEach(row => tbody.appendChild(row));
+            renderTable(sorted);
         }
 
-        window.onload = loadData;
+        window.onload = init;
     </script>
 </body>
 </html>
