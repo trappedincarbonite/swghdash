@@ -9,14 +9,16 @@
         body { background-color: #0f172a; color: #f1f5f9; margin: 0; padding: 0; font-family: sans-serif; }
         .header-bg { background-color: #1e293b; border-bottom: 1px solid #334155; }
         
-        /* Table Styles */
+        /* Table Layout */
         .table-container { width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1400px; }
+        
+        /* Sticky Headers */
         th { 
             background-color: #1e293b; 
             color: #60a5fa; 
             text-align: left; 
-            padding: 12px 10px; 
+            padding: 10px; 
             border: 1px solid #334155;
             font-size: 0.65rem;
             cursor: pointer;
@@ -27,6 +29,7 @@
             z-index: 10;
         }
         th:hover { background-color: #334155; }
+        
         td { 
             padding: 6px 10px; 
             border: 1px solid #1e293b; 
@@ -34,184 +37,199 @@
             white-space: nowrap;
         }
         
-        /* Matching Logic Colors */
+        /* Mod Comparison Colors */
         .match-green { background-color: #166534 !important; color: #bbf7d0; }
         .mismatch-red { background-color: #991b1b !important; color: #fecaca; }
         .neutral-cell { background-color: #1e293b; }
         
         tr:nth-child(even) { background-color: #111827; }
-        tr:hover td { filter: brightness(1.3); }
-
-        /* Hide horizontal scrollbar but allow scrolling */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        tr:hover td { filter: brightness(1.2); }
     </style>
 </head>
 <body>
 
-    <!-- Header Section -->
+    <!-- Top Bar with Metadata -->
     <header class="header-bg p-4 shadow-xl flex justify-between items-center">
         <div>
             <h1 class="text-xl font-black text-blue-400 tracking-tighter">SWGOH MASTER DATA</h1>
             <div id="player-summary" class="text-slate-400 text-[10px] uppercase tracking-widest mt-1">
-                Laddar spelarinformation...
+                Loading data...
             </div>
         </div>
         <div id="build-info" class="text-[9px] text-slate-500 font-mono text-right"></div>
     </header>
 
-    <!-- Dashboard Table -->
-    <div class="table-container no-scrollbar">
+    <!-- Main Data Table -->
+    <div class="table-container">
         <table id="master-table">
             <thead>
                 <tr id="header-row">
-                    <!-- Table headers are generated from JSON keys to avoid "undefined" errors -->
+                    <th onclick="sortTable('name')">Name</th>
+                    <th onclick="sortTable('level')">Lvl</th>
+                    <th onclick="sortTable('stars')">Stars</th>
+                    <th onclick="sortTable('gear')">Gear</th>
+                    <th onclick="sortTable('set bonus')">Set</th>
+                    <th onclick="sortTable('square')">Square</th>
+                    <th onclick="sortTable('arrow')">Arrow</th>
+                    <th onclick="sortTable('diamond')">Diamond</th>
+                    <th onclick="sortTable('triangle')">Triangle</th>
+                    <th onclick="sortTable('circle')">Circle</th>
+                    <th onclick="sortTable('cross')">Cross</th>
+                    <th onclick="sortTable('rec bonus')">Rec Set</th>
+                    <th onclick="sortTable('arrow(r)')">Arrow(r)</th>
+                    <th onclick="sortTable('triangle(r)')">Tri(r)</th>
+                    <th onclick="sortTable('circle(r)')">Circ(r)</th>
+                    <th onclick="sortTable('cross(r)')">Cross(r)</th>
+                    <th onclick="sortTable('kyro')">Kyro</th>
+                    <th onclick="sortTable('url')">URL</th>
                 </tr>
             </thead>
             <tbody id="table-body">
-                <tr><td colspan="20" class="text-center py-20 text-slate-500 italic">Väntar på data från db_master_data.json...</td></tr>
+                <tr><td colspan="18" class="text-center py-20 text-slate-500 italic">Initializing...</td></tr>
             </tbody>
         </table>
     </div>
 
     <script>
-        const DATA_PATH = 'db_master_data.json';
-        let masterData = [];
-        let sortState = { col: null, desc: false };
+        const JSON_FILE = 'db_master_data.json';
+        let unitsData = [];
+        let sortConfig = { key: null, direction: 1 };
 
         /**
-         * Cleans and normalizes strings for comparison
+         * Normalizes strings for logical comparison (e.g. "Crit Damage" vs "Critical Damage")
          */
-        function normalize(str) {
-            if (!str || str === "-") return "";
-            return str.toString().toLowerCase()
+        function normalizeStat(val) {
+            if (!val || val === "-") return "";
+            return val.toString().toLowerCase()
                       .replace(/critical/g, 'crit')
                       .replace(/damage/g, 'dmg')
                       .trim();
         }
 
         /**
-         * Logic to determine if equipped mod matches recommendation
+         * Determines CSS class based on comparison between equipped and recommended mods
          */
-        function getCellColorClass(val, key, unit) {
-            const compareMap = {
-                "Arrow": "Arrow(r)",
-                "Triangle": "Triangle(r)",
-                "Circle": "Circle(r)",
-                "Cross": "Cross(r)"
-            };
-
-            const recKey = compareMap[key];
-            if (!recKey || !unit[recKey] || unit[recKey] === "-") return "neutral-cell";
+        function getModClass(equippedValue, type, unit) {
+            const recKey = type + "(r)";
+            const recValue = unit[recKey];
             
-            return normalize(val) === normalize(unit[recKey]) ? "match-green" : "mismatch-red";
+            if (!equippedValue || equippedValue === "-" || !recValue || recValue === "-") {
+                return "neutral-cell";
+            }
+            
+            return normalizeStat(equippedValue) === normalizeStat(recValue) ? "match-green" : "mismatch-red";
         }
 
         /**
-         * Main load function
+         * Fetches JSON and populates the table
          */
-        async function init() {
+        async function loadDashboard() {
             try {
-                const response = await fetch(DATA_PATH);
+                const response = await fetch(JSON_FILE);
                 const data = await response.json();
                 
-                // Update Metadata
+                // Update header with metadata
                 const meta = data.metadata;
                 document.getElementById('player-summary').innerHTML = 
-                    `Spelare: <span class="text-white">${meta.player_name}</span> | GP: <span class="text-white">${Number(meta.galactic_power).toLocaleString()}</span>`;
-                document.getElementById('build-info').textContent = `Senast uppdaterad: ${meta.generated_at}`;
+                    `Player: <span class="text-white">${meta.player_name}</span> | GP: <span class="text-white">${Number(meta.galactic_power).toLocaleString()}</span>`;
+                document.getElementById('build-info').textContent = `Build: ${meta.generated_at}`;
 
-                masterData = data.units;
-                if (masterData.length > 0) {
-                    createHeaders(masterData[0]);
-                    renderTable(masterData);
-                }
+                unitsData = data.units;
+                renderTable(unitsData);
             } catch (err) {
                 document.getElementById('table-body').innerHTML = 
-                    `<tr><td colspan="20" class="text-center py-20 text-red-500">Kunde inte läsa JSON-filen. Kontrollera att den finns på GitHub.</td></tr>`;
-                console.error("Fetch error:", err);
+                    `<tr><td colspan="18" class="text-center py-20 text-rose-500 font-bold">Error loading JSON: ${err.message}</td></tr>`;
             }
         }
 
         /**
-         * Creates headers dynamically based on the keys in the first JSON unit object
-         */
-        function createHeaders(firstUnit) {
-            const headerRow = document.getElementById('header-row');
-            headerRow.innerHTML = '';
-            
-            Object.keys(firstUnit).forEach((key, index) => {
-                const th = document.createElement('th');
-                th.textContent = key;
-                th.onclick = () => sortTable(key);
-                headerRow.appendChild(th);
-            });
-        }
-
-        /**
-         * Renders the rows into the table body
+         * Renders table rows based on the provided units array
          */
         function renderTable(units) {
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
 
-            units.forEach(unit => {
+            units.forEach(u => {
                 const tr = document.createElement('tr');
                 
-                Object.entries(unit).forEach(([key, value]) => {
-                    const td = document.createElement('td');
-                    const displayValue = (value === undefined || value === null) ? "-" : value;
-                    
-                    // Specific styling for certain columns
-                    if (key === "Name") td.classList.add("font-bold", "text-blue-300");
-                    if (key === "Gear") td.classList.add("font-bold", "text-slate-100", "text-center");
-                    if (key === "Kyro") td.classList.add("text-orange-400", "font-mono", "text-center");
-                    if (key === "Stars" || key === "Level") td.classList.add("text-center");
-                    
-                    // Mod comparison coloring
-                    const colorClass = getCellColorClass(displayValue, key, unit);
-                    if (colorClass !== "neutral-cell") td.classList.add(colorClass);
+                // Column definitions mapping to JSON keys
+                const columns = [
+                    { key: "name", class: "font-bold text-blue-300" },
+                    { key: "level", class: "text-center" },
+                    { key: "stars", class: "text-center font-bold" },
+                    { key: "gear", class: "text-center font-bold text-slate-200" },
+                    { key: "set bonus", class: "text-[10px] text-slate-400" },
+                    { key: "square", class: "neutral-cell" },
+                    { key: "arrow", compare: "arrow" },
+                    { key: "diamond", class: "neutral-cell" },
+                    { key: "triangle", compare: "triangle" },
+                    { key: "circle", compare: "circle" },
+                    { key: "cross", compare: "cross" },
+                    { key: "rec bonus", class: "text-[10px] text-blue-400/50" },
+                    { key: "arrow(r)", class: "text-slate-500" },
+                    { key: "triangle(r)", class: "text-slate-500" },
+                    { key: "circle(r)", class: "text-slate-500" },
+                    { key: "cross(r)", class: "text-slate-500" },
+                    { key: "kyro", class: "text-center text-orange-400 font-mono font-bold" },
+                    { key: "url", isLink: true }
+                ];
 
-                    // Handle URL as link
-                    if (key.toLowerCase() === "url") {
-                        td.innerHTML = `<a href="${displayValue}" target="_blank" class="text-blue-500 hover:underline italic">Link</a>`;
+                columns.forEach(col => {
+                    const td = document.createElement('td');
+                    const rawValue = u[col.key] !== undefined ? u[col.key] : "-";
+                    
+                    // Apply classes
+                    if (col.class) td.className = col.class;
+                    
+                    // Logic for mod color coding
+                    if (col.compare) {
+                        td.className = getModClass(rawValue, col.compare, u);
+                    }
+
+                    // Content rendering
+                    if (col.isLink) {
+                        td.innerHTML = `<a href="${rawValue}" target="_blank" class="text-blue-500 hover:text-blue-300 underline">Link</a>`;
                     } else {
-                        td.textContent = displayValue;
+                        td.textContent = rawValue;
                     }
 
                     tr.appendChild(td);
                 });
+
                 tbody.appendChild(tr);
             });
         }
 
         /**
-         * Sorts the table by key
+         * Sorts unitsData and re-renders the table
          */
         function sortTable(key) {
-            sortState.desc = (sortState.col === key) ? !sortState.desc : false;
-            sortState.col = key;
+            if (sortConfig.key === key) {
+                sortConfig.direction *= -1;
+            } else {
+                sortConfig.key = key;
+                sortConfig.direction = 1;
+            }
 
-            const sorted = [...masterData].sort((a, b) => {
-                let v1 = a[key];
-                let v2 = b[key];
+            unitsData.sort((a, b) => {
+                let v1 = a[key] === undefined ? "" : a[key];
+                let v2 = b[key] === undefined ? "" : b[key];
 
-                // Numeric sort
+                // Numeric sorting
                 const n1 = parseFloat(v1);
                 const n2 = parseFloat(v2);
                 if (!isNaN(n1) && !isNaN(n2)) {
-                    return sortState.desc ? n2 - n1 : n1 - n2;
+                    return (n1 - n2) * sortConfig.direction;
                 }
 
-                // String sort
-                return sortState.desc 
-                    ? String(v2).localeCompare(String(v1)) 
-                    : String(v1).localeCompare(String(v2));
+                // String sorting
+                return String(v1).localeCompare(String(v2)) * sortConfig.direction;
             });
 
-            renderTable(sorted);
+            renderTable(unitsData);
         }
 
-        window.onload = init;
+        window.onload = loadDashboard;
     </script>
 </body>
 </html>
