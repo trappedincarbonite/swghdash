@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWGOH Master Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0f172a; color: #f1f5f9; margin: 0; padding: 0; }
+        .header-bg { background-color: #1e293b; border-bottom: 1px solid #334155; }
+        
+        /* Table Styles */
+        table { width: 100%; border-collapse: collapse; table-layout: auto; }
+        th { 
+            background-color: #1e293b; 
+            color: #60a5fa; 
+            text-align: left; 
+            padding: 12px 10px; 
+            border: 1px solid #334155;
+            font-size: 0.65rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        th:hover { background-color: #334155; }
+        td { 
+            padding: 8px 10px; 
+            border: 1px solid #1e293b; 
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+        
+        /* Coloring Logic */
+        .match-green { background-color: #166534 !important; color: #bbf7d0; }
+        .mismatch-red { background-color: #991b1b !important; color: #fecaca; }
+        .neutral-cell { background-color: #1e293b; }
+        
+        tr:hover td { filter: brightness(1.2); }
+    </style>
+</head>
+<body class="p-0">
+
+    <!-- Top Bar with Player Metadata -->
+    <header class="header-bg p-4 shadow-lg mb-4 flex justify-between items-center">
+        <div>
+            <h1 class="text-2xl font-black text-blue-400 tracking-tight">SWGOH MASTER</h1>
+            <div id="player-summary" class="text-slate-400 text-xs uppercase tracking-widest mt-1">
+                Laddar spelardata...
+            </div>
+        </div>
+        <div id="build-info" class="text-[10px] text-slate-500 font-mono"></div>
+    </header>
+
+    <!-- Main Table Container -->
+    <div class="w-full overflow-x-auto">
+        <table id="master-table">
+            <thead>
+                <tr id="table-headers">
+                    <!-- Headers are hardcoded to match the [Table] section in merge.ini -->
+                    <th onclick="sortTable(0)">Name</th>
+                    <th onclick="sortTable(1)">Level</th>
+                    <th onclick="sortTable(2)">Stars</th>
+                    <th onclick="sortTable(3)">Gear</th>
+                    <th onclick="sortTable(4)">Set Bonus</th>
+                    <th onclick="sortTable(5)">Square</th>
+                    <th onclick="sortTable(6)">Arrow</th>
+                    <th onclick="sortTable(7)">Diamond</th>
+                    <th onclick="sortTable(8)">Triangle</th>
+                    <th onclick="sortTable(9)">Circle</th>
+                    <th onclick="sortTable(10)">Cross</th>
+                    <th onclick="sortTable(11)">Rec Bonus</th>
+                    <th onclick="sortTable(12)">Arrow(r)</th>
+                    <th onclick="sortTable(13)">Triangle(r)</th>
+                    <th onclick="sortTable(14)">Circle(r)</th>
+                    <th onclick="sortTable(15)">Cross(r)</th>
+                    <th onclick="sortTable(16)">Kyro</th>
+                    <th onclick="sortTable(17)">URL</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <tr><td colspan="18" class="text-center p-20 text-yellow-500">Väntar på db_master_data.json...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const DATA_URL = 'db_master_data.json';
+        let masterData = null;
+        let sortDirections = {};
+
+        /**
+         * Normalizes stat names for comparison (e.g., "Critical Damage" vs "Crit Damage")
+         */
+        function normalize(val) {
+            if (!val || val === "-") return "";
+            return val.toLowerCase()
+                      .replace(/critical/g, 'crit')
+                      .replace(/damage/g, 'dmg')
+                      .trim();
+        }
+
+        /**
+         * Returns the CSS class by comparing equipped vs recommended values
+         */
+        function getCompareClass(eq, rec) {
+            if (eq === "-" || !rec || rec === "-") return "neutral-cell";
+            return normalize(eq) === normalize(rec) ? "match-green" : "mismatch-red";
+        }
+
+        /**
+         * Loads the master JSON and populates the UI
+         */
+        async function loadData() {
+            try {
+                const response = await fetch(DATA_URL);
+                if (!response.ok) throw new Error("Could not load master data.");
+                
+                masterData = await response.json();
+                
+                // Update Metadata
+                const meta = masterData.metadata;
+                document.getElementById('player-summary').innerHTML = 
+                    `Spelare: <b class="text-white">${meta.player_name}</b> | GP: <b class="text-white">${Number(meta.galactic_power).toLocaleString('sv-SE')}</b>`;
+                document.getElementById('build-info').textContent = `Build: ${meta.generated_at}`;
+
+                renderTable();
+            } catch (err) {
+                console.error(err);
+                document.getElementById('table-body').innerHTML = 
+                    `<tr><td colspan="18" class="text-center p-20 text-rose-500 font-bold">FEIL: ${err.message}</td></tr>`;
+            }
+        }
+
+        /**
+         * Renders the table rows based on the 'units' array
+         */
+        function renderTable() {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            if (!masterData.units || masterData.units.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="18" class="text-center p-20">Inga karaktärer hittades.</td></tr>';
+                return;
+            }
+
+            masterData.units.forEach(u => {
+                const row = document.createElement('tr');
+                
+                // We access the keys exactly as defined in the [Table] section of merge.ini
+                // Comparison Logic for columns (Arrow, Triangle, Circle, Cross)
+                const arrowClass = getCompareClass(u["Arrow"], u["Arrow(r)"]);
+                const triangleClass = getCompareClass(u["Triangle"], u["Triangle(r)"]);
+                const circleClass = getCompareClass(u["Circle"], u["Circle(r)"]);
+                const crossClass = getCompareClass(u["Cross"], u["Cross(r)"]);
+
+                row.innerHTML = `
+                    <td class="font-bold text-blue-300">${u["Name"]}</td>
+                    <td class="text-center">${u["Level"]}</td>
+                    <td class="text-center text-yellow-500 font-bold">${u["Stars"]}★</td>
+                    <td class="text-center font-bold text-slate-200">${u["Gear"]}</td>
+                    <td class="text-[10px] text-slate-400">${u["Set Bonus"]}</td>
+                    <td class="neutral-cell">${u["Square"]}</td>
+                    <td class="${arrowClass}">${u["Arrow"]}</td>
+                    <td class="neutral-cell">${u["Diamond"]}</td>
+                    <td class="${triangleClass}">${u["Triangle"]}</td>
+                    <td class="${circleClass}">${u["Circle"]}</td>
+                    <td class="${crossClass}">${u["Cross"]}</td>
+                    <td class="text-[10px] text-blue-400/60">${u["Rec Bonus"]}</td>
+                    <td class="text-slate-500">${u["Arrow(r)"]}</td>
+                    <td class="text-slate-500">${u["Triangle(r)"]}</td>
+                    <td class="text-slate-500">${u["Circle(r)"]}</td>
+                    <td class="text-slate-500">${u["Cross(r)"]}</td>
+                    <td class="text-center text-orange-400 font-mono font-bold">${u["Kyro"]}</td>
+                    <td><a href="${u["url"]}" target="_blank" class="text-blue-400 underline hover:text-blue-200">url</a></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        /**
+         * Standard sorting function for the table columns
+         */
+        function sortTable(n) {
+            const tbody = document.getElementById("table-body");
+            const rows = Array.from(tbody.rows);
+            
+            // Toggle direction
+            sortDirections[n] = !sortDirections[n];
+            const dir = sortDirections[n];
+
+            rows.sort((a, b) => {
+                let x = a.cells[n].innerText.toLowerCase();
+                let y = b.cells[n].innerText.toLowerCase();
+                
+                // Numeric sort if applicable
+                const nx = parseFloat(x.replace(/[^0-9.]/g, ''));
+                const ny = parseFloat(y.replace(/[^0-9.]/g, ''));
+                
+                if (!isNaN(nx) && !isNaN(ny)) {
+                    return dir ? nx - ny : ny - nx;
+                }
+                
+                return dir ? x.localeCompare(y) : y.localeCompare(x);
+            });
+
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        window.onload = loadData;
+    </script>
+</body>
+</html>
