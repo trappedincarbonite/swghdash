@@ -1,3 +1,8 @@
+<!--
+# Filename: index.html
+# Modified: 2026-02-22 15:58
+# Description: Main dashboard UI for SWGHDash. Displays player statistics and character data with compact rows.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,7 +60,7 @@
                 </div>
             </div>
 
-            <!-- Search Component: Right-aligned -->
+            <!-- Search Component -->
             <div class="ml-auto flex items-center shrink-0 pl-4">
                 <input 
                     type="text" 
@@ -155,7 +160,6 @@
 
                 valA = valA.toString().toLowerCase();
                 valB = valB.toString().toLowerCase();
-                
                 return direction === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
             });
         }
@@ -177,13 +181,9 @@
             columns.forEach((col, idx) => {
                 const th = document.createElement('th');
                 const paddingClass = (idx === 0) ? 'pl-6 pr-3 py-3' : (idx === columns.length - 1 ? 'pl-3 pr-6 py-3' : 'p-3');
-                
-                // Align left by default unless center is true
                 th.className = `sticky top-0 z-20 border-b border-slate-800 no-wrap ${paddingClass} ${col.sortable ? 'sortable' : ''} ${col.center ? 'text-center' : 'text-left'} ${col.italic ? 'italic opacity-60' : ''}`;
-                
                 let indicator = (currentSortCol === col.key) ? (currentSortDir === 'asc' ? ' ▴' : ' ▾') : '';
                 th.innerHTML = `${col.label}${indicator}`;
-                
                 if (col.sortable) th.onclick = () => handleHeaderClick(col.key);
                 headerRow.appendChild(th);
             });
@@ -197,26 +197,24 @@
                 { label: 'GP', key: 'galactic power' },
                 { label: 'CHAR GP', key: 'characters gp' },
                 { label: 'FLEET GP', key: 'fleet gp' },
-                { label: 'ARENA', key: 'arena rank', suffix: ' rank' },
-                { label: 'FLEET', key: 'fleet rank', suffix: ' rank' }
+                { label: 'ARENA WINS', key: 'arena wins' },
+                { label: 'FLEET WINS', key: 'fleet arena wins' },
+                { label: 'ARENA RANK', key: 'arena rank' },
+                { label: 'FLEET RANK', key: 'fleet rank' }
             ];
 
             statsMapping.forEach((stat) => {
                 const rawValue = headerData[stat.key];
                 const formattedValue = formatNumber(rawValue);
-                
                 if (formattedValue !== null) {
                     const statContainer = document.createElement('div');
                     statContainer.className = "flex flex-row items-baseline gap-2 px-6 shrink-0 no-wrap border-r border-slate-800/40 last:border-0";
-                    
                     const labelSpan = document.createElement('span');
                     labelSpan.className = "text-[13px] text-slate-400 font-bold tracking-[0.1em] no-wrap";
                     labelSpan.textContent = stat.label;
-                    
                     const valSpan = document.createElement('span');
                     valSpan.className = `text-[13px] font-bold no-wrap text-yellow-500`;
-                    valSpan.textContent = formattedValue + (stat.suffix || '');
-                    
+                    valSpan.textContent = formattedValue;
                     statContainer.appendChild(labelSpan);
                     statContainer.appendChild(valSpan);
                     container.appendChild(statContainer);
@@ -230,9 +228,7 @@
                 if (!response.ok) throw new Error('Could not find swgoh_data.json');
                 const data = await response.json();
                 
-                if (data.header) {
-                    renderHeaderStats(data.header);
-                }
+                if (data.header) renderHeaderStats(data.header);
 
                 allUnits = data.units || [];
                 allUnits = sortUnits(allUnits, currentSortCol, currentSortDir);
@@ -254,9 +250,7 @@
 
                 renderHeader();
                 renderTable();
-
                 document.getElementById('character-search').addEventListener('input', () => renderTable());
-
             } catch (err) {
                 console.error("Init Error:", err);
                 document.getElementById('unit-table-body').innerHTML = `<tr><td colspan="16" class="p-10 text-center text-red-400">Error loading data.</td></tr>`;
@@ -266,19 +260,17 @@
         function renderTable() {
             const tbody = document.getElementById('unit-table-body');
             const searchQuery = document.getElementById('character-search').value.toLowerCase();
-            
             let displayUnits = allUnits.filter(u => u.name.toLowerCase().includes(searchQuery));
             displayUnits = sortUnits(displayUnits, currentSortCol, currentSortDir);
-
             tbody.innerHTML = '';
 
             displayUnits.forEach(unit => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-800/20 transition-colors group";
+                // Apply hover effect and zebra striping (every even row gets a slightly lighter background)
+                tr.className = "hover:bg-slate-400/20 even:bg-slate-600/10 transition-colors group";
 
                 const getStyle = (current, recommended) => {
                     if (!recommended || recommended === "") return "text-slate-600";
-                    // Removed mx-auto to ensure left alignment for missing items
                     if (!current || current === "") return "mod-missing rounded px-1.5 py-0.5 no-wrap block w-fit";
                     return current.toLowerCase().includes(recommended.toLowerCase()) 
                         ? "mod-perfect rounded px-1.5 py-0.5 font-bold no-wrap block w-fit" 
@@ -295,27 +287,27 @@
                 const vDiamondStyle = (unit.v_diamond_speed === "yes") ? "mod-perfect rounded px-1.5 py-0.5 no-wrap block w-fit" : "text-slate-600 no-wrap block w-fit";
 
                 tr.innerHTML = `
-                    <td class="pl-6 pr-3 py-3 no-wrap border-r border-slate-800/20">
-                        <a href="${unit.url}" target="_blank" class="font-bold text-slate-100 hover:text-blue-400 transition-colors">${unit.name}</a>
+                    <td class="pl-6 pr-3 py-[5px] no-wrap border-r border-slate-800/20 font-bold leading-tight">
+                        <a href="${unit.url}" target="_blank" class="text-slate-100 hover:text-blue-400 transition-colors">${unit.name}</a>
                     </td>
-                    <td class="p-3 text-center text-slate-500 font-mono no-wrap border-r border-slate-800/20">${unit.level}</td>
-                    <td class="p-3 text-center font-bold no-wrap border-r border-slate-800/20 ${unit.stars === 7 ? 'text-amber-600' : 'text-slate-500'}">${unit.stars}</td>
-                    <td class="p-3 text-center border-r border-slate-800/20 ${gearStyle}">${unit.gear}</td>
+                    <td class="px-3 py-[5px] text-center text-slate-500 font-bold leading-tight no-wrap border-r border-slate-800/20">${unit.level}</td>
+                    <td class="px-3 py-[5px] text-center font-bold no-wrap border-r border-slate-800/20 ${unit.stars === 7 ? 'text-amber-600' : 'text-slate-500'}">${unit.stars}</td>
+                    <td class="px-3 py-[5px] text-center border-r border-slate-800/20 ${gearStyle} leading-tight">${unit.gear}</td>
                     
-                    <td class="p-3 leading-tight"><span class="${getStyle(unit.set, unit['set(r)']).replace('no-wrap', '')}">${formatModText(unit.set, true)}</span></td>
-                    <td class="p-3 leading-tight no-wrap"><span class="${getStyle(unit.arrow, unit['arrow(r)'])}">${formatModText(unit.arrow, false)}</span></td>
-                    <td class="p-3 leading-tight no-wrap"><span class="${getStyle(unit.triangle, unit['triangle(r)'])}">${formatModText(unit.triangle, false)}</span></td>
-                    <td class="p-3 leading-tight no-wrap"><span class="${getStyle(unit.circle, unit['circle(r)'])}">${formatModText(unit.circle, false)}</span></td>
-                    <td class="p-3 leading-tight no-wrap"><span class="${getStyle(unit.cross, unit['cross(r)'])}">${formatModText(unit.cross, false)}</span></td>
+                    <td class="px-3 py-[5px] leading-tight"><span class="${getStyle(unit.set, unit['set(r)']).replace('no-wrap', '')}">${formatModText(unit.set, true)}</span></td>
+                    <td class="px-3 py-[5px] leading-tight no-wrap"><span class="${getStyle(unit.arrow, unit['arrow(r)'])}">${formatModText(unit.arrow, false)}</span></td>
+                    <td class="px-3 py-[5px] leading-tight no-wrap"><span class="${getStyle(unit.triangle, unit['triangle(r)'])}">${formatModText(unit.triangle, false)}</span></td>
+                    <td class="px-3 py-[5px] leading-tight no-wrap"><span class="${getStyle(unit.circle, unit['circle(r)'])}">${formatModText(unit.circle, false)}</span></td>
+                    <td class="px-3 py-[5px] leading-tight no-wrap"><span class="${getStyle(unit.cross, unit['cross(r)'])}">${formatModText(unit.cross, false)}</span></td>
                     
-                    <td class="p-3 no-wrap"><span class="${vSquareStyle}">${formatModText(unit.square, false)}</span></td>
-                    <td class="p-3 no-wrap"><span class="${vDiamondStyle}">${formatModText(unit.diamond, false)}</span></td>
+                    <td class="px-3 py-[5px] no-wrap"><span class="${vSquareStyle}">${formatModText(unit.square, false)}</span></td>
+                    <td class="px-3 py-[5px] no-wrap"><span class="${vDiamondStyle}">${formatModText(unit.diamond, false)}</span></td>
                     
-                    <td class="p-3 text-slate-500 italic text-[11px] leading-tight border-l border-slate-800/20">${formatModText(unit['set(r)'], true)}</td>
-                    <td class="p-3 text-slate-500 italic text-[11px] leading-tight no-wrap">${formatModText(unit['arrow(r)'], false)}</td>
-                    <td class="p-3 text-slate-500 italic text-[11px] leading-tight no-wrap">${formatModText(unit['triangle(r)'], false)}</td>
-                    <td class="p-3 text-slate-500 italic text-[11px] leading-tight no-wrap">${formatModText(unit['circle(r)'], false)}</td>
-                    <td class="pl-3 pr-6 py-3 text-slate-500 italic text-[11px] leading-tight no-wrap">${formatModText(unit['cross(r)'], false)}</td>
+                    <td class="px-3 py-[5px] text-slate-500 italic text-[11px] leading-tight border-l border-slate-800/20">${formatModText(unit['set(r)'], true)}</td>
+                    <td class="px-3 py-[5px] text-slate-500 italic text-[11px] leading-tight no-wrap">${formatModText(unit['arrow(r)'], false)}</td>
+                    <td class="px-3 py-[5px] text-slate-500 italic text-[11px] leading-tight no-wrap">${formatModText(unit['triangle(r)'], false)}</td>
+                    <td class="px-3 py-[5px] text-slate-500 italic text-[11px] leading-tight no-wrap">${formatModText(unit['circle(r)'], false)}</td>
+                    <td class="pl-3 pr-6 py-[5px] text-slate-500 italic text-[11px] leading-tight no-wrap">${formatModText(unit['cross(r)'], false)}</td>
                 `;
                 tbody.appendChild(tr);
             });
