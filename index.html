@@ -1,7 +1,10 @@
-<!--
-# Filename: index.html
-# Modified: 2026-02-22 15:58
-# Description: Main dashboard UI for SWGHDash. Displays player statistics and character data with compact rows.
+
+<!-- 
+    Filename: index.html
+    Modified: 2026-02-25 10:04
+    Description: Multi-row dashboard UI for SWGHDash with advanced Level sorting.
+    Functions:    
+    - 6-way Level cycling sorting.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +13,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SWGHDash</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <style>
@@ -20,80 +22,129 @@
             margin: 0;
             padding: 0;
         }
-        
-        /* Custom scrollbar styling */
+
+        /* Custom Scrollbar Styling */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #475569; }
 
-        /* Mod status highlights */
-        .mod-perfect { background-color: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .mod-missing { background-color: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
+        /* Mod Status Classes */
+        .mod-perfect { 
+            background-color: rgba(16, 185, 129, 0.2); 
+            color: #34d399; 
+            border: 1px solid rgba(16, 185, 129, 0.3); 
+        }
+        .mod-missing { 
+            background-color: rgba(239, 68, 68, 0.15); 
+            color: #f87171; 
+            border: 1px solid rgba(239, 68, 68, 0.2); 
+        }
+        .mod-rec-missing { 
+            border: 1px solid rgba(239, 68, 68, 0.4); 
+            color: #f87171; 
+            background-color: transparent; 
+        }
         
-        .search-input:focus { outline: none; border-color: #334155; box-shadow: 0 0 0 2px rgba(51, 65, 85, 0.3); }
-
-        /* Sortable header styles */
-        th.sortable { cursor: pointer; user-select: none; transition: background-color 0.2s; }
-        th.sortable:hover { background-color: #374151 !important; color: #fbbf24; }
-
+        /* UI Elements */
+        .search-input:focus { 
+            outline: none; 
+            border-color: #334155; 
+            box-shadow: 0 0 0 2px rgba(51, 65, 85, 0.3); 
+        }
+        th.sortable { 
+            cursor: pointer; 
+            user-select: none; 
+            transition: background-color 0.2s; 
+        }
+        th.sortable:hover { 
+            background-color: #374151 !important; 
+            color: #fbbf24; 
+        }
         .no-wrap { white-space: nowrap; }
+        thead th { background-color: #1a2234; }
+        .pipe-sep { color: #334155; }
+
+        /* Custom Checkbox Style */
+        .filter-check {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background-color: #1e2b3c;
+            border: 1px solid #334155;
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+            vertical-align: middle;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .filter-check:checked {
+            background-color: #eab308;
+            border-color: #ca8a04;
+        }
+        .filter-check:checked::after {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 1px;
+            width: 4px;
+            height: 8px;
+            border: solid #0f172a;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
     </style>
 </head>
 <body class="text-slate-300 min-h-screen">
-
-    <div id="app" class="flex flex-col h-screen">
-        <!-- Top Navigation Bar -->
-        <header class="bg-[#0f172a] border-b border-slate-800 px-6 py-4 flex flex-row items-center flex-nowrap shrink-0 overflow-x-auto">
-            
-            <!-- Left Group: Brand and Stats -->
+    <div id="app" class="flex flex-col h-screen overflow-hidden">
+        
+        <!-- Header: Brand & Player Stats -->
+        <header class="bg-[#0f172a] border-b border-slate-800 px-6 py-3 flex flex-row items-center flex-nowrap shrink-0 overflow-x-auto">
             <div class="flex items-center gap-10 shrink-0">
-                <!-- Brand Section -->
                 <div class="flex flex-col shrink-0">
                     <h1 class="text-xl font-black text-yellow-500 tracking-wider uppercase leading-none no-wrap">SWGHDASH</h1>
-                    <span class="text-[10px] text-slate-400 font-mono mt-1 uppercase tracking-widest no-wrap">BUILD_260212_234800</span>
+                    <span class="text-[10px] text-slate-400 font-mono mt-1 uppercase tracking-widest no-wrap">BUILD_260225_100400</span>
                 </div>
-
-                <!-- Player Stats Section -->
                 <div id="header-stats" class="flex flex-nowrap items-center shrink-0 no-wrap">
-                    <!-- Stats injected by JS -->
+                    <!-- Global GP stats injected here -->
                 </div>
             </div>
-
-            <!-- Search Component -->
             <div class="ml-auto flex items-center shrink-0 pl-4">
-                <input 
-                    type="text" 
-                    id="character-search" 
-                    placeholder="Search Characters..." 
-                    class="search-input bg-[#1e293b]/50 border border-slate-700 rounded-md px-4 py-1.5 text-sm w-48 lg:w-72 text-slate-200 placeholder-slate-500 transition-all"
-                >
+                <input type="text" id="character-search" placeholder="Search Characters..." 
+                    class="search-input bg-[#1e293b]/50 border border-slate-700 rounded-md px-4 py-1.5 text-sm w-48 lg:w-72 text-slate-200 placeholder-slate-500 transition-all">
             </div>
         </header>
 
-        <!-- Menu Bar -->
-        <div class="bg-[#0f172a] border-b border-slate-800 px-6 py-2 shrink-0">
-            <nav id="menu" class="flex items-center gap-4 text-[11px] font-bold text-slate-400 uppercase tracking-wide">
-                <!-- Menu links injected by JS -->
-            </nav>
+        <!-- Navigation & Unit Filters -->
+        <div class="bg-[#0f172a] border-b border-slate-800 px-6 py-2 shrink-0 flex items-center justify-between text-[11px] font-bold uppercase tracking-wide">
+            <div id="unit-stats-container" class="flex items-center gap-2">
+                <!-- Unit stats and Filter checkboxes injected here -->
+            </div>
+            <div id="menu-links" class="flex items-center gap-2 text-slate-400">
+                <!-- Links injected via JS -->
+            </div>
         </div>
 
-        <!-- Main Content Area -->
-        <main class="flex-1 overflow-y-auto bg-[#0b0f19]">
-            <div class="w-full">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse table-auto relative">
-                        <thead>
-                            <tr id="table-header-row" class="text-slate-400 text-[11px] uppercase tracking-wide font-bold bg-[#1a2234]">
-                                <!-- Headers injected by JS -->
-                            </tr>
-                        </thead>
-                        <tbody id="unit-table-body" class="text-[12px] divide-y divide-slate-800/30">
-                            <!-- Rows injected by JS -->
-                        </tbody>
-                    </table>
-                </div>
+        <!-- Mod Collection Summary -->
+        <div class="bg-[#0b0f19] border-b border-slate-800 px-6 py-2 shrink-0 overflow-x-auto">
+            <div id="get-mods-container" class="flex items-center justify-between text-[11px] font-bold uppercase tracking-wide whitespace-nowrap">
+                <!-- Mod status summary and "Get Mods" tally -->
             </div>
+        </div>
+
+        <!-- Main Data Table -->
+        <main class="flex-1 overflow-auto bg-[#0b0f19]">
+            <table class="w-full text-left border-collapse table-auto">
+                <thead>
+                    <tr id="table-header-row" class="text-slate-400 text-[11px] uppercase tracking-wide font-bold">
+                        <!-- Table headers injected here -->
+                    </tr>
+                </thead>
+                <tbody id="unit-table-body" class="text-[12px] divide-y divide-slate-800/30">
+                    <!-- Unit rows injected here -->
+                </tbody>
+            </table>
         </main>
     </div>
 
@@ -101,6 +152,17 @@
         let allUnits = []; 
         let currentSortCol = 'name';
         let currentSortDir = 'asc';
+
+        // Custom sorting modes for the Level column
+        const lvlSortModes = [
+            { label: 'All', dir: 'asc', range: null },
+            { label: 'All', dir: 'desc', range: null },
+            { label: '1-50', dir: 'asc', range: [1, 50] },
+            { label: '50-1', dir: 'desc', range: [1, 50] },
+            { label: '50-85', dir: 'asc', range: [50, 85] },
+            { label: '85-50', dir: 'desc', range: [50, 85] }
+        ];
+        let currentLvlModeIdx = 0;
 
         const columns = [
             { label: 'Name', key: 'name', sortable: true },
@@ -121,11 +183,13 @@
             { label: 'Cro(r)', key: 'cross(r)', sortable: true, italic: true }
         ];
 
+        // Format numbers with space as thousands separator
         function formatNumber(num) {
             if (num === undefined || num === null || num === "") return null;
             return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
         }
 
+        // Standardize mod names for compact UI
         function formatModText(text, addNewLine = false) {
             if (!text) return '-';
             let formatted = text
@@ -133,66 +197,229 @@
                 .replace(/Critical Chance/gi, "Crit Chance")
                 .replace(/Critical Avoidance/gi, "Crit Avoidance");
             
-            if (addNewLine) {
-                formatted = formatted.replace(/\)\s/g, ')<br>');
-            }
+            if (addNewLine) formatted = formatted.replace(/\)\s/g, ')<br>');
             return formatted;
         }
 
+        // Compare equipped mod against recommended
+        function getModStatus(current, recommended) {
+            if (!recommended || recommended === "") return "none";
+            if (!current || current === "" || current === "-") return "none";
+            return current.toLowerCase().includes(recommended.toLowerCase()) ? "perfect" : "missing";
+        }
+
+        // Tally required mod sets
+        function parseModCounts(str, isRecommended = false) {
+            const counts = {};
+            if (!str || str === "-") return counts;
+            const setNames = ["Health", "Speed", "Crit Damage", "Crit Chance", "Potency", "Tenacity", "Offense", "Defense"];
+            const defaults = { "Speed": 4, "Crit Damage": 4, "Offense": 4, "Health": 2, "Crit Chance": 2, "Potency": 2, "Tenacity": 2, "Defense": 2 };
+
+            if (isRecommended) {
+                setNames.forEach(name => {
+                    const regex = new RegExp(name + "(?:\\s*\\(?(\\d+)\\)?)?", "gi");
+                    let match;
+                    while ((match = regex.exec(str)) !== null) {
+                        counts[name] = (counts[name] || 0) + (parseInt(match[1]) || defaults[name]);
+                    }
+                });
+            } else {
+                setNames.forEach(name => {
+                    const regex = new RegExp(name, "gi");
+                    const matches = str.match(regex);
+                    if (matches) counts[name] = (counts[name] || 0) + matches.length;
+                });
+            }
+            return counts;
+        }
+
+        // Calculate and update the summary statistics rows
+        function updateMenuStats(units) {
+            const unitContainer = document.getElementById('unit-stats-container');
+            const getModsContainer = document.getElementById('get-mods-container');
+            
+            let totalUnits = units.length;
+            let modsEquipped = 0, slotsEmpty = 0, perfectSlots = 0, missingSlots = 0, speedMods = 0, noSpeedMods = 0;
+            let allGreenUnits = 0;
+            let neededModsTally = {};
+
+            units.forEach(u => {
+                let currentEmptyInUnit = 0;
+                ['arrow', 'triangle', 'circle', 'cross', 'square', 'diamond'].forEach(slot => {
+                    if (u[slot] && u[slot] !== "" && u[slot] !== "-") modsEquipped++; 
+                    else { slotsEmpty++; currentEmptyInUnit++; }
+                });
+
+                let unitPerfectCount = 0;
+                ['arrow', 'triangle', 'circle', 'cross'].forEach(slot => {
+                    const status = getModStatus(u[slot], u[slot + '(r)']);
+                    if (status === 'perfect') { perfectSlots++; unitPerfectCount++; }
+                    else if (status === 'missing') missingSlots++;
+                });
+                
+                if (u.v_square_speed === "yes") { speedMods++; unitPerfectCount++; } else noSpeedMods++;
+                if (u.v_diamond_speed === "yes") { speedMods++; unitPerfectCount++; } else noSpeedMods++;
+                
+                if (unitPerfectCount === 6) allGreenUnits++;
+
+                // Build Get Mods tally for characters with empty slots
+                if (currentEmptyInUnit > 0 && u['set(r)']) {
+                    const target = parseModCounts(u['set(r)'], true);
+                    const current = parseModCounts(u.set, false);
+                    let missingPool = [];
+                    Object.keys(target).forEach(set => {
+                        const diff = target[set] - (current[set] || 0);
+                        for(let i=0; i < diff; i++) missingPool.push(set);
+                    });
+                    
+                    if (missingPool.length < currentEmptyInUnit) {
+                        const firstRec = Object.keys(target)[0] || "Health";
+                        while(missingPool.length < currentEmptyInUnit) missingPool.push(firstRec);
+                    }
+                    
+                    for (let i = 0; i < currentEmptyInUnit; i++) {
+                        const modType = missingPool[i];
+                        neededModsTally[modType] = (neededModsTally[modType] || 0) + 1;
+                    }
+                }
+            });
+
+            const slash = '<span class="mx-[1px]">/</span>';
+            const pipe = '<span class="mx-2 pipe-sep">|</span>';
+
+            const hideGreensChecked = document.getElementById('hide-greens-check')?.checked || false;
+            const onlyRedsChecked = document.getElementById('only-reds-check')?.checked || false;
+
+            // Render Row 2: UNITS
+            unitContainer.innerHTML = `
+                <span class="font-black text-yellow-500">UNITS</span>
+                <span class="ml-2 text-slate-400">Unlocked:</span><span class="text-yellow-500">${totalUnits}</span>
+                ${pipe}
+                <span class="text-slate-400">All Green:</span><span class="inline-flex items-baseline gap-0"><span class="text-green-500">${allGreenUnits}</span>${slash}<span class="text-yellow-500">${totalUnits}</span></span>
+                <span class="mx-4 pipe-sep">|</span>
+                <div class="flex items-center gap-4">
+                    <label class="flex items-center gap-1.5 cursor-pointer hover:text-white transition-colors">
+                        <span class="text-slate-400">Hide Greens</span>
+                        <input type="checkbox" id="hide-greens-check" class="filter-check" ${hideGreensChecked ? 'checked' : ''} onchange="renderTable()">
+                    </label>
+                    <label class="flex items-center gap-1.5 cursor-pointer hover:text-white transition-colors">
+                        <span class="text-slate-400">Only Reds</span>
+                        <input type="checkbox" id="only-reds-check" class="filter-check" ${onlyRedsChecked ? 'checked' : ''} onchange="renderTable()">
+                    </label>
+                </div>
+            `.trim();
+
+            // Render Row 3: MODS & GET MODS
+            const sortedTally = Object.entries(neededModsTally).sort((a, b) => b[1] - a[1]);
+            const getModsString = sortedTally
+                .map(([name, count]) => `<span class="text-slate-400">${name}:</span> <span class="text-yellow-500">${count}</span>`)
+                .join(` <span class="mx-3 pipe-sep">|</span> `);
+
+            getModsContainer.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <span class="text-yellow-500">MODS</span>
+                    <span class="ml-2 text-slate-400">Mod${slash}Empty:</span><span class="inline-flex items-baseline gap-0"><span class="text-yellow-500">${modsEquipped}${slash}${slotsEmpty}</span></span>
+                    ${pipe}
+                    <span class="text-slate-400">Green${slash}Red:</span><span class="inline-flex items-baseline gap-0"><span class="text-green-600">${perfectSlots}</span>${slash}<span class="text-red-600">${missingSlots}</span></span>
+                    ${pipe}
+                    <span class="text-slate-400">Speed${slash}No Speed:</span><span class="inline-flex items-baseline gap-0"><span class="text-green-500">${speedMods}</span>${slash}<span class="text-yellow-500">${noSpeedMods}</span></span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="text-yellow-500">GET MODS</span>
+                    <span class="ml-4 flex items-center gap-1">${getModsString || '<span class="text-slate-600 font-normal">All slots filled</span>'}</span>
+                </div>
+            `;
+        }
+
+        // Unit sorting logic
         function sortUnits(units, key, direction) {
+            // Priority logic for Level Column cycling
+            if (key === 'level') {
+                const mode = lvlSortModes[currentLvlModeIdx];
+                if (mode.range) {
+                    const [min, max] = mode.range;
+                    return [...units].sort((a, b) => {
+                        const valA = parseInt(a.level) || 0;
+                        const valB = parseInt(b.level) || 0;
+                        const inRangeA = valA >= min && valA <= max;
+                        const inRangeB = valB >= min && valB <= max;
+                        
+                        // Push in-range units to top
+                        if (inRangeA && !inRangeB) return -1;
+                        if (!inRangeA && inRangeB) return 1;
+                        
+                        // Sort numerically within groups
+                        return direction === 'asc' ? valA - valB : valB - valA;
+                    });
+                }
+            }
+
             return [...units].sort((a, b) => {
                 let valA = a[key] ?? '';
                 let valB = b[key] ?? '';
-
+                
+                // Special handling for Gear labels (R7 > G12)
                 if (key === 'gear') {
                     const getGearValue = (g) => {
                         if (typeof g !== 'string') return 0;
-                        if (g.startsWith('R')) return 20 + parseInt(g.substring(1));
-                        return parseInt(g) || 0;
+                        if (g.startsWith('R')) return 20 + (parseInt(g.substring(1)) || 0);
+                        return parseInt(g.replace(/\D/g, '')) || 0;
                     };
-                    valA = getGearValue(valA);
-                    valB = getGearValue(valB);
+                    valA = getGearValue(valA); valB = getGearValue(valB);
                 }
 
                 if (typeof valA === 'number' && typeof valB === 'number') {
                     return direction === 'asc' ? valA - valB : valB - valA;
                 }
-
-                valA = valA.toString().toLowerCase();
+                
+                valA = valA.toString().toLowerCase(); 
                 valB = valB.toString().toLowerCase();
                 return direction === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
             });
         }
 
+        // Header click listener handling the 6-way cycle for Level
         function handleHeaderClick(key) {
-            if (currentSortCol === key) {
-                currentSortDir = currentSortDir === 'asc' ? 'desc' : 'asc';
+            if (key === 'level') {
+                currentLvlModeIdx = (currentLvlModeIdx + 1) % lvlSortModes.length;
+                currentSortCol = 'level';
+                currentSortDir = lvlSortModes[currentLvlModeIdx].dir;
             } else {
-                currentSortCol = key;
-                currentSortDir = 'asc';
+                if (currentSortCol === key) currentSortDir = currentSortDir === 'asc' ? 'desc' : 'asc';
+                else { currentSortCol = key; currentSortDir = 'asc'; }
+                currentLvlModeIdx = 0; // Reset level mode if sorting other column
             }
-            renderHeader();
+            renderHeader(); 
             renderTable();
         }
 
+        // Injects table headers
         function renderHeader() {
             const headerRow = document.getElementById('table-header-row');
             headerRow.innerHTML = '';
             columns.forEach((col, idx) => {
                 const th = document.createElement('th');
                 const paddingClass = (idx === 0) ? 'pl-6 pr-3 py-3' : (idx === columns.length - 1 ? 'pl-3 pr-6 py-3' : 'p-3');
-                th.className = `sticky top-0 z-20 border-b border-slate-800 no-wrap ${paddingClass} ${col.sortable ? 'sortable' : ''} ${col.center ? 'text-center' : 'text-left'} ${col.italic ? 'italic opacity-60' : ''}`;
+                th.className = `sticky top-0 z-30 border-b border-slate-800 no-wrap ${paddingClass} ${col.sortable ? 'sortable' : ''} ${col.center ? 'text-center' : 'text-left'} ${col.italic ? 'italic opacity-60' : ''}`;
+                
+                let label = col.label;
                 let indicator = (currentSortCol === col.key) ? (currentSortDir === 'asc' ? ' ▴' : ' ▾') : '';
-                th.innerHTML = `${col.label}${indicator}`;
+                
+                // Specific label for Level mode
+                if (col.key === 'level' && currentSortCol === 'level') {
+                    label = `Lvl (${lvlSortModes[currentLvlModeIdx].label})`;
+                }
+
+                th.innerHTML = `${label}${indicator}`;
                 if (col.sortable) th.onclick = () => handleHeaderClick(col.key);
                 headerRow.appendChild(th);
             });
         }
 
+        // Injects global player stats into header
         function renderHeaderStats(headerData) {
             const container = document.getElementById('header-stats');
             container.innerHTML = '';
-            
             const statsMapping = [
                 { label: 'GP', key: 'galactic power' },
                 { label: 'CHAR GP', key: 'characters gp' },
@@ -202,86 +429,86 @@
                 { label: 'ARENA RANK', key: 'arena rank' },
                 { label: 'FLEET RANK', key: 'fleet rank' }
             ];
-
+            
             statsMapping.forEach((stat) => {
-                const rawValue = headerData[stat.key];
-                const formattedValue = formatNumber(rawValue);
+                const formattedValue = formatNumber(headerData[stat.key]);
                 if (formattedValue !== null) {
-                    const statContainer = document.createElement('div');
-                    statContainer.className = "flex flex-row items-baseline gap-2 px-6 shrink-0 no-wrap border-r border-slate-800/40 last:border-0";
-                    const labelSpan = document.createElement('span');
-                    labelSpan.className = "text-[13px] text-slate-400 font-bold tracking-[0.1em] no-wrap";
-                    labelSpan.textContent = stat.label;
-                    const valSpan = document.createElement('span');
-                    valSpan.className = `text-[13px] font-bold no-wrap text-yellow-500`;
-                    valSpan.textContent = formattedValue;
-                    statContainer.appendChild(labelSpan);
-                    statContainer.appendChild(valSpan);
-                    container.appendChild(statContainer);
+                    const div = document.createElement('div');
+                    div.className = "flex flex-row items-baseline gap-2 px-6 shrink-0 no-wrap border-r border-slate-800/40 last:border-0";
+                    div.innerHTML = `<span class="text-[13px] text-slate-400 font-bold tracking-[0.1em] no-wrap">${stat.label}</span><span class="text-[13px] font-bold no-wrap text-yellow-500">${formattedValue}</span>`;
+                    container.appendChild(div);
                 }
             });
         }
 
-        async function initDashboard() {
-            try {
-                const response = await fetch('swgoh_data.json');
-                if (!response.ok) throw new Error('Could not find swgoh_data.json');
-                const data = await response.json();
-                
-                if (data.header) renderHeaderStats(data.header);
-
-                allUnits = data.units || [];
-                allUnits = sortUnits(allUnits, currentSortCol, currentSortDir);
-
-                const menuContainer = document.getElementById('menu');
-                const menuItems = data.menu || [];
-                if (!menuItems.some(m => m.label.toLowerCase() === 'home')) {
-                    menuItems.unshift({ label: "HOME", url: "#" });
-                }
-                menuItems.push({ label: "KYRO", url: "https://trappedincarbonite.github.io/swghdash" });
-
-                menuItems.forEach((item) => {
-                    const a = document.createElement('a');
-                    a.href = item.url;
-                    a.textContent = item.label;
-                    a.className = "hover:text-yellow-500 transition-colors no-wrap";
-                    menuContainer.appendChild(a);
-                });
-
-                renderHeader();
-                renderTable();
-                document.getElementById('character-search').addEventListener('input', () => renderTable());
-            } catch (err) {
-                console.error("Init Error:", err);
-                document.getElementById('unit-table-body').innerHTML = `<tr><td colspan="16" class="p-10 text-center text-red-400">Error loading data.</td></tr>`;
+        // Map gear levels to colors
+        function getGearClass(gear) {
+            if (!gear) return "text-slate-400 no-wrap";
+            const gearStr = gear.toString().toUpperCase();
+            if (gearStr.startsWith('R')) {
+                const rLevel = parseInt(gearStr.substring(1)) || 0;
+                return rLevel >= 7 ? "text-red-500 font-black no-wrap" : "text-blue-500 font-black no-wrap";
             }
+            const gLevel = parseInt(gearStr.replace(/\D/g, '')) || 0;
+            if (gLevel === 1) return "text-slate-500 font-bold no-wrap";
+            if (gLevel <= 3) return "text-green-500 font-bold no-wrap";
+            if (gLevel <= 6) return "text-blue-400 font-bold no-wrap";
+            if (gLevel <= 11) return "text-purple-500 font-bold no-wrap";
+            return "text-yellow-500 font-bold no-wrap";
         }
 
+        // Main table rendering with filtering and sorting
         function renderTable() {
             const tbody = document.getElementById('unit-table-body');
             const searchQuery = document.getElementById('character-search').value.toLowerCase();
+            const hideGreens = document.getElementById('hide-greens-check')?.checked || false;
+            const onlyReds = document.getElementById('only-reds-check')?.checked || false;
+
+            // Search filter
             let displayUnits = allUnits.filter(u => u.name.toLowerCase().includes(searchQuery));
+
+            // Status filter
+            if (hideGreens || onlyReds) {
+                displayUnits = displayUnits.filter(u => {
+                    let unitPerfectCount = 0;
+                    let hasMissing = false;
+
+                    ['arrow', 'triangle', 'circle', 'cross'].forEach(slot => {
+                        const s = getModStatus(u[slot], u[slot + '(r)']);
+                        if (s === 'perfect') unitPerfectCount++;
+                        if (s === 'missing') hasMissing = true;
+                    });
+                    if (u.v_square_speed === "yes") unitPerfectCount++;
+                    if (u.v_diamond_speed === "yes") unitPerfectCount++;
+
+                    const isAllGreen = (unitPerfectCount === 6);
+                    if (hideGreens && isAllGreen) return false;
+                    if (onlyReds && !hasMissing) return false;
+                    return true;
+                });
+            }
+
+            // Sort and Update Stats
             displayUnits = sortUnits(displayUnits, currentSortCol, currentSortDir);
+            updateMenuStats(displayUnits);
             tbody.innerHTML = '';
 
             displayUnits.forEach(unit => {
                 const tr = document.createElement('tr');
-                // Apply hover effect and zebra striping (every even row gets a slightly lighter background)
                 tr.className = "hover:bg-slate-400/20 even:bg-slate-600/10 transition-colors group";
-
-                const getStyle = (current, recommended) => {
-                    if (!recommended || recommended === "") return "text-slate-600";
-                    if (!current || current === "") return "mod-missing rounded px-1.5 py-0.5 no-wrap block w-fit";
-                    return current.toLowerCase().includes(recommended.toLowerCase()) 
-                        ? "mod-perfect rounded px-1.5 py-0.5 font-bold no-wrap block w-fit" 
-                        : "mod-missing rounded px-1.5 py-0.5 no-wrap block w-fit";
+                
+                const getCellClass = (current, rec) => {
+                    const s = getModStatus(current, rec);
+                    if (s === 'perfect') return "mod-perfect rounded px-1.5 py-0.5 font-bold no-wrap block w-fit";
+                    if (s === 'missing') return "mod-missing rounded px-1.5 py-0.5 no-wrap block w-fit";
+                    return "text-slate-600";
                 };
 
-                let gearStyle = "text-slate-400 font-bold no-wrap"; 
-                if (unit.gear?.startsWith('R')) {
-                    const rLevel = parseInt(unit.gear.replace('R', ''));
-                    gearStyle = rLevel >= 7 ? "text-amber-500 font-black no-wrap" : "text-blue-500 font-black no-wrap";
-                }
+                const getRecCellClass = (current, rec) => {
+                    const s = getModStatus(current, rec);
+                    if (s === 'missing') return "mod-rec-missing rounded px-1.5 py-0.5 no-wrap block w-fit";
+                    return "px-1.5 py-0.5 no-wrap block w-fit";
+                };
 
                 const vSquareStyle = (unit.v_square_speed === "yes") ? "mod-perfect rounded px-1.5 py-0.5 no-wrap block w-fit" : "text-slate-600 no-wrap block w-fit";
                 const vDiamondStyle = (unit.v_diamond_speed === "yes") ? "mod-perfect rounded px-1.5 py-0.5 no-wrap block w-fit" : "text-slate-600 no-wrap block w-fit";
@@ -292,25 +519,69 @@
                     </td>
                     <td class="px-3 py-[5px] text-center text-slate-500 font-bold leading-tight no-wrap border-r border-slate-800/20">${unit.level}</td>
                     <td class="px-3 py-[5px] text-center font-bold no-wrap border-r border-slate-800/20 ${unit.stars === 7 ? 'text-amber-600' : 'text-slate-500'}">${unit.stars}</td>
-                    <td class="px-3 py-[5px] text-center border-r border-slate-800/20 ${gearStyle} leading-tight">${unit.gear}</td>
-                    
-                    <td class="px-3 py-[5px] leading-tight"><span class="${getStyle(unit.set, unit['set(r)']).replace('no-wrap', '')}">${formatModText(unit.set, true)}</span></td>
-                    <td class="px-3 py-[5px] leading-tight no-wrap"><span class="${getStyle(unit.arrow, unit['arrow(r)'])}">${formatModText(unit.arrow, false)}</span></td>
-                    <td class="px-3 py-[5px] leading-tight no-wrap"><span class="${getStyle(unit.triangle, unit['triangle(r)'])}">${formatModText(unit.triangle, false)}</span></td>
-                    <td class="px-3 py-[5px] leading-tight no-wrap"><span class="${getStyle(unit.circle, unit['circle(r)'])}">${formatModText(unit.circle, false)}</span></td>
-                    <td class="px-3 py-[5px] leading-tight no-wrap"><span class="${getStyle(unit.cross, unit['cross(r)'])}">${formatModText(unit.cross, false)}</span></td>
-                    
+                    <td class="px-3 py-[5px] text-center border-r border-slate-800/20 leading-tight">
+                        <span class="${getGearClass(unit.gear)}">${unit.gear}</span>
+                    </td>
+                    <td class="px-3 py-[5px] leading-tight">
+                        <span class="${getCellClass(unit.set, unit['set(r)']).replace('no-wrap', '')}">${formatModText(unit.set, true)}</span>
+                    </td>
+                    <td class="px-3 py-[5px] leading-tight no-wrap"><span class="${getCellClass(unit.arrow, unit['arrow(r)'])}">${formatModText(unit.arrow, false)}</span></td>
+                    <td class="px-3 py-[5px] leading-tight no-wrap"><span class="${getCellClass(unit.triangle, unit['triangle(r)'])}">${formatModText(unit.triangle, false)}</span></td>
+                    <td class="px-3 py-[5px] leading-tight no-wrap"><span class="${getCellClass(unit.circle, unit['circle(r)'])}">${formatModText(unit.circle, false)}</span></td>
+                    <td class="px-3 py-[5px] leading-tight no-wrap"><span class="${getCellClass(unit.cross, unit['cross(r)'])}">${formatModText(unit.cross, false)}</span></td>
                     <td class="px-3 py-[5px] no-wrap"><span class="${vSquareStyle}">${formatModText(unit.square, false)}</span></td>
                     <td class="px-3 py-[5px] no-wrap"><span class="${vDiamondStyle}">${formatModText(unit.diamond, false)}</span></td>
-                    
-                    <td class="px-3 py-[5px] text-slate-500 italic text-[11px] leading-tight border-l border-slate-800/20">${formatModText(unit['set(r)'], true)}</td>
-                    <td class="px-3 py-[5px] text-slate-500 italic text-[11px] leading-tight no-wrap">${formatModText(unit['arrow(r)'], false)}</td>
-                    <td class="px-3 py-[5px] text-slate-500 italic text-[11px] leading-tight no-wrap">${formatModText(unit['triangle(r)'], false)}</td>
-                    <td class="px-3 py-[5px] text-slate-500 italic text-[11px] leading-tight no-wrap">${formatModText(unit['circle(r)'], false)}</td>
-                    <td class="pl-3 pr-6 py-[5px] text-slate-500 italic text-[11px] leading-tight no-wrap">${formatModText(unit['cross(r)'], false)}</td>
+                    <td class="px-3 py-[5px] text-slate-500 italic text-[11px] leading-tight border-l border-slate-800/20"><span class="${getRecCellClass(unit.set, unit['set(r)']).replace('no-wrap', '')}">${formatModText(unit['set(r)'], true)}</span></td>
+                    <td class="px-3 py-[5px] text-slate-500 italic text-[11px] leading-tight no-wrap"><span class="${getRecCellClass(unit.arrow, unit['arrow(r)'])}">${formatModText(unit['arrow(r)'], false)}</span></td>
+                    <td class="px-3 py-[5px] text-slate-500 italic text-[11px] leading-tight no-wrap"><span class="${getRecCellClass(unit.triangle, unit['triangle(r)'])}">${formatModText(unit['triangle(r)'], false)}</span></td>
+                    <td class="px-3 py-[5px] text-slate-500 italic text-[11px] leading-tight no-wrap"><span class="${getRecCellClass(unit.circle, unit['circle(r)'])}">${formatModText(unit['circle(r)'], false)}</span></td>
+                    <td class="pl-3 pr-6 py-[5px] text-slate-500 italic text-[11px] leading-tight no-wrap"><span class="${getRecCellClass(unit.cross, unit['cross(r)'])}">${formatModText(unit['cross(r)'], false)}</span></td>
                 `;
                 tbody.appendChild(tr);
             });
+        }
+
+        // Initialization function
+        async function initDashboard() {
+            try {
+                const response = await fetch('swgoh_data.json');
+                if (!response.ok) throw new Error('Could not find swgoh_data.json');
+                const data = await response.json();
+                
+                if (data.header) renderHeaderStats(data.header);
+                allUnits = data.units || [];
+
+                // Menu link processing
+                const menuLinksContainer = document.getElementById('menu-links');
+                menuLinksContainer.innerHTML = ''; 
+                let menuItems = [...(data.menu || [])];
+                
+                // Add Kyro link after Home
+                const homeIdx = menuItems.findIndex(item => item.label.toLowerCase() === 'home');
+                if (homeIdx !== -1) menuItems.splice(homeIdx + 1, 0, { label: 'Kyro', url: 'kyro.html' });
+                else menuItems.unshift({ label: 'Kyro', url: 'kyro.html' });
+
+                menuItems.forEach((item, index) => {
+                    const a = document.createElement('a');
+                    a.href = item.url; a.textContent = item.label;
+                    a.className = "hover:text-yellow-500 transition-colors no-wrap";
+                    menuLinksContainer.appendChild(a);
+                    
+                    if (index < menuItems.length - 1) {
+                        const pipe = document.createElement('span');
+                        pipe.className = 'pipe-sep';
+                        pipe.textContent = '|';
+                        menuLinksContainer.appendChild(pipe);
+                    }
+                });
+
+                renderHeader(); 
+                renderTable();
+                
+                document.getElementById('character-search').addEventListener('input', () => renderTable());
+            } catch (err) {
+                console.error("Initialization Error:", err);
+            }
         }
 
         window.onload = initDashboard;
