@@ -18,14 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Define all menu items
     const menuItems = [
         { name: 'DASHBOARD', path: 'index.html', isRoot: true },
-        { name: 'OVERLAY', path: 'html/overlay.html', isRoot: false },
+   /*     { name: 'OVERLAY', path: 'html/overlay.html', isRoot: false }, */
    /*     { name: 'FINDER', path: 'html/finder.html', isRoot: false }, */
         { name: 'KYRO', path: 'html/kyro.html', isRoot: false },
-        { name: '(SHIPMENTS)', path: 'html/shipments.html', isRoot: false },
-        { name: 'FARMGUIDE', path: 'html/farmguide.html', isRoot: false },
-        { name: '(LST)', path: 'html/lst.html', isRoot: false },
-        { name: 'PORTRAITS', path: 'html/portraits.html', isRoot: false },
-        { name: 'TEMPLATE', path: 'html/template.html', isRoot: false }
+		{ name: 'SELL MODS', path: 'html/sellmods.html', isRoot: false },
+   /*     { name: '(SHIPMENTS)', path: 'html/shipments.html', isRoot: false }, */
+        { name: 'FARMGUIDE', path: 'html/farmguide.html', isRoot: false }
+   /*     { name: '(LST)', path: 'html/lst.html', isRoot: false }, */
+   /*     { name: 'PORTRAITS', path: 'html/portraits.html', isRoot: false }, */
+   /*     { name: 'TEMPLATE', path: 'html/template.html', isRoot: false } */
     ];
 
     menuContainer.innerHTML = '';
