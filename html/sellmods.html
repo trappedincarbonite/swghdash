@@ -1,3 +1,10 @@
+<script>
+    // Dynamically adjust base URL for files inside the html/ subfolder
+    if (window.location.hostname.includes('github.io')) {
+        document.write('<base href="' + window.location.protocol + '//' + window.location.hostname + '/swghdash/html/">');
+    }
+</script>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
