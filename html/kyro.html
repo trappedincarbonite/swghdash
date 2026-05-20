@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWGHDash Kyro</title>
+    <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .kyro-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .kyro-table th { 
+            background-color: #1a2234; color: #94a3b8; 
+            text-transform: uppercase; padding: 6px 8px; 
+            text-align: left; font-weight: 700; 
+            cursor: pointer; user-select: none;
+            position: sticky; top: 0; z-index: 10;
+        }
+        .kyro-table th:hover { color: #eab308; background-color: #1e293b; }
+        .kyro-table td { padding: 6px 8px; border-bottom: 1px solid rgba(51, 65, 85, 0.2); }
+        .kyro-table tr:hover { background-color: rgba(51, 65, 85, 0.3); }
+        .gear-r { color: #ef4444; font-weight: 800; }
+        .gear-g { color: #60a5fa; font-weight: 700; }
+    </style>
+</head>
+<body class="bg-[#0b0f19] text-slate-300">
+    <div id="app" class="flex flex-col h-screen overflow-hidden">
+        <header class="bg-[#0f172a] border-b border-slate-800 main-header shrink-0">
+            <div class="flex items-center gap-10 shrink-0">
+                <div class="logo-container">
+                    <a href="../index.html" class="header-logo-link">SWGHDASH</a>
+                    <span class="logo-pipe">|</span>
+                    <span class="logo-subtitle subtitle-kyro uppercase font-black tracking-widest">Kyro</span>
+                </div>
+            </div>
+            <div class="ml-auto flex items-center gap-8">
+                <nav id="menu-links" class="nav-link-text shrink-0"></nav>
+                <input type="text" id="character-search" placeholder="Search..." class="search-input-global">
+            </div>
+        </header>
+
+        <div class="bg-[#0f172a]/30 border-b border-slate-800 shrink-0 flex items-center justify-between px-6 py-2 sub-header">
+            <div class="flex items-center gap-6 stats-text">
+                <div id="unit-stats-container" class="flex items-center gap-2"></div>
+                
+                <label class="flex items-center gap-2 cursor-pointer group">
+                    <input type="checkbox" id="hide-g11-minus" class="filter-check">
+                    <span class="text-slate-400 group-hover:text-slate-200 transition-colors pt-0.5 uppercase text-[10px] font-bold">
+                        Hide ≤G11 <span id="g11-count-badge" class="ml-1 text-yellow-600/80 font-black"></span>
+                    </span>
+                </label>
+
+                <label class="flex items-center gap-2 cursor-pointer group">
+                    <input type="checkbox" id="hide-g12-plus" class="filter-check">
+                    <span class="text-slate-400 group-hover:text-slate-200 transition-colors pt-0.5 uppercase text-[10px] font-bold">
+                        Hide G12+ <span id="g12-count-badge" class="ml-1 text-yellow-600/80 font-black"></span>
+                    </span>
+                </label>
+
+                <label class="flex items-center gap-2 cursor-pointer group">
+                    <input type="checkbox" id="hide-g13-plus" class="filter-check">
+                    <span class="text-slate-400 group-hover:text-slate-200 transition-colors pt-0.5 uppercase text-[10px] font-bold">
+                        Hide G13+ <span id="g13-count-badge" class="ml-1 text-yellow-600/80 font-black"></span>
+                    </span>
+                </label>
+            </div>
+
+            <div id="jvfunc_getmodscount_js" class="flex items-center gap-6 text-[11px] font-bold uppercase tracking-wide whitespace-nowrap"></div>
+        </div>
+
+        <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 bg-[#0b0f19]">
+            <div id="kyro-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-start"></div>
+        </main>
+
+        <footer class="bg-[#0f172a] border-t border-slate-800 px-6 py-2 shrink-0 flex justify-between items-center">
+            <div id="jvfunc_gamestats_js"></div>
+            <div class="text-[9px] text-slate-400 font-mono uppercase tracking-[0.2em]">BUILD_260312_2235</div>
+        </footer>
+    </div>
+
+    <script src="../js/nav.js"></script>
+    <script src="../js/gamestats.js"></script>
+    <script>
+        window.allUnits = [];
+        window.globalHeaderData = null;
+        let currentSort = { key: 'total', dir: 'desc' };
+
+        const formatNumber = (num) => num ? num.toLocaleString('sv-SE') : '0';
+
+        function getGearWeight(val) {
+            if (!val) return 0;
+            const str = val.toString().toUpperCase();
+            const num = parseInt(str.replace(/[^\d]/g, '')) || 0;
+            return str.startsWith('R') ? 13 + num : num;
+        }
+
+        function updateUIStats(total, showing, mk7Total, mk9Total) {
+            const unitContainer = document.getElementById('unit-stats-container');
+            const kyroContainer = document.getElementById('jvfunc_getmodscount_js');
+            const g11Badge = document.getElementById('g11-count-badge');
+            const g12Badge = document.getElementById('g12-count-badge');
+            const g13Badge = document.getElementById('g13-count-badge');
+            
+            const g11MinusCount = window.allUnits.filter(u => getGearWeight(u.gear) <= 11).length;
+            const g12PlusCount = window.allUnits.filter(u => getGearWeight(u.gear) >= 12).length;
+            const g13PlusCount = window.allUnits.filter(u => getGearWeight(u.gear) >= 13).length;
+
+            unitContainer.innerHTML = `
+                <span class="font-black text-yellow-500 mr-2 uppercase">Kyro filtering</span>
+                <span class="text-slate-400">Showing:</span> <span class="text-yellow-500 font-bold ml-1">${showing}/${total}</span>
+                <span class="mx-2 text-slate-800">|</span>`;
+            
+            if (g11Badge) g11Badge.innerText = `(${g11MinusCount})`;
+            if (g12Badge) g12Badge.innerText = `(${g12PlusCount})`;
+            if (g13Badge) g13Badge.innerText = `(${g13PlusCount})`;
+            
+            kyroContainer.innerHTML = `
+                <span class="text-yellow-600 font-black text-[10px]">KYROTECH COUNT:</span>
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-1 bg-slate-900/50 px-2 py-1 rounded border border-slate-800">
+                        <span class="text-slate-400 text-[10px]">MK7:</span>
+                        <span class="text-yellow-500 font-black text-[11px]">${formatNumber(mk7Total)}</span>
+                    </div>
+                    <div class="flex items-center gap-1 bg-slate-900/50 px-2 py-1 rounded border border-slate-800">
+                        <span class="text-slate-400 text-[10px]">MK9:</span>
+                        <span class="text-yellow-500 font-black text-[11px]">${formatNumber(mk9Total)}</span>
+                    </div>
+                    <div class="flex items-center gap-1 bg-yellow-500/10 px-2 py-1 rounded border border-yellow-500/20">
+                        <span class="text-yellow-500/70 text-[10px]">TOTAL:</span>
+                        <span class="text-yellow-500 font-black text-[11px]">${formatNumber(mk7Total + mk9Total)}</span>
+                    </div>
+                </div>`;
+        }
+
+        function setSort(key) {
+            if (currentSort.key === key) currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
+            else { currentSort.key = key; currentSort.dir = (key === 'name') ? 'asc' : 'desc'; }
+            renderBalancedGrid();
+        }
+
+        function renderBalancedGrid() {
+            const container = document.getElementById('kyro-grid-container');
+            const query = document.getElementById('character-search').value.toLowerCase();
+            const hideG11 = document.getElementById('hide-g11-minus').checked;
+            const hideG12 = document.getElementById('hide-g12-plus').checked;
+            const hideG13 = document.getElementById('hide-g13-plus').checked;
+            
+            let filtered = window.allUnits.filter(u => {
+                const matches = u.name.toLowerCase().includes(query);
+                const weight = getGearWeight(u.gear);
+                if (hideG11 && weight <= 11) return false;
+                if (hideG12 && weight >= 12) return false;
+                if (hideG13 && weight >= 13) return false;
+                return matches;
+            });
+
+            let mk7Sum = filtered.reduce((sum, u) => sum + (parseInt(u.mk7) || 0), 0);
+            let mk9Sum = filtered.reduce((sum, u) => sum + (parseInt(u.mk9) || 0), 0);
+            
+            updateUIStats(window.allUnits.length, filtered.length, mk7Sum, mk9Sum);
+
+            filtered.sort((a, b) => {
+                let vA = (currentSort.key === 'gear') ? getGearWeight(a.gear) : a[currentSort.key];
+                let vB = (currentSort.key === 'gear') ? getGearWeight(b.gear) : b[currentSort.key];
+                if (currentSort.key === 'name') return currentSort.dir === 'asc' ? vA.localeCompare(vB) : vB.localeCompare(vA);
+                return currentSort.dir === 'asc' ? (vA - vB) : (vB - vA);
+            });
+
+            container.innerHTML = '';
+            const numCols = 4;
+            const unitsPerCol = Math.ceil(filtered.length / numCols);
+
+            for (let i = 0; i < numCols; i++) {
+                const slice = filtered.slice(i * unitsPerCol, (i + 1) * unitsPerCol);
+                if (slice.length === 0) continue;
+                const wrapper = document.createElement('div');
+                wrapper.className = "bg-[#111827]/50 border border-slate-800 rounded overflow-hidden shadow-lg mb-auto";
+                let tableHtml = `<table class="kyro-table"><thead><tr><th onclick="setSort('name')">Unit</th><th onclick="setSort('gear')" class="text-center">Gear</th><th onclick="setSort('mk7')" class="text-center">Mk7</th><th onclick="setSort('mk9')" class="text-center">Mk9</th><th onclick="setSort('total')" class="text-center text-yellow-500">Tot</th></tr></thead><tbody>`;
+                slice.forEach(u => {
+                    const gearClass = u.gear?.toString().startsWith('R') ? 'gear-r' : 'gear-g';
+                    tableHtml += `<tr><td class="font-bold text-slate-200">${u.name}</td><td class="text-center ${gearClass}">${u.gear || '-'}</td><td class="text-center text-slate-400">${u.mk7 || 0}</td><td class="text-center text-slate-400">${u.mk9 || 0}</td><td class="text-center font-bold text-yellow-500">${u.total || 0}</td></tr>`;
+                });
+                wrapper.innerHTML = tableHtml + `</tbody></table>`;
+                container.appendChild(wrapper);
+            }
+        }
+
+        async function initKyroPage() {
+            try {
+                const response = await fetch('../data/swgoh_data.json');
+                const data = await response.json();
+                window.globalHeaderData = data.header;
+                window.allUnits = data.units || [];
+
+                if (typeof window.renderAccountStats === 'function') {
+                    window.renderAccountStats(data.header, 'jvfunc_gamestats_js');
+                }
+
+                renderBalancedGrid();
+                
+                document.getElementById('character-search').addEventListener('input', renderBalancedGrid);
+                document.getElementById('hide-g11-minus').addEventListener('change', renderBalancedGrid);
+                document.getElementById('hide-g12-plus').addEventListener('change', renderBalancedGrid);
+                document.getElementById('hide-g13-plus').addEventListener('change', renderBalancedGrid);
+            } catch (err) { console.error("Init Error:", err); }
+        }
+        window.onload = initKyroPage;
+    </script>
+</body>
+</html>
