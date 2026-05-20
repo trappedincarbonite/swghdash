@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWGHDash Overlay</title>
+    <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* --- COLUMN WIDTH CONTROL PANEL --- */
+        :root {
+            --w-name: 200px;
+            --w-lvl: 60px;
+            --w-stars: 70px;
+            --w-gear: 70px;
+            --w-set: 250px;
+            --w-square: 170px;
+            --w-arrow: 170px;
+            --w-diamond: 170px;
+            --w-triangle: 170px;
+            --w-circle: 170px;
+            --w-cross: 170px;
+        }
+        .col-name { width: var(--w-name); min-width: var(--w-name); }
+        .col-lvl { width: var(--w-lvl); min-width: var(--w-lvl); text-align: center; }
+        .col-stars { width: var(--w-stars); min-width: var(--w-stars); text-align: center; }
+        .col-gear { width: var(--w-gear); min-width: var(--w-gear); text-align: center; }
+        .col-set { width: var(--w-set); min-width: var(--w-set); }
+        .col-square { width: var(--w-square); min-width: var(--w-square); }
+        .col-arrow { width: var(--w-arrow); min-width: var(--w-arrow); }
+        .col-diamond { width: var(--w-diamond); min-width: var(--w-diamond); }
+        .col-triangle { width: var(--w-triangle); min-width: var(--w-triangle); }
+        .col-circle { width: var(--w-circle); min-width: var(--w-circle); }
+        .col-cross { width: var(--w-cross); min-width: var(--w-cross); }
+        
+        /* Mod Badges & Status */
+        .mod-ghost { font-style: normal; opacity: 0.50; border: 1.5px dashed #7d838c; color: #7d838c; font-size: 11px; background-color: transparent; }
+        .mod-none { font-style: normal; opacity: 0.5; border: 1.5px dashed rgba(234, 179, 8, 0.4); color: #ca8a04; font-size: 11px; background-color: transparent; }
+        .mod-perfect { border: 1.5px solid #10b981 !important; color: #34d399; font-weight: bold; }
+        .mod-missing.strike { text-decoration: line-through; text-decoration-thickness: 1px; opacity: 0.5; border: 1.5px solid #ef4444 !important; }
+        .is-selector-highlight { border: 1.5px solid #3b82f6 !important; opacity: 1 !important; box-shadow: 0 0 3px rgba(59, 130, 246, 0.2); }
+        .is-selector-highlight-equipped { border: 1.5px solid #f97316 !important; opacity: 1 !important; box-shadow: 0 0 3px rgba(249, 115, 22, 0.2); }
+        
+        .mod-rec-hint { color: #65758b; border: 1px solid rgba(100, 116, 139, 0.4); font-weight: 700; padding: 2px 6px; border-radius: 3px; font-size: 11px; margin-left: 6px; white-space: nowrap; text-transform: uppercase; }
+        .mod-set-partial { border: 1.5px solid #10b981; color: #7b8a9e; font-weight: 700; padding: 2px 6px; border-radius: 3px; font-size: 11px; white-space: nowrap; }
+        .partial-num { color: #10b981; font-weight: 900; }
+        
+        /* Table & Selector Layout */
+        .overlay-table td { padding: 8px 10px; }
+        .cell-flex { display: flex; align-items: center; justify-content: flex-start; gap: 4px; white-space: nowrap; }
+        .selector-container { background: #111827; border: 1px solid #1e293b; border-radius: 4px; overflow: hidden; display: flex; align-items: stretch; }
+        .box-sidebar { width: 32px; flex-shrink: 0; background: #192332; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 10px; }
+        .sidebar-title-img { width: 24px; height: 85px; object-fit: contain; pointer-events: none; }
+        .selector-content { padding: 12px; display: grid; gap: 6px; align-content: start; flex-grow: 1; border-left: 1px solid rgba(30, 41, 59, 0.4); }
+        .grid-shape { grid-template-columns: repeat(3, 120px); }
+        .grid-sets { grid-template-columns: repeat(4, 160px); }
+        .grid-primaries { grid-template-columns: repeat(6, 1fr); }
+        .item-btn { width: 100%; height: 40px; padding: 0 8px; display: flex; align-items: center; justify-content: space-between; border-radius: 3px; font-size: 10px; transition: all 0.2s; cursor: pointer; background: #192132; border: 1px solid transparent; color: #94a3b8; white-space: nowrap; }
+        .item-btn:hover { border-color: #eab308; color: #eab308; }
+        .item-btn.active { background: #eab308; color: #0f172a; font-weight: bold; border-color: #eab308; }
+        .overlay-table tbody tr:hover { background-color: rgba(148, 163, 184, 0.15) !important; }
+        .row-selected { background-color: rgba(148, 163, 184, 0.25) !important; border-left: 3px solid #eab308; }
+
+        /* Custom Orange Checkbox styling */
+        .orange-checkbox {
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #f97316;
+            border-radius: 2px;
+            background-color: rgba(251, 146, 60, 0.2);
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .orange-checkbox:checked {
+            background-color: rgba(251, 146, 60, 0.3);
+        }
+        .orange-checkbox:checked::after {
+            content: '✔';
+            color: #f97316;
+            font-size: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="text-slate-300 flex flex-col h-screen overflow-hidden">
+
+    <header class="bg-[#0f172a] border-b border-slate-800 main-header shrink-0">
+        <div class="flex items-center gap-10 shrink-0">
+            <div class="logo-container">
+                <a href="../index.html" class="header-logo-link">SWGHDASH</a>
+                <span class="logo-pipe">|</span>
+                <span class="logo-subtitle uppercase font-black tracking-widest">OVERLAY</span>
+            </div>
+        </div>
+        <div class="ml-auto flex items-center gap-8">
+            <nav id="menu-links" class="nav-link-text shrink-0"></nav>
+            <input type="text" id="character-search" placeholder="Search..." class="search-input-global">
+        </div>
+    </header>
+
+    <div class="shrink-0 border-b border-slate-800 bg-[#0f172a]/30 flex items-center px-6 min-h-[40px] overflow-x-auto overflow-y-hidden sub-header">
+        <div id="sub-header-left" class="flex items-center gap-6 text-[11px] font-bold uppercase tracking-wide shrink-0">
+            
+            <label class="flex items-center gap-2 cursor-pointer select-none text-slate-400 hover:text-slate-200">
+                <input type="checkbox" id="show-equipped-check" class="orange-checkbox" onchange="window.renderTable()">
+                <span>Show Equipped</span>
+            </label>
+
+            <label class="flex items-center gap-2 cursor-pointer select-none text-slate-400 hover:text-slate-200">
+                <input type="checkbox" id="hide-greens-check" class="orange-checkbox" onchange="window.renderTable()">
+                <span>Hide Completed</span>
+            </label>
+
+            <label class="flex items-center gap-2 cursor-pointer select-none text-slate-400 hover:text-slate-200">
+                <input type="checkbox" id="only-reds-check" class="orange-checkbox" onchange="window.renderTable()">
+                <span>Only Deficits</span>
+            </label>
+
+        </div>
+        <div id="jvfunc_getmodscount_js" class="ml-auto flex items-center shrink-0 py-1"></div>
+    </div>
+
+    <div class="shrink-0 px-6 py-6 border-b border-slate-800 bg-[#0f172a]/20 flex items-start justify-between gap-6 overflow-x-auto">
+        <div class="selector-container">
+            <div class="box-sidebar"><img src="../img/mod_finder_shape.png" class="sidebar-title-img" alt="Shape"></div>
+            <div id="box-1" class="selector-content grid-shape"></div>
+        </div>
+        <div class="selector-container">
+            <div class="box-sidebar"><img src="../img/mod_finder_set.png" class="sidebar-title-img" alt="Sets"></div>
+            <div id="box-2" class="selector-content grid-sets"></div>
+        </div>
+        <div class="selector-container flex-grow">
+            <div class="box-sidebar"><img src="../img/mod_finder_primary.png" class="sidebar-title-img" alt="Primary"></div>
+            <div id="box-3" class="selector-content grid-primaries"></div>
+        </div>
+    </div>
+
+    <main class="flex-1 overflow-y-auto bg-[#0b0f19]">
+        <table class="standard-table overlay-table">
+            <thead>
+                <tr id="table-header-row"></tr>
+            </thead>
+            <tbody id="table-body">
+                <tr><td colspan="11" class="p-20 text-center text-slate-600 italic">Loading unit data...</td></tr>
+            </tbody>
+        </table>
+    </main>
+
+    <footer class="bg-[#0f172a] border-t border-slate-800 px-6 py-2 shrink-0 flex justify-between items-center">
+        <div id="jvfunc_gamestats_js"></div>
+        <div class="text-[9px] text-slate-400 font-mono uppercase tracking-[0.2em]">BUILD_260518_220500</div>
+    </footer>
+
+    <script src="../js/nav.js"></script>
+    <script src="../js/gamestats.js"></script>
+    <script src="../js/modselector.js"></script>
+    <script src="../js/getmodscount.js"></script>
+
+    <script>
+        async function initOverlay() {
+            try {
+                const response = await fetch('../data/swgoh_data.json?v=' + Date.now());
+                const data = await response.json();
+                
+                window.allUnits = data.units || [];
+                
+                if (typeof window.renderAccountStats === 'function') {
+                    window.renderAccountStats(data.header, 'jvfunc_gamestats_js');
+                }
+                
+                if (typeof window.renderSelectors === 'function') {
+                    window.renderSelectors();
+                    window.renderHeader(); 
+                    window.renderTable();
+                }
+
+                if (typeof window.renderModRequirements === 'function') {
+                    window.renderModRequirements(window.allUnits, 'jvfunc_getmodscount_js');
+                }
+                
+                document.getElementById('character-search').addEventListener('input', () => window.renderTable());
+            } catch (err) { 
+                console.error("Init Error:", err); 
+            }
+        }
+        window.onload = initOverlay;
+    </script>
+</body>
+</html>

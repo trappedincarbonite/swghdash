@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWGHDash Discard Matrix</title>
+    <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .overlay-table td { padding: 12px 14px; vertical-align: middle; }
+        .overlay-table tbody tr:hover { background-color: rgba(148, 163, 184, 0.06) !important; }
+        .filter-pill {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            transition: all 0.2s;
+            background: rgba(30, 41, 59, 0.4);
+            color: #94a3b8;
+        }
+        .filter-pill:hover { border-color: #f97316; color: #f97316; }
+        .filter-pill.active { background: #f97316; color: #0f172a; border-color: #f97316; }
+        
+        /* Layout Badges & Lists */
+        .badge-shape { background: #1e293b; border: 1px solid #334155; color: #cbd5e1; font-weight: bold; font-size: 11px; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
+        .stat-list-keep { color: #10b981; font-family: monospace; font-size: 11px; font-weight: 700; white-space: nowrap; }
+        .stat-list-discard { color: #ef4444; font-family: monospace; font-size: 11px; font-weight: 700; white-space: nowrap; }
+    </style>
+</head>
+<body class="text-slate-300 flex flex-col h-screen overflow-hidden">
+
+    <header class="bg-[#0f172a] border-b border-slate-800 main-header shrink-0">
+        <div class="flex items-center gap-10 shrink-0">
+            <div class="logo-container">
+                <a href="../index.html" class="header-logo-link">SWGHDASH</a>            
+                <span class="logo-pipe">|</span>
+                <span class="logo-subtitle uppercase font-black tracking-widest">DISCARD MATRIX</span>
+            </div>
+            <div id="header-stats" class="flex items-center"></div>
+        </div>
+
+        <div class="ml-auto flex items-center gap-8">
+            <nav id="menu-links" class="nav-link-text shrink-0"></nav>
+            <input type="text" id="search-input" placeholder="Search shape, set or stat..." class="search-input-global">
+        </div>
+    </header>
+
+    <div class="shrink-0 border-b border-slate-800 bg-[#0f172a]/30 sub-header px-6 py-3 flex flex-wrap items-center gap-3">
+        <div class="text-slate-400 font-bold uppercase text-[10px] mr-2 tracking-wider">Select Mod Slot:</div>
+        <div id="shape-filter-pills" class="flex flex-wrap gap-2">
+            <button class="filter-pill active" onclick="filterByShape('All')">All Slots</button>
+            <button class="filter-pill" onclick="filterByShape('Arrow')">Arrow</button>
+            <button class="filter-pill" onclick="filterByShape('Triangle')">Triangle</button>
+            <button class="filter-pill" onclick="filterByShape('Circle')">Circle</button>
+            <button class="filter-pill" onclick="filterByShape('Cross')">Cross</button>
+        </div>
+        <div id="matrix-counter-log" class="ml-auto text-slate-500 font-bold uppercase text-[10px] tracking-widest"></div>
+    </div>
+
+    <main class="flex-1 overflow-y-auto bg-[#0b0f19] p-6">
+        <div class="max-w-6xl mx-auto space-y-6">
+            
+            <div class="bg-slate-900/40 border border-slate-800 rounded p-4 text-xs text-slate-400 leading-relaxed">
+                <strong class="text-orange-500 font-bold uppercase">Optimized Width Layout:</strong> Column space has been dynamically expanded for <span class="text-emerald-400 font-bold">MOD STAT (RECOMMENDED)</span> and <span class="text-red-400 font-bold">MOD STAT DISCARD</span> to prevent text wrapping. Both lists are sorted alphabetically from left to right.
+            </div>
+
+            <table class="standard-table overlay-table w-full table-fixed">
+                <thead>
+                    <tr class="text-left border-b border-slate-800 text-[11px] font-bold uppercase tracking-wider text-slate-400 bg-slate-900/20">
+                        <th class="p-3 w-[100px]">Mod Slot</th>
+                        <th class="p-3 w-[140px]">Mod Set Bonus</th>
+                        <th class="p-3">Mod Stat (Recommended)</th>
+                        <th class="p-3">Mod Stat Discard</th>
+                    </tr>
+                </thead>
+                <tbody id="jvfunc_sellmods_js">
+                    <tr>
+                        <td colspan="4" class="p-20 text-center text-slate-600 italic">Processing data structures...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </main>
+
+    <footer class="bg-[#0f172a] border-t border-slate-800 px-6 py-2 shrink-0 flex justify-between items-center">
+        <div id="jvfunc_gamestats_js"></div>
+        <div class="text-[9px] text-slate-400 font-mono uppercase tracking-[0.2em]">BUILD_260519_122000</div>
+    </footer>
+
+    <script src="../js/nav.js"></script>
+    <script src="../js/gamestats.js"></script>
+
+    <script>
+        window.currentShapeFilter = 'All';
+        window.rawMatrixItems = [];
+        window.hierarchicalMatrix = {};
+
+        const PHYSICAL_SHAPE_MAP = {
+            "Arrow": ["Speed", "Offense", "Defense", "Health", "Protection", "Accuracy", "Crit Avoid"],
+            "Triangle": ["Crit Damage", "Crit Chance", "Offense", "Defense", "Health", "Protection"],
+            "Circle": ["Health", "Protection"],
+            "Cross": ["Offense", "Defense", "Health", "Protection", "Potency", "Tenacity"]
+        };
+
+        async function initOverlay() {
+            try {
+                const response = await fetch('../data/swgoh_data.json?v=' + Date.now());
+                const data = await response.json();
+                
+                window.rawMatrixItems = data.unused_mod_combinations || [];
+                
+                if (typeof window.renderAccountStats === 'function') {
+                    window.renderAccountStats(data.header, 'jvfunc_gamestats_js');
+                }
+                
+                buildHierarchicalMatrix();
+                renderMatrixTable();
+                
+                document.getElementById('search-input').addEventListener('input', () => renderMatrixTable());
+            } catch (err) { 
+                console.error("Init Error:", err); 
+            }
+        }
+
+        function buildHierarchicalMatrix() {
+            window.hierarchicalMatrix = {};
+
+            window.rawMatrixItems.forEach(item => {
+                const shape = item.shape;
+                const setBonus = item.set;
+                const primary = item.primary;
+
+                if (!window.hierarchicalMatrix[shape]) {
+                    window.hierarchicalMatrix[shape] = {};
+                }
+                if (!window.hierarchicalMatrix[shape][setBonus]) {
+                    window.hierarchicalMatrix[shape][setBonus] = [];
+                }
+                
+                window.hierarchicalMatrix[shape][setBonus].push(primary);
+            });
+        }
+
+        function filterByShape(shapeName) {
+            window.currentShapeFilter = shapeName;
+            
+            const pills = document.querySelectorAll('#shape-filter-pills button');
+            pills.forEach(pill => {
+                if (pill.textContent.trim().toLowerCase() === shapeName.toLowerCase() || (shapeName === 'All' && pill.textContent.trim() === 'All Slots')) {
+                    pill.classList.add('active');
+                } else {
+                    pill.classList.remove('active');
+                }
+            });
+            
+            renderMatrixTable();
+        }
+
+        function renderMatrixTable() {
+            const tbody = document.getElementById('jvfunc_sellmods_js');
+            const counterLog = document.getElementById('matrix-counter-log');
+            const searchInput = document.getElementById('search-input');
+            const searchQuery = searchInput ? searchInput.value.toLowerCase().trim() : "";
+
+            if (!window.rawMatrixItems || window.rawMatrixItems.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-10 text-center text-slate-500 italic">No unused data arrays flagged. Run execution scripts.</td></tr>`;
+                if (counterLog) counterLog.textContent = "0 ROWS DISPLAYED";
+                return;
+            }
+
+            let htmlString = "";
+            let rowCount = 0;
+            const shapeOrder = ["Arrow", "Triangle", "Circle", "Cross"];
+
+            shapeOrder.forEach(shape => {
+                if (window.currentShapeFilter !== 'All' && window.currentShapeFilter.toLowerCase() !== shape.toLowerCase()) return;
+                
+                const setsForShape = window.hierarchicalMatrix[shape] || {};
+                const sortedSets = Object.keys(setsForShape).sort();
+
+                sortedSets.forEach(setBonus => {
+                    const unusedList = setsForShape[setBonus] || [];
+                    const allPossibleStats = PHYSICAL_SHAPE_MAP[shape] || [];
+                    
+                    const keepList = allPossibleStats.filter(stat => !unusedList.includes(stat));
+
+                    keepList.sort();
+                    unusedList.sort();
+
+                    const keepString = keepList.join(', ');
+                    const unusedString = unusedList.join(', ');
+
+                    const matchSearch = (!searchQuery || shape.toLowerCase().includes(searchQuery) || setBonus.toLowerCase().includes(searchQuery) || keepString.toLowerCase().includes(searchQuery) || unusedString.toLowerCase().includes(searchQuery));
+
+                    if (matchSearch) {
+                        rowCount++;
+                        htmlString += `
+                            <tr class="border-b border-slate-900 text-xs">
+                                <td class="p-3"><span class="badge-shape">${shape}</span></td>
+                                <td class="p-3 font-semibold text-slate-200">${setBonus}</td>
+                                <td class="p-3"><span class="stat-list-keep">${keepString || '-'}</span></td>
+                                <td class="p-3"><span class="stat-list-discard">${unusedString || '-'}</span></td>
+                            </tr>
+                        `;
+                    }
+                });
+            });
+
+            if (htmlString === "") {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-10 text-center text-slate-600 italic">No matrix configurations matched your current search filters.</td></tr>`;
+            } else {
+                tbody.innerHTML = htmlString;
+            }
+
+            if (counterLog) {
+                counterLog.textContent = `${rowCount} CONFIGURATIONS ACTIVE`;
+            }
+        }
+
+        window.onload = initOverlay;
+    </script>
+</body>
+</html>
