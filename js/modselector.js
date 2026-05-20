@@ -30,7 +30,7 @@ window.renderSelectors = function() {
     b1.innerHTML = window.shapes.map(s => `<button class="item-btn ${window.selection.shape === s ? 'active' : ''}" onclick="window.setVal('shape', '${s}')"><span>${s}</span></button>`).join('');
     
     const sortedSets = [...window.rawSets].sort();
-    b2.innerHTML = sortedSets.map(s => `<button class="item-btn ${window.selection.sets.includes(s) ? 'active' : ''}" onclick="window.toggleSet('${s}')"><span>${s}</span><img src="../img/set_icon_${window.setIconMapping[s]}_32px.png" class="set-icon"></button>`).join('');
+    b2.innerHTML = sortedSets.map(s => `<button class="item-btn ${window.selection.sets.includes(s) ? 'active' : ''}" onclick="window.toggleSet('${s}')"><span>${s}</span><img src="img/set_icon_${window.setIconMapping[s]}_32px.png" class="set-icon"></button>`).join('');
     
     const sortedPrimaries = [...window.rawPrimaries].sort();
     b3.innerHTML = sortedPrimaries.map(p => `<button class="item-btn ${window.selection.primary === p ? 'active' : ''}" onclick="window.setVal('primary', '${p}')"><span>${p}</span></button>`).join('');
